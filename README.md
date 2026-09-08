@@ -5,6 +5,7 @@
 An **open-source, composable engineering skill library for architecture, software engineering, and agentic development**.
 
 Each skill represents a practical, repeatable engineering capability with:
+
 - Clear problem statement
 - Well-defined inputs
 - Repeatable workflow
@@ -59,6 +60,7 @@ engineering-skills/
 2. **Use individual skills** for specific engineering tasks
 3. **Follow workflow recipes** in `workflows/` for common scenarios
 4. **Start with the orchestrator** (`skills/meta/skill-orchestrator/`) to compose skills
+5. **Read the comprehensive usage guide** in [USAGE.md](USAGE.md) for detailed integration instructions
 
 ### For AI Agents
 
@@ -66,6 +68,18 @@ engineering-skills/
 2. **Discover skills** using the skill graph
 3. **Compose workflows** using skill relationships
 4. **Execute skills** following the standard contract
+
+### Detailed Usage Instructions
+
+For comprehensive guidance on integrating this library with various AI development tools, see **[USAGE.md](USAGE.md)**, which includes:
+
+- **GitHub Copilot** integration patterns and workflows
+- **Claude** (Anthropic) usage with Desktop app and API
+- **Cursor** IDE integration and Composer workflows
+- **Custom AI coding agents** with API/interface patterns
+- **MCP (Model Context Protocol)** server implementations
+- **Other AI development tools** integration strategies
+- Real-world examples and troubleshooting guides
 
 ## Core Meta-Skills
 
@@ -95,6 +109,7 @@ Location: `skills/meta/skill-authoring/`
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
+
 - Creating new skills
 - Following the standard skill contract
 - Adding examples and evaluations
@@ -109,6 +124,7 @@ See [LICENSE](LICENSE) for details.
 > **An open-source, composable engineering skill library for architecture, software engineering, and agentic development.**
 
 Vendor-neutral and designed to work with:
+
 - GitHub Copilot
 - Claude
 - Cursor
