@@ -2,29 +2,41 @@
   "name": "tradeoff-analysis",
   "category": "architecture",
   "version": "1.0.0",
-  "description": "Systematically compare architectural alternatives by analyzing tradeoffs across multiple dimensions",
+  "description": "Systematically compare architectural alternatives by evaluating tradeoffs across multiple dimensions to support informed decision-making.",
   "inputs": [
     "alternatives",
-    "evaluation-criteria",
+    "evaluation_criteria",
     "constraints",
-    "context"
+    "business_context",
+    "requirements"
   ],
   "outputs": [
-    "comparison-matrix",
-    "tradeoff-analysis",
-    "recommendation",
-    "risk-assessment"
+    "tradeoff_matrix",
+    "scoring_analysis",
+    "tradeoff_summary",
+    "recommendation"
   ],
-  "requires": [],
+  "requires": [
+    "requirements-analysis"
+  ],
   "commonly_followed_by": [
-    "architecture-decision"
+    "architecture-decision",
+    "system-design"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "architecture-review",
+    "risk-analysis",
+    "cost-analysis"
   ],
   "tags": [
     "architecture",
-    "tradeoffs",
+    "analysis",
+    "decision-support",
     "comparison",
-    "analysis"
+    "tradeoffs"
   ],
   "complexity": "intermediate",
-  "estimated_time": "2-4 hours"
+  "estimated_time": "2-6 hours",
+  "skill_type": "analysis"
 }

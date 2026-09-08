@@ -1,398 +1,619 @@
-# Architecture Discovery - Examples
+# Architecture Discovery - Practical Examples
 
-## Example 1: E-commerce Microservices System
+## Example 1: Discovering a Microservices Architecture
 
-### Context
-Joining a team with a 3-year-old e-commerce platform. Documentation is outdated. Need to understand the architecture before planning a major feature.
+### Scenario
+You've joined a team with a microservices-based SaaS platform. Documentation is minimal.
 
 ### Discovery Process
 
-#### Step 1: Initial Investigation
+#### Step 1: Initial Exploration (1 hour)
 
-**Found repositories:**
-- `ecommerce-web` (React frontend)
-- `api-gateway` (Node.js)
-- `auth-service` (Node.js)
-- `product-service` (Java Spring Boot)
-- `order-service` (Java Spring Boot)
-- `payment-service` (Node.js)
-- `notification-service` (Python)
-- `infrastructure` (Terraform)
-
-**Found documentation:**
-- Outdated architecture diagram (18 months old)
-- README files in each repo
-- Some ADRs in `docs/` folder
-
-#### Step 2: Component Analysis
-
-**Web Application:**
-- Technology: React, Next.js
-- Purpose: Customer-facing e-commerce site
-- Communicates with: API Gateway
-
-**API Gateway:**
-- Technology: Node.js, Express
-- Purpose: Route requests to backend services
-- Communicates with: All backend services
-- Authentication: JWT validation
-
-**Auth Service:**
-- Technology: Node.js, Express
-- Purpose: User authentication and authorization
-- Database: PostgreSQL (users, sessions)
-- APIs: Login, Register, Password Reset
-
-**Product Service:**
-- Technology: Java, Spring Boot
-- Purpose: Product catalog management
-- Database: PostgreSQL (products, categories)
-- Cache: Redis (product data)
-- APIs: Product CRUD, Search
-
-**Order Service:**
-- Technology: Java, Spring Boot
-- Purpose: Order management
-- Database: PostgreSQL (orders, order items)
-- Communicates with: Product Service, Payment Service
-- Publishes events: OrderCreated, OrderShipped
-
-**Payment Service:**
-- Technology: Node.js, Express
-- Purpose: Payment processing
-- Database: PostgreSQL (transactions)
-- External: Stripe API
-- Publishes events: PaymentSucceeded, PaymentFailed
-
-**Notification Service:**
-- Technology: Python, Flask
-- Purpose: Send emails and SMS
-- Consumes events: OrderCreated, PaymentSucceeded
-- External: SendGrid, Twilio
-
-#### Step 3: Communication Patterns
-
-**Synchronous (REST):**
+**Repository structure:**
 ```
-Web App → API Gateway → Auth Service (login)
-Web App → API Gateway → Product Service (browse products)
-Web App → API Gateway → Order Service (create order)
-Order Service → Product Service (check inventory)
-Order Service → Payment Service (process payment)
+platform/
+├── services/
+│   ├── api-gateway/
+│   ├── auth-service/
+│   ├── user-service/
+│   ├── product-service/
+│   ├── order-service/
+│   ├── payment-service/
+│   ├── notification-service/
+│   └── analytics-service/
+├── shared/
+│   ├── common-lib/
+│   └── proto-definitions/
+├── infrastructure/
+│   ├── kubernetes/
+│   └── terraform/
+└── docker-compose.yml
 ```
 
-**Asynchronous (RabbitMQ):**
+**Initial findings:**
+- 8 microservices
+- Shared library for common code
+- Proto definitions suggest gRPC
+- Kubernetes for deployment
+- Terraform for infrastructure
+
+#### Step 2: Technology Stack Analysis (30 minutes)
+
+**Per-service analysis:**
+
+`api-gateway/package.json`:
+```json
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^2.0.0",
+    "express-rate-limit": "^5.2.6"
+  }
+}
 ```
-Order Service → [OrderCreated] → Notification Service
-Payment Service → [PaymentSucceeded] → Notification Service
-Payment Service → [PaymentFailed] → Order Service
+→ Node.js/Express gateway with rate limiting
+
+`auth-service/pom.xml`:
+```xml
+<dependencies>
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
+  <dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+  </dependency>
+</dependencies>
 ```
+→ Java/Spring Boot with JWT authentication
 
-#### Step 4: Data Architecture
-
-**Databases:**
-- `auth-db` (PostgreSQL): Owned by Auth Service
-- `product-db` (PostgreSQL): Owned by Product Service
-- `order-db` (PostgreSQL): Owned by Order Service
-- `payment-db` (PostgreSQL): Owned by Payment Service
-- `redis-cache`: Shared by Product Service and Order Service
-
-**Data Flows:**
-```
-User Registration → Auth Service → auth-db
-Browse Products → Product Service → product-db → redis-cache
-Create Order → Order Service → order-db
-            → Product Service (inventory check)
-            → Payment Service → payment-db → Stripe
-            → [OrderCreated event] → Notification Service → SendGrid
-```
-
-#### Step 5: Infrastructure
-
-**Cloud Provider:** AWS
-
-**Services Used:**
-- ECS (Elastic Container Service) for service hosting
-- RDS (PostgreSQL) for databases
-- ElastiCache (Redis) for caching
-- Amazon MQ (RabbitMQ) for messaging
-- CloudFront for CDN
-- Route 53 for DNS
-- ALB (Application Load Balancer)
-
-**Deployment:**
-- Each service is a Docker container
-- Deployed to ECS Fargate
-- Auto-scaling based on CPU/memory
-- Blue/green deployments
-
-#### Step 6: Architecture Diagrams
-
-**System Context:**
-```
-Customers → Web App → E-commerce System → Stripe (payments)
-                                        → SendGrid (emails)
-                                        → Twilio (SMS)
+**Technology inventory:**
+```markdown
+| Service | Language | Framework | Database |
+|---------|----------|-----------|----------|
+| api-gateway | Node.js | Express | - |
+| auth-service | Java | Spring Boot | PostgreSQL |
+| user-service | Java | Spring Boot | PostgreSQL |
+| product-service | Python | FastAPI | MongoDB |
+| order-service | Java | Spring Boot | PostgreSQL |
+| payment-service | Node.js | Express | PostgreSQL |
+| notification-service | Python | Flask | Redis |
+| analytics-service | Python | FastAPI | ClickHouse |
 ```
 
-**Container Diagram:**
+#### Step 3: Communication Patterns (2 hours)
+
+**Found in api-gateway/routes.js:**
+```javascript
+app.use('/api/auth', proxy('http://auth-service:8080'));
+app.use('/api/users', proxy('http://user-service:8080'));
+app.use('/api/products', proxy('http://product-service:8000'));
 ```
-[Web App (React)] → [API Gateway (Node.js)]
-                         ↓
-        ┌────────────────┼────────────────┐
-        ↓                ↓                ↓
-  [Auth Service]  [Product Service]  [Order Service]
-        ↓                ↓                ↓
-   [auth-db]       [product-db]       [order-db]
-                        ↓
-                   [Redis Cache]
-                   
-[Order Service] → [RabbitMQ] → [Notification Service]
+→ Synchronous REST via API gateway
+
+**Found in order-service/config:**
+```yaml
+rabbitmq:
+  host: rabbitmq
+  exchanges:
+    - name: orders
+      type: topic
+  queues:
+    - name: order.created
+    - name: order.completed
+```
+→ Asynchronous messaging via RabbitMQ
+
+**Communication diagram:**
+```
+Client
+  ↓
+API Gateway (REST)
+  ↓
+Services (REST for sync, RabbitMQ for async)
+  ↓
+Databases
 ```
 
-### Findings
+#### Step 4: Data Flow Analysis (2 hours)
+
+**Order creation flow:**
+
+1. Client → API Gateway → Order Service (REST)
+2. Order Service validates and saves to PostgreSQL
+3. Order Service publishes `order.created` event to RabbitMQ
+4. Payment Service consumes event, processes payment
+5. Payment Service publishes `payment.processed` event
+6. Order Service consumes event, updates order status
+7. Notification Service consumes event, sends email
+8. Analytics Service consumes event, updates metrics
+
+**Data flow diagram:**
+```
+[Client]
+   ↓ POST /orders
+[API Gateway]
+   ↓
+[Order Service] --save--> [PostgreSQL]
+   ↓ publish: order.created
+[RabbitMQ]
+   ↓
+[Payment Service] --process--> [Stripe API]
+   ↓ publish: payment.processed
+[RabbitMQ]
+   ├─→ [Order Service] --update--> [PostgreSQL]
+   ├─→ [Notification Service] --send--> [Email Service]
+   └─→ [Analytics Service] --insert--> [ClickHouse]
+```
+
+#### Step 5: Deployment Architecture (1 hour)
+
+**From kubernetes/ manifests:**
+
+```yaml
+# Each service has:
+- Deployment (2-5 replicas)
+- Service (ClusterIP)
+- HorizontalPodAutoscaler
+- ConfigMap
+- Secret
+
+# Infrastructure:
+- Ingress (Nginx)
+- PostgreSQL (StatefulSet)
+- MongoDB (StatefulSet)
+- RabbitMQ (StatefulSet)
+- Redis (StatefulSet)
+```
+
+**Deployment diagram:**
+```
+[Internet]
+   ↓
+[AWS ALB]
+   ↓
+[Nginx Ingress]
+   ↓
+[Kubernetes Cluster]
+   ├─ [API Gateway Pods] (3 replicas)
+   ├─ [Auth Service Pods] (2 replicas)
+   ├─ [User Service Pods] (2 replicas)
+   ├─ [Product Service Pods] (3 replicas)
+   ├─ [Order Service Pods] (5 replicas)
+   ├─ [Payment Service Pods] (3 replicas)
+   ├─ [Notification Service Pods] (2 replicas)
+   └─ [Analytics Service Pods] (2 replicas)
+
+[Data Layer]
+   ├─ [PostgreSQL Cluster]
+   ├─ [MongoDB Cluster]
+   ├─ [RabbitMQ Cluster]
+   └─ [Redis Cluster]
+```
+
+#### Step 6: Findings Summary
+
+**Architecture Overview:**
+- Microservices architecture with 8 services
+- Polyglot (Java, Node.js, Python)
+- Synchronous communication via REST
+- Asynchronous communication via RabbitMQ
+- Deployed on Kubernetes (AWS EKS)
+- Each service has its own database (good)
 
 **Strengths:**
-- Clear service boundaries
-- Each service owns its data
+- Service independence
+- Polyglot persistence
 - Event-driven for async operations
-- Good separation of concerns
+- Horizontal scalability
+- Infrastructure as Code
 
-**Issues:**
-- Shared Redis cache (coupling)
+**Technical Debt:**
 - No API versioning
-- No circuit breakers
-- Limited observability
+- Inconsistent logging formats
+- No distributed tracing
+- Missing circuit breakers
+- No service mesh
+- Shared library creates coupling
 
 **Recommendations:**
-1. Implement API versioning
-2. Add circuit breakers (Hystrix/Resilience4j)
-3. Improve monitoring (add distributed tracing)
-4. Consider separate cache per service
+- Implement distributed tracing (Jaeger/Zipkin)
+- Standardize logging (structured JSON)
+- Add circuit breakers (Resilience4j/Hystrix)
+- Consider service mesh (Istio/Linkerd)
+- Implement API versioning
+- Reduce shared library dependencies
 
 ---
 
-## Example 2: Legacy Monolith Application
+## Example 2: Discovering a Legacy Monolith
 
-### Context
-Inherited a 10-year-old monolithic application. Need to understand it before planning modernization.
+### Scenario
+Large Java monolith, 10+ years old, planning modernization.
 
 ### Discovery Process
 
-#### Step 1: Initial Investigation
-
-**Repository:**
-- Single repo: `legacy-app`
-- Technology: Java, Spring MVC, JSP
-- 500K+ lines of code
-- Minimal documentation
+#### Step 1: Repository Analysis (1 hour)
 
 **Structure:**
 ```
 legacy-app/
 ├── src/main/java/com/company/
-│   ├── controller/
-│   ├── service/
-│   ├── dao/
-│   ├── model/
-│   └── util/
-├── src/main/webapp/
-│   ├── WEB-INF/
-│   └── jsp/
-└── src/main/resources/
+│   ├── web/          (Controllers, JSPs)
+│   ├── service/      (Business logic)
+│   ├── dao/          (Data access)
+│   ├── model/        (Entities)
+│   └── util/         (Utilities)
+├── src/main/resources/
+│   ├── applicationContext.xml
+│   └── hibernate.cfg.xml
+└── pom.xml
 ```
 
-#### Step 2: Component Analysis
+**Technology stack (from pom.xml):**
+```xml
+<properties>
+  <java.version>1.8</java.version>
+  <spring.version>4.3.30</spring.version>
+  <hibernate.version>4.3.11</hibernate.version>
+</properties>
+```
+→ Java 8, Spring 4, Hibernate 4 (all outdated)
 
-**Layers:**
-- **Controllers**: Handle HTTP requests (50+ controllers)
-- **Services**: Business logic (100+ service classes)
-- **DAOs**: Database access (80+ DAO classes)
-- **Models**: Domain entities (150+ classes)
+#### Step 2: Module Identification (2 hours)
 
-**Modules (by package):**
-- `user`: User management
-- `product`: Product catalog
-- `order`: Order processing
-- `payment`: Payment handling
-- `inventory`: Inventory management
-- `reporting`: Reports and analytics
-- `admin`: Admin functions
+**Package analysis:**
+```
+com.company.web.customer.*     → Customer Management
+com.company.web.order.*        → Order Processing
+com.company.web.inventory.*    → Inventory Management
+com.company.web.billing.*      → Billing
+com.company.web.reporting.*    → Reporting
+com.company.web.admin.*        → Administration
+```
 
-#### Step 3: Database Analysis
+**Dependency analysis:**
+```java
+// OrderController depends on:
+- CustomerService
+- InventoryService
+- BillingService
+- NotificationService
+- ReportingService
 
-**Single Database:**
-- PostgreSQL
-- 120+ tables
-- Heavy use of stored procedures
+// High coupling - order processing touches everything!
+```
+
+#### Step 3: Database Analysis (1 hour)
+
+**From hibernate.cfg.xml and entity classes:**
+
+```sql
+-- 47 tables in single Oracle database:
+CUSTOMERS
+ADDRESSES
+ORDERS
+ORDER_ITEMS
+PRODUCTS
+INVENTORY
+INVOICES
+PAYMENTS
+SHIPMENTS
+... (38 more)
+```
+
+**Observations:**
+- All modules share same database
+- No clear schema boundaries
+- Some tables used by multiple modules
 - Complex foreign key relationships
+- Some tables have 50+ columns
 
-**Key Tables:**
-- `users`, `roles`, `permissions` (auth)
-- `products`, `categories`, `prices` (catalog)
-- `orders`, `order_items`, `shipments` (orders)
-- `payments`, `transactions` (payments)
-- `inventory`, `stock_movements` (inventory)
+#### Step 4: Integration Points (1 hour)
 
-**Data Access Patterns:**
-- Direct SQL queries (not ORM)
-- Some business logic in stored procedures
-- Transactions managed at service layer
+**External integrations found:**
 
-#### Step 4: Integration Points
+```java
+// SOAP web services (legacy)
+@WebService
+public class LegacyPartnerService {
+    // Integration with old partner system
+}
 
-**External Systems:**
-- Payment gateway (SOAP API)
-- Shipping provider (REST API)
-- Email service (SMTP)
-- Legacy ERP system (database link)
+// REST endpoints (newer)
+@RestController
+public class ApiController {
+    // Mobile app integration
+}
 
-**Integration Patterns:**
-- Synchronous HTTP calls
-- Direct database access to ERP (anti-pattern)
-- Scheduled batch jobs for reporting
+// FTP file transfers
+public class BatchFileProcessor {
+    // Nightly batch jobs
+}
 
-#### Step 5: Infrastructure
-
-**Deployment:**
-- Single Tomcat server
-- PostgreSQL database server
-- Apache HTTP Server (reverse proxy)
-
-**Scaling:**
-- Vertical scaling only
-- Manual deployment
-- No load balancing
-
-### Findings
-
-**Architecture Pattern:**
-Traditional 3-tier monolith:
-```
-Presentation (JSP) → Business Logic (Services) → Data Access (DAO) → Database
+// Direct database access
+// Reporting tool connects directly to database (bad!)
 ```
 
-**Strengths:**
-- Simple deployment
-- ACID transactions
-- Consistent data
+#### Step 5: Code Quality Analysis (2 hours)
 
-**Issues:**
+**Findings:**
+
+```java
+// God class example:
+public class OrderService {
+    // 5,247 lines of code!
+    // Handles: validation, pricing, inventory, 
+    // billing, shipping, notifications, reporting
+}
+
+// Tight coupling:
+public class CustomerController {
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private BillingService billingService;
+    @Autowired
+    private ReportingService reportingService;
+    // ... 8 more dependencies
+}
+
+// Hard-coded configuration:
+public class EmailService {
+    private static final String SMTP_HOST = "mail.company.com";
+    private static final String API_KEY = "abc123xyz"; // Security issue!
+}
+```
+
+**Technical debt identified:**
+- God classes (5000+ lines)
 - Tight coupling between modules
-- Shared database (can't split easily)
-- No horizontal scaling
-- Long deployment times
-- Difficult to test
-- Technology stack is outdated
+- Hard-coded configuration
+- Secrets in code
+- No unit tests
+- Outdated dependencies
+- Security vulnerabilities
 
-**Modernization Recommendations:**
-1. Extract bounded contexts (user, product, order)
-2. Introduce API layer
-3. Migrate to microservices incrementally
-4. Replace direct ERP database access with API
-5. Implement CI/CD
-6. Add monitoring and logging
+#### Step 6: Architecture Documentation
+
+**Current Architecture:**
+
+```
+┌─────────────────────────────────────────┐
+│         Presentation Layer              │
+│  (JSP, REST Controllers, SOAP Services) │
+└─────────────────┬───────────────────────┘
+                  │
+┌─────────────────▼───────────────────────┐
+│         Business Logic Layer            │
+│    (Service classes - tightly coupled)  │
+└─────────────────┬───────────────────────┘
+                  │
+┌─────────────────▼───────────────────────┐
+│         Data Access Layer               │
+│         (Hibernate, Custom SQL)         │
+└─────────────────┬───────────────────────┘
+                  │
+           ┌──────▼──────┐
+           │   Oracle DB  │
+           └─────────────┘
+```
+
+**Module boundaries (logical, not enforced):**
+
+```
+Monolith
+├── Customer Management
+│   ├── Customer CRUD
+│   ├── Address management
+│   └── Customer preferences
+├── Order Processing
+│   ├── Order creation
+│   ├── Order fulfillment
+│   └── Order tracking
+├── Inventory Management
+│   ├── Stock management
+│   ├── Warehouse operations
+│   └── Supplier integration
+├── Billing
+│   ├── Invoice generation
+│   ├── Payment processing
+│   └── Accounting integration
+└── Reporting
+    ├── Sales reports
+    ├── Inventory reports
+    └── Financial reports
+```
+
+**Modernization Strategy:**
+
+1. **Phase 1: Stabilize**
+   - Add automated tests
+   - Update dependencies
+   - Fix security vulnerabilities
+   - Externalize configuration
+
+2. **Phase 2: Decouple**
+   - Introduce interfaces between modules
+   - Extract shared utilities
+   - Separate database schemas logically
+
+3. **Phase 3: Extract Services**
+   - Extract Billing as first microservice (least coupled)
+   - Extract Inventory as second service
+   - Extract Order Processing (most complex, do last)
+
+4. **Phase 4: Modernize**
+   - Upgrade to Java 17, Spring Boot 3
+   - Migrate to cloud-native architecture
+   - Implement event-driven patterns
 
 ---
 
-## Example 3: Serverless Application
+## Example 3: Discovering a Serverless Application
 
-### Context
-Need to understand a serverless application built on AWS to add new features.
+### Scenario
+AWS serverless application, need to understand architecture for adding new features.
 
 ### Discovery Process
 
-#### Step 1: Infrastructure Analysis
+#### Step 1: Infrastructure Analysis (1 hour)
 
-**AWS Services Used:**
-- Lambda functions (20+)
-- API Gateway
-- DynamoDB tables (5)
-- S3 buckets (3)
-- SQS queues (2)
-- SNS topics (3)
-- CloudWatch Events (cron jobs)
+**From CloudFormation template:**
 
-**IaC:**
-- Serverless Framework
-- `serverless.yml` configuration
-
-#### Step 2: Function Inventory
-
-**API Functions:**
-- `createUser` (POST /users)
-- `getUser` (GET /users/{id})
-- `updateUser` (PUT /users/{id})
-- `deleteUser` (DELETE /users/{id})
-- `listProducts` (GET /products)
-- `createOrder` (POST /orders)
-- `getOrder` (GET /orders/{id})
-
-**Event-Driven Functions:**
-- `processOrder` (triggered by SQS)
-- `sendNotification` (triggered by SNS)
-- `generateReport` (scheduled, daily)
-- `cleanupOldData` (scheduled, weekly)
-
-**S3 Event Functions:**
-- `processUpload` (triggered by S3 upload)
-- `generateThumbnail` (image processing)
-
-#### Step 3: Data Architecture
-
-**DynamoDB Tables:**
-- `Users` (PK: userId)
-- `Products` (PK: productId)
-- `Orders` (PK: orderId, GSI: userId)
-- `Sessions` (PK: sessionId, TTL enabled)
-- `AuditLog` (PK: timestamp#userId)
-
-**S3 Buckets:**
-- `uploads` (user uploads)
-- `processed` (processed files)
-- `reports` (generated reports)
-
-#### Step 4: Event Flows
-
-**Order Creation:**
-```
-API Gateway → createOrder Lambda → DynamoDB (Orders)
-                                 → SQS (order-queue)
-                                 
-SQS → processOrder Lambda → DynamoDB (update order)
-                          → SNS (order-notification)
-                          
-SNS → sendNotification Lambda → SES (send email)
+```yaml
+Resources:
+  # API Gateway
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+  
+  # Lambda Functions (23 total)
+  UserAuthFunction:
+    Type: AWS::Lambda::Function
+    Runtime: nodejs14.x
+  
+  CreateOrderFunction:
+    Type: AWS::Lambda::Function
+    Runtime: python3.9
+  
+  # Data Stores
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+  
+  OrdersTable:
+    Type: AWS::DynamoDB::Table
+  
+  FilesBucket:
+    Type: AWS::S3::Bucket
+  
+  # Messaging
+  OrderQueue:
+    Type: AWS::SQS::Queue
+  
+  OrderTopic:
+    Type: AWS::SNS::Topic
 ```
 
-**File Upload:**
+**Component inventory:**
+- 23 Lambda functions
+- API Gateway (REST API)
+- 5 DynamoDB tables
+- 3 S3 buckets
+- 4 SQS queues
+- 2 SNS topics
+- 1 EventBridge rule (scheduled)
+
+#### Step 2: Function Categorization (1 hour)
+
+**API Functions** (triggered by API Gateway):
 ```
-S3 Upload → processUpload Lambda → Validate file
-                                 → S3 (processed bucket)
-                                 → DynamoDB (metadata)
+- UserAuthFunction (POST /auth/login)
+- GetUserFunction (GET /users/{id})
+- CreateOrderFunction (POST /orders)
+- GetOrderFunction (GET /orders/{id})
+- ListOrdersFunction (GET /orders)
 ```
 
-### Findings
+**Event Processing Functions** (triggered by events):
+```
+- ProcessOrderFunction (SQS trigger)
+- SendNotificationFunction (SNS trigger)
+- GenerateInvoiceFunction (SNS trigger)
+- UpdateInventoryFunction (DynamoDB stream)
+```
 
-**Architecture Pattern:**
-Event-driven serverless
+**Scheduled Functions** (triggered by EventBridge):
+```
+- DailyReportFunction (daily at 2 AM)
+- CleanupOldDataFunction (weekly)
+```
+
+**S3 Functions** (triggered by S3 events):
+```
+- ProcessUploadFunction (on file upload)
+- GenerateThumbnailFunction (on image upload)
+```
+
+#### Step 3: Data Flow Mapping (2 hours)
+
+**Order creation flow:**
+
+```
+1. Client → API Gateway → CreateOrderFunction
+2. CreateOrderFunction:
+   - Validates request
+   - Writes to OrdersTable (DynamoDB)
+   - Publishes to OrderTopic (SNS)
+3. OrderTopic fans out to:
+   - ProcessOrderFunction (via SQS)
+   - GenerateInvoiceFunction (direct)
+   - SendNotificationFunction (direct)
+4. ProcessOrderFunction:
+   - Processes payment
+   - Updates OrdersTable
+   - Publishes to InventoryTopic
+5. UpdateInventoryFunction:
+   - Triggered by DynamoDB stream
+   - Updates InventoryTable
+```
+
+**Architecture diagram:**
+
+```
+[Client]
+   ↓
+[API Gateway]
+   ↓
+[Lambda: CreateOrder]
+   ├─→ [DynamoDB: Orders]
+   └─→ [SNS: OrderTopic]
+         ├─→ [SQS: OrderQueue] → [Lambda: ProcessOrder]
+         ├─→ [Lambda: GenerateInvoice] → [S3: Invoices]
+         └─→ [Lambda: SendNotification] → [SES]
+
+[DynamoDB: Orders] (stream)
+   ↓
+[Lambda: UpdateInventory]
+   ↓
+[DynamoDB: Inventory]
+```
+
+#### Step 4: Findings and Recommendations
 
 **Strengths:**
-- Auto-scaling
-- Pay-per-use
-- No server management
-- Event-driven
+- Fully serverless (no server management)
+- Event-driven architecture
+- Automatic scaling
+- Pay-per-use pricing
 
 **Issues:**
-- Cold start latency
-- Difficult to test locally
-- Vendor lock-in
-- Complex debugging
-- No shared code between functions (duplication)
+- No X-Ray tracing (hard to debug)
+- Inconsistent error handling
+- Some functions too large (>1000 lines)
+- Cold start issues on some functions
+- No centralized logging
+- Secrets in environment variables (should use Secrets Manager)
 
 **Recommendations:**
-1. Extract shared code to Lambda layers
-2. Implement distributed tracing (X-Ray)
-3. Add integration tests
-4. Implement circuit breakers for external calls
-5. Add API versioning
+- Enable X-Ray tracing on all functions
+- Implement structured logging (JSON)
+- Split large functions
+- Use provisioned concurrency for critical functions
+- Migrate secrets to AWS Secrets Manager
+- Add CloudWatch dashboards
+- Implement circuit breakers for external calls
+
+---
+
+## Key Takeaways
+
+1. **Start with structure** - Repository and folder organization reveals a lot
+2. **Follow the data** - Data flows reveal how the system really works
+3. **Talk to the team** - They know things not in the code
+4. **Use multiple sources** - Code, configs, running system, docs
+5. **Document as you go** - Don't wait until the end
+6. **Validate findings** - Review with team to catch misunderstandings
+7. **Focus on objectives** - Don't document everything, focus on what matters

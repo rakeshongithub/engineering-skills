@@ -1,359 +1,407 @@
-# Requirements Analysis - Examples
+# Requirements Analysis - Practical Examples
 
-## Example 1: E-commerce Checkout Feature
+## Example 1: User Authentication Feature
 
-### Initial Requirements
+### Input
+Stakeholder request: "We need users to be able to log in to the application."
 
-**Stakeholder request:**
-> "We need to add a checkout feature to our e-commerce site. Users should be able to buy products easily."
+### Analysis Process
 
-### Requirements Analysis Output
+#### Step 1: Initial Questions
+- What authentication methods? (username/password, social login, SSO, MFA?)
+- Who are the users? (customers, employees, partners?)
+- What happens after login? (redirect where?)
+- Password requirements?
+- Session duration?
+- Forgot password flow?
+- Account lockout policy?
 
-#### Functional Requirements
+#### Step 2: Extracted Requirements
 
-**FR-1**: Users shall be able to add products to a shopping cart
-**FR-2**: Users shall be able to view cart contents with item details and total price
-**FR-3**: Users shall be able to update quantities or remove items from cart
-**FR-4**: Users shall be able to apply discount codes at checkout
-**FR-5**: Users shall be able to select shipping method (standard, express)
-**FR-6**: Users shall be able to enter shipping address
-**FR-7**: Users shall be able to enter payment information (credit card)
-**FR-8**: System shall validate payment information before processing
-**FR-9**: System shall process payment via payment gateway
-**FR-10**: System shall send order confirmation email after successful payment
-**FR-11**: Users shall be able to view order history
+**Functional Requirements:**
+- FR-1: Users can register with email and password
+- FR-2: Users can log in with email and password
+- FR-3: Users can reset forgotten passwords via email
+- FR-4: Users can log out
+- FR-5: System locks account after 5 failed login attempts
+- FR-6: Users can unlock account via email verification
 
-#### Non-Functional Requirements
+**Non-Functional Requirements:**
+- NFR-1: Passwords must meet complexity requirements (min 8 chars, 1 uppercase, 1 number, 1 special char)
+- NFR-2: Passwords must be hashed using bcrypt with cost factor 12
+- NFR-3: Login response time < 500ms (P95)
+- NFR-4: Session timeout after 30 minutes of inactivity
+- NFR-5: Support 100 concurrent login requests
+- NFR-6: Comply with OWASP authentication guidelines
 
-**Performance:**
-- NFR-P-1: Checkout page shall load in < 2 seconds
-- NFR-P-2: Payment processing shall complete in < 5 seconds
-- NFR-P-3: System shall handle 1,000 concurrent checkouts
+**Security Requirements:**
+- SEC-1: Implement rate limiting (max 5 login attempts per minute per IP)
+- SEC-2: Use HTTPS for all authentication endpoints
+- SEC-3: Set secure, httpOnly cookies for session tokens
+- SEC-4: Log all authentication events (success and failure)
+- SEC-5: Implement CSRF protection
 
-**Security:**
-- NFR-S-1: Payment information shall be transmitted over HTTPS
-- NFR-S-2: Credit card numbers shall not be stored (use tokenization)
-- NFR-S-3: System shall comply with PCI DSS requirements
-- NFR-S-4: System shall implement CSRF protection
+#### Step 3: Acceptance Criteria
 
-**Reliability:**
-- NFR-R-1: Payment failures shall be logged and retryable
-- NFR-R-2: Cart data shall persist for 30 days
-- NFR-R-3: System shall have 99.9% uptime during business hours
-
-**Usability:**
-- NFR-U-1: Checkout flow shall be completable in < 3 minutes
-- NFR-U-2: Checkout shall work on mobile devices (responsive)
-- NFR-U-3: Error messages shall be clear and actionable
-
-#### Acceptance Criteria
-
-**AC-1 (Add to Cart):**
+**AC-1: User Registration**
 ```
-Given a user is viewing a product
-When they click "Add to Cart"
-Then the product is added to their cart
-And the cart icon shows updated item count
-```
-
-**AC-2 (Apply Discount Code):**
-```
-Given a user has items in their cart
-When they enter a valid discount code
-Then the discount is applied to the total
-And the discounted price is displayed
-
-Given a user enters an invalid discount code
-When they click "Apply"
-Then an error message is displayed
-And the total price remains unchanged
-```
-
-**AC-3 (Payment Processing):**
-```
-Given a user has entered valid payment information
-When they click "Place Order"
-Then payment is processed via payment gateway
-And order confirmation is displayed
-And confirmation email is sent within 2 minutes
-
-Given payment processing fails
-When the failure occurs
-Then user sees error message with retry option
-And cart contents are preserved
-```
-
-#### Assumptions
-
-- A-1: Users have valid email addresses - If wrong, need alternative notification method
-- A-2: Payment gateway API is available 99.9% of time - If wrong, need fallback payment method
-- A-3: Users are familiar with online checkout - If wrong, need more guidance/tooltips
-- A-4: Shipping addresses are within supported regions - If wrong, need region validation
-
-#### Open Questions
-
-- Q-1: Should we support guest checkout or require account creation? | Owner: Product | Priority: H | Status: Open
-- Q-2: What payment methods should we support (credit card, PayPal, Apple Pay)? | Owner: Product | Priority: H | Status: Open
-- Q-3: Should we support international shipping? | Owner: Business | Priority: M | Status: Open
-- Q-4: What is the tax calculation logic? | Owner: Finance | Priority: H | Status: Open
-- Q-5: Should we save payment methods for future use? | Owner: Product | Priority: M | Status: Open
-
-#### Scope
-
-**In Scope:**
-- Shopping cart functionality
-- Checkout flow
-- Payment processing (credit card)
-- Order confirmation
-- Email notifications
-
-**Out of Scope:**
-- Inventory management (handled by existing system)
-- Shipping fulfillment (handled by existing system)
-- Customer support features
-- Loyalty/rewards program
-- Gift wrapping options
-
----
-
-## Example 2: User Authentication System
-
-### Initial Requirements
-
-**Stakeholder request:**
-> "We need a secure login system for our application. Users should be able to sign up and log in."
-
-### Requirements Analysis Output
-
-#### Functional Requirements
-
-**FR-1**: Users shall be able to register with email and password
-**FR-2**: System shall validate email format and password strength
-**FR-3**: System shall send email verification after registration
-**FR-4**: Users shall be able to log in with email and password
-**FR-5**: Users shall be able to log out
-**FR-6**: Users shall be able to reset forgotten password via email
-**FR-7**: System shall support session management
-**FR-8**: System shall support "Remember Me" functionality
-**FR-9**: Users shall be able to change password when logged in
-**FR-10**: System shall lock account after 5 failed login attempts
-
-#### Non-Functional Requirements
-
-**Security:**
-- NFR-S-1: Passwords shall be hashed using bcrypt (cost factor 12)
-- NFR-S-2: Password reset tokens shall expire after 1 hour
-- NFR-S-3: Sessions shall expire after 24 hours of inactivity
-- NFR-S-4: System shall implement rate limiting (5 login attempts per minute)
-- NFR-S-5: All authentication endpoints shall use HTTPS
-- NFR-S-6: System shall log all authentication events
-
-**Performance:**
-- NFR-P-1: Login shall complete in < 500ms
-- NFR-P-2: Registration shall complete in < 1 second
-- NFR-P-3: Password reset email shall be sent within 2 minutes
-
-**Reliability:**
-- NFR-R-1: Authentication service shall have 99.95% uptime
-- NFR-R-2: Failed authentication attempts shall be logged
-- NFR-R-3: System shall gracefully handle email service failures
-
-**Usability:**
-- NFR-U-1: Password requirements shall be clearly displayed
-- NFR-U-2: Error messages shall not reveal whether email exists
-- NFR-U-3: Login form shall be accessible (WCAG 2.1 AA)
-
-#### Acceptance Criteria
-
-**AC-1 (Registration):**
-```
-Given a new user visits the registration page
+Given a new user on the registration page
 When they enter valid email and password
-Then account is created
-And verification email is sent
-And user is redirected to "Check your email" page
-
-Given a user enters an email that already exists
-When they submit registration form
-Then error message is displayed
-And account is not created
-
-Given a user enters a weak password
-When they submit registration form
-Then password strength error is displayed
-And account is not created
+And click "Register"
+Then an account is created
+And a verification email is sent
+And they are redirected to "check your email" page
 ```
 
-**AC-2 (Login):**
+**AC-2: User Login**
 ```
 Given a registered user with verified email
 When they enter correct email and password
-Then they are logged in
+And click "Login"
+Then they are authenticated
 And redirected to dashboard
-And session is created
+And session cookie is set
+```
 
-Given a user enters incorrect password
+**AC-3: Failed Login**
+```
+Given a user entering incorrect password
 When they submit login form
-Then generic error message is displayed
-And login attempt is logged
-And they remain on login page
+Then login fails
+And error message displays "Invalid email or password"
+And failed attempt is logged
+And attempt counter increments
 ```
 
-**AC-3 (Password Reset):**
+**AC-4: Account Lockout**
 ```
-Given a user has forgotten their password
-When they enter their email on password reset page
-Then password reset email is sent
-And user sees "Check your email" message
-
-Given a user clicks valid reset link
-When they enter new password
-Then password is updated
-And they are redirected to login page
-And all existing sessions are invalidated
+Given a user with 4 failed login attempts
+When they fail login a 5th time
+Then account is locked
+And error message displays "Account locked. Check email for unlock instructions."
+And unlock email is sent
 ```
 
-**AC-4 (Account Lockout):**
+### Output Document Structure
+
+```markdown
+# User Authentication Requirements
+
+## 1. Overview
+Implement secure user authentication system supporting registration, login, logout, and password reset.
+
+## 2. Functional Requirements
+[FR-1 through FR-6 detailed above]
+
+## 3. Non-Functional Requirements
+[NFR-1 through NFR-6 detailed above]
+
+## 4. Security Requirements
+[SEC-1 through SEC-5 detailed above]
+
+## 5. User Flows
+[Diagrams for registration, login, password reset]
+
+## 6. Acceptance Criteria
+[AC-1 through AC-4 detailed above]
+
+## 7. Out of Scope
+- Social login (OAuth)
+- Multi-factor authentication
+- Single sign-on (SSO)
+- Biometric authentication
+
+## 8. Assumptions
+- Email service is available and configured
+- HTTPS is enabled on all environments
+- Database supports encrypted storage
+
+## 9. Dependencies
+- Email service integration
+- Session management infrastructure
+- User database schema
 ```
-Given a user has failed login 5 times
-When they attempt 6th login
-Then account is locked for 30 minutes
-And user sees lockout message
-And security team is notified
-```
-
-#### Assumptions
-
-- A-1: Users have access to email - If wrong, need SMS verification option
-- A-2: Email service is reliable - If wrong, need retry mechanism
-- A-3: Users can remember passwords - If wrong, need social login option
-- A-4: HTTPS is available - If wrong, cannot proceed (security requirement)
-
-#### Open Questions
-
-- Q-1: Should we support social login (Google, GitHub)? | Owner: Product | Priority: M | Status: Open
-- Q-2: Should we support two-factor authentication (2FA)? | Owner: Security | Priority: H | Status: Open
-- Q-3: What is the password policy (min length, complexity)? | Owner: Security | Priority: H | Status: Open
-- Q-4: How long should sessions last? | Owner: Security | Priority: H | Status: Answered (24 hours)
-- Q-5: Should we support SSO for enterprise customers? | Owner: Business | Priority: L | Status: Open
-
-#### Scope
-
-**In Scope:**
-- Email/password registration
-- Email verification
-- Login/logout
-- Password reset
-- Session management
-- Account lockout
-
-**Out of Scope:**
-- Social login (deferred to Phase 2)
-- Two-factor authentication (deferred to Phase 2)
-- SSO (deferred to enterprise version)
-- User profile management
-- Role-based access control (separate feature)
 
 ---
 
-## Example 3: API Performance Monitoring
+## Example 2: E-commerce Search Feature
 
-### Initial Requirements
+### Input
+Product owner: "Customers should be able to search for products easily and find what they're looking for quickly."
 
-**Stakeholder request:**
-> "Our API is sometimes slow. We need to monitor performance and get alerts when there are issues."
+### Analysis Process
 
-### Requirements Analysis Output
+#### Clarification Questions Asked
+1. What can users search by? (product name, description, SKU, category, brand?)
+2. Should search support filters? (price range, category, brand, ratings?)
+3. Should search support sorting? (relevance, price, popularity, newest?)
+4. Should there be autocomplete/suggestions?
+5. How should search handle typos or misspellings?
+6. What's the expected search volume? (requests per second)
+7. What's acceptable search response time?
+8. Should search results be personalized?
 
-#### Functional Requirements
+#### Extracted Requirements
 
-**FR-1**: System shall track API response times for all endpoints
-**FR-2**: System shall track API error rates
-**FR-3**: System shall track API request volume
-**FR-4**: System shall provide real-time dashboard showing key metrics
-**FR-5**: System shall send alerts when response time exceeds threshold
-**FR-6**: System shall send alerts when error rate exceeds threshold
-**FR-7**: System shall provide historical performance data (30 days)
-**FR-8**: System shall identify slow endpoints
-**FR-9**: System shall track performance by endpoint, method, and status code
-**FR-10**: System shall provide performance reports
+**Functional Requirements:**
+- FR-1: Users can search products by keyword
+- FR-2: Search matches against product name, description, brand, and category
+- FR-3: Search results display product image, name, price, rating, and availability
+- FR-4: Users can filter results by category, price range, brand, and rating
+- FR-5: Users can sort results by relevance, price (low-high, high-low), rating, and newest
+- FR-6: Search provides autocomplete suggestions as user types
+- FR-7: Search handles common misspellings and typos
+- FR-8: Empty search returns all products (with filters available)
+- FR-9: Search results paginate (20 products per page)
+- FR-10: Users can save search queries
 
-#### Non-Functional Requirements
+**Non-Functional Requirements:**
+- NFR-1: Search response time < 200ms (P95)
+- NFR-2: Autocomplete response time < 100ms (P95)
+- NFR-3: Support 500 concurrent search requests
+- NFR-4: Search index updates within 5 minutes of product changes
+- NFR-5: Search available 99.9% of time
+- NFR-6: Relevance scoring produces useful results (measured by click-through rate > 60%)
 
-**Performance:**
-- NFR-P-1: Monitoring shall add < 5ms overhead to API requests
-- NFR-P-2: Dashboard shall load in < 2 seconds
-- NFR-P-3: Alerts shall be sent within 1 minute of threshold breach
-
-**Reliability:**
-- NFR-R-1: Monitoring system shall have 99.9% uptime
-- NFR-R-2: Monitoring data shall be retained for 30 days
-- NFR-R-3: Monitoring failures shall not affect API functionality
-
-**Scalability:**
-- NFR-SC-1: System shall handle monitoring 10,000 requests/second
-- NFR-SC-2: System shall store up to 100M data points
-
-**Usability:**
-- NFR-U-1: Dashboard shall be accessible to non-technical users
-- NFR-U-2: Alerts shall include actionable information
+**User Experience Requirements:**
+- UX-1: Search box prominently displayed on all pages
+- UX-2: Search results highlight matching keywords
+- UX-3: "No results" page suggests alternative searches or popular products
+- UX-4: Applied filters are clearly visible and removable
+- UX-5: Search preserves state when navigating back from product page
 
 #### Acceptance Criteria
 
-**AC-1 (Response Time Tracking):**
+**AC-1: Basic Search**
 ```
-Given an API request is made
-When the request completes
-Then response time is recorded
-And stored with endpoint, method, status code, timestamp
-```
-
-**AC-2 (Performance Alert):**
-```
-Given API response time exceeds 500ms for 5 consecutive requests
-When the threshold is breached
-Then alert is sent to on-call engineer
-And alert includes endpoint, average response time, time range
+Given a user on any page
+When they enter "laptop" in search box
+And press Enter or click search icon
+Then they see results page with laptop products
+And results are sorted by relevance
+And each result shows image, name, price, rating, availability
 ```
 
-**AC-3 (Dashboard):**
+**AC-2: Search with Filters**
 ```
-Given a user opens the monitoring dashboard
-When the page loads
-Then they see:
-  - Average response time (last hour, last 24 hours)
-  - Error rate (last hour, last 24 hours)
-  - Request volume (last hour, last 24 hours)
-  - Top 10 slowest endpoints
-  - Recent alerts
+Given a user viewing search results for "laptop"
+When they select "Dell" brand filter
+And select price range "$500-$1000"
+Then results update to show only Dell laptops in that price range
+And filter selections are visually indicated
+And result count updates
 ```
 
-#### Assumptions
+**AC-3: Autocomplete**
+```
+Given a user typing in search box
+When they type "lap"
+Then autocomplete dropdown appears
+And shows suggestions like "laptop", "laptop bag", "laptop stand"
+And suggestions update as they continue typing
+```
 
-- A-1: API framework supports middleware/interceptors - If wrong, need alternative instrumentation
-- A-2: Team has access to monitoring infrastructure - If wrong, need to provision
-- A-3: On-call rotation exists - If wrong, need to set up
+**AC-4: Typo Handling**
+```
+Given a user searching for "laptp" (typo)
+When search executes
+Then results for "laptop" are shown
+And message displays "Showing results for 'laptop'"
+And option to search for "laptp" exactly is provided
+```
 
-#### Open Questions
+**AC-5: No Results**
+```
+Given a user searching for "xyzabc123" (no matches)
+When search executes
+Then "No results found" message displays
+And suggestions for popular products or categories are shown
+And search tips are provided ("Try different keywords", etc.)
+```
 
-- Q-1: What are the acceptable response time thresholds? | Owner: Engineering | Priority: H | Status: Open
-- Q-2: What alert channels should we use (email, Slack, PagerDuty)? | Owner: Operations | Priority: H | Status: Open
-- Q-3: Should we track database query performance separately? | Owner: Engineering | Priority: M | Status: Open
-- Q-4: Do we need distributed tracing? | Owner: Engineering | Priority: M | Status: Open
+### Output Document
 
-#### Scope
+```markdown
+# Product Search Requirements
 
+## 1. Executive Summary
+Implement full-text product search with filtering, sorting, autocomplete, and typo tolerance to improve product discovery and conversion.
+
+## 2. Business Goals
+- Increase product discovery rate by 30%
+- Reduce "no results" searches by 50%
+- Improve search-to-purchase conversion by 20%
+
+## 3. Functional Requirements
+[FR-1 through FR-10]
+
+## 4. Non-Functional Requirements
+[NFR-1 through NFR-6]
+
+## 5. User Experience Requirements
+[UX-1 through UX-5]
+
+## 6. Search Scope
 **In Scope:**
-- Response time tracking
-- Error rate tracking
-- Request volume tracking
-- Real-time dashboard
-- Alerting
-- Historical data (30 days)
+- Product name, description, brand, category
+- Active products only
+- English language
 
 **Out of Scope:**
-- Distributed tracing (deferred)
-- Database query monitoring (separate project)
-- Log aggregation (existing tool)
-- Custom metrics (Phase 2)
-- Anomaly detection (Phase 2)
+- Reviews/comments search
+- Image-based search
+- Voice search
+- Multi-language support
+
+## 7. Acceptance Criteria
+[AC-1 through AC-5]
+
+## 8. Success Metrics
+- Search usage: % of sessions using search
+- Click-through rate: % of searches resulting in product click
+- Zero-results rate: % of searches with no results
+- Search-to-purchase: % of searches leading to purchase
+- Average response time
+
+## 9. Technical Constraints
+- Must integrate with existing product catalog API
+- Must work on mobile and desktop
+- Must support 100,000+ products
+
+## 10. Dependencies
+- Search engine selection (Elasticsearch, Algolia, etc.)
+- Product catalog API
+- Analytics integration
+```
+
+---
+
+## Example 3: API Rate Limiting
+
+### Input
+Security team: "We need to prevent API abuse."
+
+### Analysis Process
+
+#### Clarification Questions
+1. What constitutes "abuse"? (request volume, patterns, endpoints?)
+2. What should happen when limit is exceeded? (reject, queue, throttle?)
+3. Should limits differ by user type? (free vs. paid, internal vs. external?)
+4. Should limits be per endpoint or global?
+5. What time window? (per second, minute, hour, day?)
+6. Should there be burst allowances?
+7. How should users know they're rate limited?
+8. Should there be a way to request limit increases?
+
+#### Extracted Requirements
+
+**Functional Requirements:**
+- FR-1: Implement rate limiting on all public API endpoints
+- FR-2: Return HTTP 429 (Too Many Requests) when limit exceeded
+- FR-3: Include rate limit headers in all API responses
+- FR-4: Provide different rate limits for different user tiers
+- FR-5: Allow administrators to configure rate limits per endpoint
+- FR-6: Log rate limit violations
+
+**Rate Limit Tiers:**
+- Free tier: 100 requests/hour, 1,000 requests/day
+- Basic tier: 1,000 requests/hour, 10,000 requests/day
+- Pro tier: 10,000 requests/hour, 100,000 requests/day
+- Enterprise: Custom limits
+
+**Non-Functional Requirements:**
+- NFR-1: Rate limiting check adds < 5ms latency
+- NFR-2: Rate limit counters are accurate within 1%
+- NFR-3: Rate limiting system is highly available (99.99%)
+- NFR-4: Support distributed rate limiting across multiple servers
+
+**Response Headers:**
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1640000000
+Retry-After: 3600
+```
+
+#### Acceptance Criteria
+
+**AC-1: Rate Limit Enforcement**
+```
+Given a free tier user with 100 requests/hour limit
+When they make their 101st request within an hour
+Then response status is 429
+And response body explains rate limit exceeded
+And Retry-After header indicates when they can retry
+```
+
+**AC-2: Rate Limit Headers**
+```
+Given any API request
+When response is returned
+Then X-RateLimit-Limit header shows user's limit
+And X-RateLimit-Remaining shows remaining requests
+And X-RateLimit-Reset shows when limit resets (Unix timestamp)
+```
+
+**AC-3: Different Limits by Tier**
+```
+Given a Pro tier user
+When they make requests
+Then their limit is 10,000 requests/hour
+And limit headers reflect Pro tier limits
+```
+
+### Output Document
+
+```markdown
+# API Rate Limiting Requirements
+
+## 1. Purpose
+Prevent API abuse, ensure fair usage, and protect system resources.
+
+## 2. Functional Requirements
+[FR-1 through FR-6]
+
+## 3. Rate Limit Tiers
+[Tier definitions]
+
+## 4. Non-Functional Requirements
+[NFR-1 through NFR-4]
+
+## 5. Error Response Format
+```json
+{
+  "error": "rate_limit_exceeded",
+  "message": "You have exceeded your rate limit of 100 requests per hour.",
+  "retry_after": 3600,
+  "limit": 100,
+  "remaining": 0,
+  "reset": 1640000000
+}
+```
+
+## 6. Acceptance Criteria
+[AC-1 through AC-3]
+
+## 7. Implementation Notes
+- Use sliding window algorithm for accurate counting
+- Store counters in Redis for distributed access
+- Implement graceful degradation if rate limit service is unavailable
+
+## 8. Monitoring
+- Track rate limit hit rate by endpoint and tier
+- Alert if rate limit service latency > 10ms
+- Dashboard showing top rate-limited users
+```
+
+---
+
+## Key Takeaways from Examples
+
+1. **Always ask clarifying questions** - Initial requests are rarely complete
+2. **Be specific with NFRs** - "Fast" and "secure" need quantifiable definitions
+3. **Define acceptance criteria** - Make requirements testable
+4. **Document out-of-scope** - Explicitly state what's NOT included
+5. **Consider all requirement types** - Functional, non-functional, security, UX, etc.
+6. **Think about edge cases** - What happens when things go wrong?
+7. **Define success metrics** - How will you know if it's working?

@@ -2,240 +2,451 @@
 
 ## Purpose
 
-Convert requirements into a comprehensive system design with components, APIs, data flows, and technical decisions.
+Convert requirements into a comprehensive system design that defines components, APIs, data flows, and technical architecture.
 
 ## When to Use
 
-- When designing a new system or major feature
-- After completing requirements analysis
-- Before beginning implementation
-- When planning a significant refactoring
-- During technical interviews or architecture discussions
+- Starting a new feature or system
+- Requirements have been analyzed and clarified
+- Need to design technical solution before implementation
+- Planning major system changes or additions
+- Before architecture review
+- When multiple implementation approaches are possible
+- Communicating design to engineering team
 
 ## When NOT to Use
 
-- For trivial features that don't need formal design
-- When requirements are unclear (use requirements-analysis first)
-- For minor bug fixes or small changes
-- When the design already exists and is current
+- Requirements are unclear (use requirements-analysis first)
+- Making minor code changes
+- Bug fixes with known solutions
+- System design already exists and is current
+- Prototyping or experimentation phase
 
 ## Inputs
 
-- **requirements**: Functional and non-functional requirements
-- **constraints**: Technical, business, timeline, budget constraints
-- **non-functional-requirements**: Performance, scalability, security, reliability requirements
-- **existing-architecture**: Current system architecture (if applicable)
+- Analyzed requirements (functional and non-functional)
+- Business constraints (budget, timeline, compliance)
+- Existing system architecture
+- Technology stack and standards
+- Team capabilities and preferences
+- Scalability and performance requirements
+- Security and compliance requirements
 
 ## Expected Outputs
 
-- **system-architecture**: High-level architecture diagram and description
-- **component-design**: Detailed component specifications
-- **api-specifications**: API contracts and interfaces
-- **data-model**: Database schemas and data structures
-- **technology-choices**: Selected technologies with rationale
+- **System Design Document** containing:
+  - System overview and context
+  - Component architecture
+  - API specifications
+  - Data model and flows
+  - Technology choices
+  - Deployment architecture
+  - Security design
+  - Scalability approach
+- **Architecture Diagrams** (C4 model or similar)
+- **API Contracts** (OpenAPI/Swagger specs)
+- **Data Models** (ERD, schema definitions)
+- **Sequence Diagrams** for key flows
+- **Technology Stack** documentation
+- **Trade-off Analysis** for key decisions
 
 ## Workflow
 
-### 1. Understand Requirements and Constraints
-
+### 1. Understand Requirements (1-2 hours)
 - Review functional requirements
-- Understand non-functional requirements (performance, scalability, security)
-- Identify constraints (technical, budget, timeline)
-- Clarify success criteria
+- Review non-functional requirements (NFRs)
+- Identify constraints
+- Clarify ambiguities
+- Prioritize requirements
 
-### 2. Define System Scope and Boundaries
+### 2. Define System Context (1 hour)
+- Identify users and actors
+- Identify external systems
+- Define system boundaries
+- Create context diagram
 
-- What is in scope?
-- What is out of scope?
-- What are the external dependencies?
-- What are the integration points?
-
-### 3. Identify Major Components
-
-- Break down the system into logical components
+### 3. Design High-Level Architecture (2-4 hours)
+- Identify major components
 - Define component responsibilities
-- Ensure single responsibility principle
-- Identify component types (services, databases, caches, queues)
+- Determine architectural style (monolith, microservices, serverless, etc.)
+- Design component interactions
+- Create container diagram
 
-### 4. Design Data Model
+### 4. Design Data Architecture (2-3 hours)
+- Design data model
+- Choose data stores
+- Define data flows
+- Plan data consistency strategy
+- Design caching strategy
+- Address data privacy and compliance
 
-- Identify entities and relationships
-- Design database schemas
-- Choose data stores (SQL, NoSQL, cache, object storage)
-- Define data ownership (which component owns which data)
-- Plan for data consistency and integrity
-
-### 5. Design APIs and Interfaces
-
-- Define API contracts between components
-- Choose API styles (REST, GraphQL, gRPC, events)
-- Design request/response formats
+### 5. Design APIs (2-4 hours)
+- Define API endpoints
+- Specify request/response formats
+- Design authentication and authorization
+- Plan API versioning
 - Define error handling
-- Plan for versioning
+- Create API documentation
 
-### 6. Design Data Flows
+### 6. Design Key Workflows (2-3 hours)
+- Identify critical user journeys
+- Create sequence diagrams
+- Design error handling
+- Plan retry and fallback strategies
 
-- Map how data flows through the system
-- Identify synchronous vs. asynchronous flows
-- Design event flows (if applicable)
-- Plan for data transformations
+### 7. Address Non-Functional Requirements (2-4 hours)
+- **Performance:** Design for target latency and throughput
+- **Scalability:** Plan horizontal/vertical scaling
+- **Reliability:** Design for target availability
+- **Security:** Design authentication, authorization, encryption
+- **Observability:** Plan logging, monitoring, tracing
 
-### 7. Address Non-Functional Requirements
+### 8. Make Technology Choices (1-2 hours)
+- Select programming languages
+- Choose frameworks and libraries
+- Select databases and caches
+- Choose messaging systems
+- Document rationale for each choice
 
-**Performance:**
-- Identify performance bottlenecks
-- Design for required response times
-- Plan caching strategy
-- Optimize data access patterns
+### 9. Design Deployment Architecture (1-2 hours)
+- Define deployment model
+- Plan infrastructure
+- Design CI/CD pipeline
+- Plan environments (dev, staging, prod)
 
-**Scalability:**
-- Design for horizontal scaling
-- Identify stateless vs. stateful components
-- Plan for load balancing
-- Design for expected load and growth
-
-**Security:**
-- Design authentication mechanism
-- Design authorization model
-- Plan for data encryption (in transit and at rest)
-- Identify security boundaries
-
-**Reliability:**
-- Design for fault tolerance
-- Plan for failure scenarios
-- Design retry and fallback mechanisms
-- Plan for data backup and recovery
-
-### 8. Make Technology Choices
-
-- Choose programming languages
-- Select frameworks and libraries
-- Choose databases and data stores
-- Select cloud services (if applicable)
-- Choose communication protocols
-
-### 9. Create Architecture Diagrams
-
-- System context diagram
-- Component diagram
-- Sequence diagrams (for key flows)
-- Data flow diagrams
-- Deployment diagram
-
-### 10. Document Design Decisions
-
-- Why this architecture?
-- Why these technologies?
-- What tradeoffs were made?
-- What alternatives were considered?
+### 10. Document and Review (2-3 hours)
+- Write system design document
+- Create all diagrams
+- Document trade-offs and decisions
+- Review with team
+- Iterate based on feedback
 
 ## Decision Framework
 
-### Architecture Patterns
+### Architectural Style Selection
+- **Monolith:** Simple requirements, small team, rapid iteration
+- **Microservices:** Complex domain, multiple teams, independent scaling
+- **Serverless:** Event-driven, variable load, minimal ops
+- **Hybrid:** Mix based on component needs
 
-**Monolith:**
-- Use for: Small teams, simple domains, rapid development
-- Pros: Simple deployment, easy transactions, straightforward
-- Cons: Scaling challenges, tight coupling, long deployment cycles
+### Data Store Selection
+- **Relational (SQL):** Structured data, ACID transactions, complex queries
+- **Document (NoSQL):** Flexible schema, hierarchical data
+- **Key-Value:** Simple lookups, caching, sessions
+- **Graph:** Relationship-heavy data
+- **Time-Series:** Metrics, logs, events
 
-**Microservices:**
-- Use for: Large teams, complex domains, independent scaling
-- Pros: Independent deployment, technology diversity, fault isolation
-- Cons: Complexity, distributed transactions, operational overhead
+### Communication Pattern Selection
+- **Synchronous (REST/gRPC):** Request-response, immediate feedback
+- **Asynchronous (Message Queue):** Decoupling, reliability, buffering
+- **Event-Driven (Pub/Sub):** Fan-out, loose coupling
+- **Hybrid:** Mix based on use case
 
-**Serverless:**
-- Use for: Event-driven, variable load, minimal ops
-- Pros: Auto-scaling, pay-per-use, no server management
-- Cons: Cold starts, vendor lock-in, debugging challenges
-
-### Data Storage
-
-**Relational (PostgreSQL, MySQL):**
-- Use for: Structured data, ACID transactions, complex queries
-
-**NoSQL (MongoDB, DynamoDB):**
-- Use for: Flexible schema, high write throughput, horizontal scaling
-
-**Cache (Redis, Memcached):**
-- Use for: Fast reads, session storage, temporary data
-
-**Object Storage (S3, GCS):**
-- Use for: Files, images, backups, large objects
-
-### Communication Patterns
-
-**Synchronous (REST, gRPC):**
-- Use for: Request-response, immediate feedback, simple flows
-
-**Asynchronous (Message queues, Events):**
-- Use for: Decoupling, eventual consistency, high throughput
+### Scalability Strategy
+- **Vertical:** Increase resources (CPU, RAM)
+- **Horizontal:** Add more instances
+- **Caching:** Reduce database load
+- **CDN:** Distribute static content
+- **Read Replicas:** Scale reads
+- **Sharding:** Distribute data
 
 ## Quality Checklist
 
-- [ ] All requirements are addressed
-- [ ] Non-functional requirements are met
-- [ ] Components have clear responsibilities
-- [ ] APIs are well-defined
-- [ ] Data model is normalized and efficient
+- [ ] All functional requirements are addressed
+- [ ] All NFRs have design solutions
+- [ ] System context is clearly defined
+- [ ] Component responsibilities are clear and single-purpose
+- [ ] APIs are well-defined with contracts
+- [ ] Data model supports all use cases
+- [ ] Data flows are documented
 - [ ] Security is designed in (not bolted on)
-- [ ] System can scale to meet expected load
+- [ ] Scalability approach is defined
 - [ ] Failure scenarios are considered
+- [ ] Monitoring and observability are planned
 - [ ] Technology choices are justified
-- [ ] Design is documented with diagrams
-- [ ] Tradeoffs are explicitly stated
+- [ ] Deployment architecture is defined
+- [ ] Diagrams are clear and use standard notation
+- [ ] Trade-offs are documented
+- [ ] Team has reviewed and approved design
 
 ## Common Mistakes
 
-- **Over-engineering**: Designing for scale you don't need
-- **Under-engineering**: Ignoring non-functional requirements
-- **Premature optimization**: Optimizing before understanding bottlenecks
-- **Ignoring constraints**: Designing without considering budget, timeline, team skills
-- **Technology-first**: Choosing technologies before understanding requirements
-- **Skipping documentation**: Not documenting design decisions and rationale
+1. **Designing before understanding requirements**
+   - Always start with clear, analyzed requirements
+   - Don't assume you know what's needed
+
+2. **Over-engineering**
+   - Design for current needs, not hypothetical future
+   - Add complexity only when justified
+
+3. **Under-engineering**
+   - Don't ignore NFRs (performance, security, scalability)
+   - Plan for production from the start
+
+4. **Ignoring existing architecture**
+   - Understand current system before designing changes
+   - Ensure consistency with existing patterns
+
+5. **Not documenting trade-offs**
+   - Every design decision involves trade-offs
+   - Document why you chose one approach over another
+
+6. **Skipping API design**
+   - APIs are contracts - design them carefully
+   - Poor API design is hard to fix later
+
+7. **Forgetting about operations**
+   - Design for deployment, monitoring, debugging
+   - Consider operational complexity
+
+8. **Not validating with team**
+   - Get feedback early and often
+   - Team buy-in is critical for success
 
 ## Examples
 
-See [examples.md](examples.md) for detailed examples.
+### Example 1: E-commerce Checkout System
+
+**Requirements:**
+- Users can add items to cart and checkout
+- Support credit card and PayPal payments
+- Send order confirmation emails
+- Update inventory in real-time
+- Handle 1000 orders/hour
+- 99.9% availability
+
+**System Design:**
+
+**Architecture Style:** Microservices (separate scaling for checkout vs. inventory)
+
+**Components:**
+1. **Cart Service** (Node.js)
+   - Manage shopping cart
+   - Redis for cart storage
+   - REST API
+
+2. **Checkout Service** (Java/Spring Boot)
+   - Process checkout
+   - Orchestrate payment and order creation
+   - PostgreSQL for orders
+
+3. **Payment Service** (Node.js)
+   - Integrate with Stripe and PayPal
+   - Handle payment processing
+   - Store payment records
+
+4. **Inventory Service** (Go)
+   - Manage stock levels
+   - Reserve inventory
+   - PostgreSQL for inventory
+
+5. **Notification Service** (Python)
+   - Send emails
+   - Integrate with SendGrid
+
+**Data Flow:**
+```
+1. User adds items to cart → Cart Service → Redis
+2. User clicks checkout → Checkout Service
+3. Checkout Service → Inventory Service (reserve items)
+4. Checkout Service → Payment Service (process payment)
+5. Payment Service → Stripe/PayPal API
+6. On success: Checkout Service → Create Order (PostgreSQL)
+7. Checkout Service → Publish OrderCreated event
+8. Notification Service → Send confirmation email
+9. Inventory Service → Update stock levels
+```
+
+**API Design:**
+
+```yaml
+# Cart Service
+POST /api/cart/items
+DELETE /api/cart/items/{itemId}
+GET /api/cart
+
+# Checkout Service
+POST /api/checkout
+  Request:
+    cartId: string
+    paymentMethod: "credit_card" | "paypal"
+    paymentDetails: object
+    shippingAddress: object
+  Response:
+    orderId: string
+    status: "success" | "failed"
+    confirmationNumber: string
+```
+
+**Technology Stack:**
+- **Languages:** Node.js, Java, Go, Python
+- **Frameworks:** Express, Spring Boot, Gin, Flask
+- **Databases:** PostgreSQL (orders, inventory), Redis (cart, cache)
+- **Messaging:** RabbitMQ (async events)
+- **Payments:** Stripe, PayPal SDKs
+- **Email:** SendGrid
+- **Infrastructure:** Kubernetes, AWS
+
+**Scalability:**
+- Horizontal scaling for all services
+- Redis for cart (fast, ephemeral)
+- Database read replicas
+- CDN for static assets
+- Rate limiting on APIs
+
+**Security:**
+- HTTPS for all communication
+- JWT for authentication
+- PCI DSS compliance for payment data
+- Secrets in AWS Secrets Manager
+- Input validation on all endpoints
+
+### Example 2: Real-Time Analytics Dashboard
+
+**Requirements:**
+- Display real-time metrics from IoT devices
+- Support 10,000 devices sending data every 10 seconds
+- Dashboard updates in near real-time (< 5 seconds)
+- Historical data queries
+- Alerting on threshold breaches
+
+**System Design:**
+
+**Architecture Style:** Event-driven, serverless
+
+**Components:**
+1. **Ingestion API** (AWS API Gateway + Lambda)
+   - Receive device data
+   - Validate and enrich
+   - Publish to Kinesis
+
+2. **Stream Processor** (AWS Lambda + Kinesis)
+   - Process incoming data
+   - Calculate aggregations
+   - Detect anomalies
+
+3. **Time-Series Database** (AWS Timestream)
+   - Store device metrics
+   - Optimized for time-series queries
+
+4. **Real-Time Service** (WebSocket API + Lambda)
+   - Push updates to connected clients
+   - Manage WebSocket connections
+
+5. **Query Service** (Lambda + API Gateway)
+   - Historical data queries
+   - Aggregations and analytics
+
+6. **Alert Service** (Lambda + SNS)
+   - Evaluate alert rules
+   - Send notifications
+
+**Data Flow:**
+```
+1. IoT Device → POST /api/metrics → API Gateway → Lambda
+2. Lambda → Publish to Kinesis Stream
+3. Stream Processor Lambda (triggered by Kinesis)
+   - Calculate aggregations
+   - Write to Timestream
+   - Publish to SNS (for real-time updates)
+4. WebSocket Lambda (subscribed to SNS)
+   - Push to connected dashboard clients
+5. Alert Lambda (triggered by Kinesis)
+   - Evaluate rules
+   - Send alerts via SNS
+```
+
+**Technology Stack:**
+- **Ingestion:** API Gateway, Lambda (Node.js)
+- **Streaming:** Kinesis Data Streams
+- **Processing:** Lambda (Python)
+- **Storage:** Timestream (time-series), DynamoDB (metadata)
+- **Real-time:** WebSocket API, Lambda
+- **Alerting:** SNS, SES
+- **Frontend:** React, WebSocket client
+
+**Scalability:**
+- API Gateway auto-scales
+- Lambda auto-scales
+- Kinesis shards scale based on throughput
+- Timestream auto-scales
+
+**Performance:**
+- Kinesis provides < 1 second latency
+- WebSocket for real-time push (no polling)
+- Timestream optimized for time-series queries
+- DynamoDB for fast metadata lookups
 
 ## Related Skills
 
-- **Requires**: requirements-analysis
-- **Commonly followed by**:
-  - architecture-review
-  - api-design-review
-  - data-architecture-review
-  - security-architecture-review
-- **Works with**:
-  - architecture-decision
-  - tradeoff-analysis
+### Prerequisites
+- `requirements-analysis` - Clear requirements before design
+
+### Commonly Followed By
+- `architecture-review` - Review the design
+- `api-design-review` - Detailed API review
+- `data-architecture-review` - Detailed data review
+- `security-architecture-review` - Security review
+- `technical-specification` - Detailed implementation specs
+
+### Works With
+- `architecture-decision` - Document key decisions
+- `tradeoff-analysis` - Analyze alternatives
+- `scalability-analysis` - Deep dive on scaling
+- `technical-design-document` - Formal documentation
+
+### Alternative To
+- None (this is a core skill)
 
 ## Skill Composition
 
+Typical workflow:
+
 ```
 requirements-analysis
-        ↓
-system-design
-        ↓
+       ↓
+system-design (this skill)
+       ↓
 architecture-review
-        ↓
+       ↓
 api-design-review
-        ↓
+       ↓
+data-architecture-review
+       ↓
+security-architecture-review
+       ↓
+architecture-decision
+       ↓
 technical-specification
+       ↓
+Implementation
 ```
 
 ## Evaluation Criteria
 
-### Completeness
-- Are all requirements addressed?
-- Are all components defined?
-- Are all APIs specified?
+### Quality Indicators
+- All requirements are addressed in design
+- Components have clear, single responsibilities
+- APIs are well-defined and consistent
+- Data model supports all use cases
+- NFRs have concrete solutions
+- Trade-offs are documented
+- Team understands and approves design
 
-### Quality
-- Is the design scalable?
-- Is the design secure?
-- Is the design maintainable?
+### Red Flags
+- Requirements not fully understood
+- Components with unclear responsibilities
+- Missing API specifications
+- Data model gaps
+- NFRs ignored or hand-waved
+- No consideration of failure scenarios
+- Technology choices not justified
+- Team doesn't understand design
 
-### Clarity
-- Is the design well-documented?
-- Are diagrams clear and accurate?
-- Are decisions justified?
+### Success Metrics
+- Engineering team can implement from design
+- Design passes architecture review
+- Stakeholders approve design
+- Design addresses all requirements
+- NFRs are achievable with design
+- Design is consistent with existing architecture

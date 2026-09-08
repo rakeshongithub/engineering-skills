@@ -2,33 +2,46 @@
   "name": "requirements-analysis",
   "category": "requirements",
   "version": "1.0.0",
-  "description": "Transform vague or incomplete requirements into clear, actionable engineering requirements with acceptance criteria",
+  "description": "Transform vague, incomplete, or ambiguous requirements into clear, actionable engineering requirements that can be implemented.",
   "inputs": [
-    "initial-requirements",
-    "stakeholders",
-    "context",
-    "constraints"
+    "business_requirements",
+    "stakeholder_conversations",
+    "existing_documentation",
+    "user_feedback",
+    "constraints",
+    "existing_system_architecture"
   ],
   "outputs": [
-    "functional-requirements",
-    "non-functional-requirements",
-    "acceptance-criteria",
-    "assumptions",
-    "open-questions"
+    "structured_requirements_document",
+    "clarification_questions",
+    "requirements_traceability_matrix",
+    "risk_assessment"
   ],
   "requires": [],
   "commonly_followed_by": [
+    "requirement-clarification",
     "system-design",
-    "architecture-design",
+    "architecture-decision",
+    "technical-specification",
+    "tradeoff-analysis"
+  ],
+  "alternative_to": [
+    "requirement-clarification",
     "technical-specification"
+  ],
+  "works_with": [
+    "architecture-discovery",
+    "technical-feasibility",
+    "risk-analysis"
   ],
   "tags": [
     "requirements",
     "analysis",
     "planning",
-    "stakeholders",
-    "acceptance-criteria"
+    "documentation",
+    "stakeholder-management"
   ],
   "complexity": "intermediate",
-  "estimated_time": "1-2 hours"
+  "estimated_time": "2-8 hours",
+  "skill_type": "analysis"
 }

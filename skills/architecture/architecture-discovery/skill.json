@@ -2,33 +2,47 @@
   "name": "architecture-discovery",
   "category": "architecture",
   "version": "1.0.0",
-  "description": "Reverse-engineer and document the architecture of an existing system by analyzing code, infrastructure, and documentation",
+  "description": "Reverse-engineer and document the architecture of an existing system when documentation is missing, outdated, or incomplete.",
   "inputs": [
-    "codebase",
-    "infrastructure-config",
-    "existing-documentation",
-    "access-to-running-system"
+    "source_code_repository",
+    "running_application",
+    "deployment_configurations",
+    "database_schemas",
+    "team_interviews",
+    "existing_documentation"
   ],
   "outputs": [
-    "architecture-diagram",
-    "component-inventory",
-    "integration-map",
-    "technology-stack",
-    "architecture-documentation"
+    "architecture_overview_document",
+    "component_catalog",
+    "dependency_map",
+    "technology_inventory",
+    "architecture_diagrams",
+    "identified_risks"
   ],
   "requires": [],
   "commonly_followed_by": [
     "architecture-review",
     "technical-debt-analysis",
-    "migration-planning"
+    "migration-planning",
+    "architecture-decision",
+    "system-design"
+  ],
+  "alternative_to": [
+    "architecture-documentation"
+  ],
+  "works_with": [
+    "codebase-analysis",
+    "dependency-analysis",
+    "security-review"
   ],
   "tags": [
     "architecture",
     "discovery",
-    "reverse-engineering",
     "documentation",
-    "analysis"
+    "reverse-engineering",
+    "legacy-systems"
   ],
-  "complexity": "advanced",
-  "estimated_time": "4-8 hours"
+  "complexity": "intermediate",
+  "estimated_time": "1-2 weeks",
+  "skill_type": "analysis"
 }

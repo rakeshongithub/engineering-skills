@@ -31,6 +31,253 @@ skills:
       - documentation
       - meta-skill
 
+  # Requirements Skills
+  - name: requirements-analysis
+    category: requirements
+    path: skills/requirements/requirements-analysis
+    description: Transform vague, incomplete, or ambiguous requirements into clear, actionable engineering requirements that can be implemented
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-8 hours
+    tags:
+      - requirements
+      - analysis
+      - planning
+      - documentation
+      - stakeholder-management
+
+  # Architecture Skills
+  - name: architecture-discovery
+    category: architecture
+    path: skills/architecture/architecture-discovery
+    description: Reverse-engineer and document the architecture of an existing system when documentation is missing, outdated, or incomplete
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-2 weeks
+    tags:
+      - architecture
+      - discovery
+      - documentation
+      - reverse-engineering
+      - legacy-systems
+
+  - name: system-design
+    category: architecture
+    path: skills/architecture/system-design
+    description: Convert requirements into a comprehensive system design that defines components, APIs, data flows, and technical architecture
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 1-2 weeks
+    tags:
+      - architecture
+      - design
+      - system-design
+      - api-design
+      - data-modeling
+
+  - name: architecture-review
+    category: architecture
+    path: skills/architecture/architecture-review
+    description: Systematically evaluate an existing architecture for quality, risks, gaps, and improvement opportunities
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-16 hours
+    tags:
+      - architecture
+      - review
+      - assessment
+      - quality
+      - risk-analysis
+
+  - name: architecture-decision
+    category: architecture
+    path: skills/architecture/architecture-decision
+    description: Make and document architectural and technology decisions using a structured, evidence-based approach with Architecture Decision Records (ADRs)
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-6 hours
+    tags:
+      - architecture
+      - decision-making
+      - adr
+      - documentation
+      - governance
+
+  - name: tradeoff-analysis
+    category: architecture
+    path: skills/architecture/tradeoff-analysis
+    description: Systematically compare architectural alternatives by evaluating tradeoffs across multiple dimensions to support informed decision-making
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-6 hours
+    tags:
+      - architecture
+      - analysis
+      - decision-support
+      - comparison
+      - tradeoffs
+
+  - name: scalability-analysis
+    category: architecture
+    path: skills/architecture/scalability-analysis
+    description: Analyze system scalability to identify bottlenecks and design solutions for growth
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-6 hours
+    tags:
+      - scalability
+      - performance
+      - capacity
+      - bottlenecks
+
+  - name: reliability-analysis
+    category: architecture
+    path: skills/architecture/reliability-analysis
+    description: Analyze system reliability to identify failure modes and design resilience mechanisms
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-6 hours
+    tags:
+      - reliability
+      - availability
+      - resilience
+      - failure-modes
+
+  - name: api-design-review
+    category: architecture
+    path: skills/architecture/api-design-review
+    description: Review API design for usability, security, performance, and consistency before implementation
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    tags:
+      - api
+      - design
+      - review
+      - rest
+      - graphql
+
+  - name: data-architecture-review
+    category: architecture
+    path: skills/architecture/data-architecture-review
+    description: Review data architecture including data models, storage choices, and data flows for correctness and efficiency
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-6 hours
+    tags:
+      - data
+      - database
+      - schema
+      - storage
+
+  # Security Skills
+  - name: security-architecture-review
+    category: security
+    path: skills/security/security-architecture-review
+    description: Review architecture from a security perspective to identify threats, vulnerabilities, and required controls
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    tags:
+      - security
+      - threats
+      - vulnerabilities
+      - controls
+
+  # Engineering Skills
+  - name: code-review
+    category: engineering
+    path: skills/engineering/code-review
+    description: Systematically review code for quality, correctness, security, and maintainability
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 30min-2 hours
+    tags:
+      - code-review
+      - quality
+      - standards
+      - feedback
+
+  - name: refactoring
+    category: engineering
+    path: skills/engineering/refactoring
+    description: Improve code structure and quality without changing external behavior through systematic refactoring
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-8 hours
+    tags:
+      - refactoring
+      - code-quality
+      - maintainability
+      - technical-debt
+
+  - name: testing-strategy
+    category: engineering
+    path: skills/engineering/testing-strategy
+    description: Design a comprehensive testing strategy covering unit, integration, and end-to-end testing
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    tags:
+      - testing
+      - quality
+      - automation
+      - strategy
+
+  - name: migration-planning
+    category: engineering
+    path: skills/engineering/migration-planning
+    description: Plan technology or platform migrations with minimal risk and downtime
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    tags:
+      - migration
+      - planning
+      - risk-management
+      - modernization
+
+  - name: technical-debt-analysis
+    category: engineering
+    path: skills/engineering/technical-debt-analysis
+    description: Identify, quantify, and prioritize technical debt for systematic remediation
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 4-8 hours
+    tags:
+      - technical-debt
+      - code-quality
+      - prioritization
+      - remediation
+
+  # Operations Skills
+  - name: production-readiness
+    category: operations
+    path: skills/operations/production-readiness
+    description: Assess whether a system is ready for production deployment across operational, security, and reliability dimensions
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-6 hours
+    tags:
+      - production
+      - readiness
+      - deployment
+      - operations
+
+  # Documentation Skills
+  - name: technical-design-document
+    category: documentation
+    path: skills/documentation/technical-design-document
+    description: Create comprehensive technical design documentation for systems, features, or architectural changes
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    tags:
+      - documentation
+      - design
+      - technical-writing
+      - communication
+
 # Skill categories available:
 # - meta: Meta-skills for orchestration and authoring
 # - requirements: Requirements analysis and clarification

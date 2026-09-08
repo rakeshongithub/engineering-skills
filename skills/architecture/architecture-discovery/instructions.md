@@ -1,420 +1,306 @@
-# Architecture Discovery - Detailed Instructions
+# Architecture Discovery - Step-by-Step Instructions
 
-## Step-by-Step Guide
+## Overview
+Systematic approach to understanding and documenting an unfamiliar system's architecture.
 
-### Phase 1: Initial Investigation
+## Phase 1: Preparation (30-60 minutes)
 
-#### 1. Gather Existing Materials
+### Step 1: Define Objectives
+1. Why are you doing this discovery?
+   - Onboarding?
+   - Planning migration?
+   - Architecture review?
+   - Integration planning?
 
-**Documentation:**
-- Architecture diagrams (even if outdated)
-- Design documents
-- README files
-- Wiki pages
-- ADRs (Architecture Decision Records)
-- Runbooks
+2. What questions need answers?
+   - How does the system work?
+   - What are the components?
+   - How do they integrate?
+   - What are the dependencies?
 
-**Code:**
-- Clone all repositories
-- Identify main repositories vs. supporting ones
-- Review repository structure
-- Check for monorepo vs. multi-repo
+3. What level of detail is needed?
+   - High-level overview
+   - Medium detail
+   - Deep dive
 
-**Infrastructure:**
-- Infrastructure as Code (Terraform, CloudFormation, etc.)
-- Kubernetes manifests
-- Docker Compose files
-- CI/CD pipeline configurations
+### Step 2: Gather Tools
+- Code editor/IDE
+- Diagram tool (draw.io, Lucidchart, PlantUML)
+- Note-taking tool
+- Code analysis tools (depends on language)
+- Access to running system (if available)
 
-#### 2. Interview Stakeholders
+## Phase 2: Information Gathering (2-4 hours)
 
-**Questions for engineers:**
-- What are the main components?
-- How do they communicate?
-- What are the pain points?
-- What are the critical paths?
-- What would you change if you could?
+### Step 3: Collect Existing Documentation
+1. Search for:
+   - README files
+   - Wiki pages
+   - Architecture docs
+   - API documentation
+   - Deployment guides
+   - ADRs (Architecture Decision Records)
 
-**Questions for operations:**
-- How is the system deployed?
-- What are the scaling characteristics?
-- What are common incidents?
-- What monitoring is in place?
+2. Interview team members:
+   - "Can you give me a 10-minute overview?"
+   - "What are the main components?"
+   - "What are the biggest pain points?"
+   - "What should I know that's not documented?"
 
-### Phase 2: System Analysis
+### Step 4: Examine Repository Structure
+1. Clone the repository
+2. Explore folder structure:
+   ```
+   project/
+   ├── src/
+   ├── tests/
+   ├── config/
+   ├── docs/
+   └── scripts/
+   ```
+3. Read top-level README
+4. Check build files (package.json, pom.xml, etc.)
+5. Review dependency files
 
-#### 1. Identify Entry Points
+## Phase 3: Code Analysis (4-8 hours)
 
-**User-facing:**
-- Web applications
-- Mobile apps
-- APIs
+### Step 5: Identify Entry Points
+1. Find main application entry:
+   - `main()` function
+   - Server startup file
+   - Application bootstrap
 
-**System-facing:**
-- Scheduled jobs
-- Event processors
-- Webhooks
+2. Trace from entry point:
+   - What gets initialized?
+   - What services start?
+   - What connections are made?
 
-**Tools:**
-```bash
-# Find web servers
-grep -r "express\|fastify\|flask\|django" .
+### Step 6: Map Components
+1. List major modules/packages:
+   ```
+   Component Name | Responsibility | Technology | Dependencies
+   ```
 
-# Find API routes
-grep -r "@app.route\|@GetMapping\|@PostMapping" .
+2. For each component, document:
+   - Purpose
+   - Key classes/modules
+   - Interfaces exposed
+   - Dependencies
 
-# Find scheduled jobs
-grep -r "cron\|schedule\|@scheduled" .
+### Step 7: Identify Technology Stack
+Create inventory:
+```markdown
+## Languages
+- Java 11
+- JavaScript (Node.js 14)
+
+## Frameworks
+- Spring Boot 2.5
+- React 17
+
+## Databases
+- PostgreSQL 13
+- Redis 6
+
+## Infrastructure
+- Docker
+- Kubernetes
+- AWS (EC2, S3, RDS)
 ```
 
-#### 2. Map Components
+## Phase 4: Integration Analysis (3-6 hours)
 
-**Identify services:**
-```bash
-# List directories that look like services
-ls -d */
+### Step 8: Map Internal Communication
+1. How do components communicate?
+   - REST APIs
+   - Message queues
+   - Shared database
+   - gRPC
+   - Events
 
-# Check for service definitions
-find . -name "docker-compose.yml" -o -name "deployment.yaml"
+2. Create communication diagram:
+   ```
+   Component A --REST--> Component B
+   Component B --Event--> Message Queue ---> Component C
+   ```
 
-# Check package.json or similar for service names
-find . -name "package.json" -exec grep -H "name" {} \;
+### Step 9: Identify External Dependencies
+1. List external systems:
+   - Third-party APIs
+   - External databases
+   - Cloud services
+   - SaaS integrations
+
+2. Document integration method:
+   - REST API
+   - SOAP
+   - SDK
+   - Direct database access
+
+## Phase 5: Data Architecture (2-4 hours)
+
+### Step 10: Map Data Stores
+1. List all data stores:
+   - Databases
+   - Caches
+   - File storage
+   - Message queues
+
+2. For each, document:
+   - Type (SQL, NoSQL, cache, etc.)
+   - What data it stores
+   - Who accesses it
+   - Backup strategy
+
+### Step 11: Trace Data Flows
+1. Pick key user scenarios
+2. Trace data through system:
+   ```
+   User Input → API → Service → Database
+                          ↓
+                    Message Queue
+                          ↓
+                    Background Job
+                          ↓
+                    External API
+   ```
+
+## Phase 6: Deployment Architecture (2-4 hours)
+
+### Step 12: Understand Deployment
+1. Review deployment configs:
+   - Dockerfile
+   - Kubernetes manifests
+   - CI/CD pipelines
+   - Infrastructure as Code
+
+2. Document:
+   - Environments (dev, staging, prod)
+   - Deployment process
+   - Scaling approach
+   - Monitoring and logging
+
+### Step 13: Map Infrastructure
+1. Create infrastructure diagram:
+   - Load balancers
+   - Application servers
+   - Databases
+   - Caches
+   - Message queues
+   - CDN
+   - Storage
+
+## Phase 7: Documentation (4-8 hours)
+
+### Step 14: Create Architecture Diagrams
+
+**System Context Diagram:**
+```
+[Users] --> [System] --> [External Systems]
 ```
 
-**For each component, document:**
-- Name
-- Purpose/responsibility
-- Technology stack
-- Dependencies
-- Owned data
-- Exposed APIs
-
-#### 3. Analyze Dependencies
-
-**Code dependencies:**
-```bash
-# Node.js
-find . -name "package.json" -exec cat {} \;
-
-# Python
-find . -name "requirements.txt" -o -name "Pipfile"
-
-# Java
-find . -name "pom.xml" -o -name "build.gradle"
+**Container Diagram:**
+```
+[Web App] --> [API] --> [Database]
+              [API] --> [Message Queue] --> [Worker]
 ```
 
-**Service dependencies:**
-- Check import statements
-- Review API client code
-- Check environment variables for service URLs
-- Review docker-compose or k8s configs
-
-### Phase 3: Communication Patterns
-
-#### 1. Identify Synchronous Communication
-
-**REST APIs:**
-```bash
-# Find HTTP clients
-grep -r "axios\|fetch\|requests\|RestTemplate" .
-
-# Find API endpoints
-grep -r "@GetMapping\|@PostMapping\|@app.route" .
+**Component Diagram:**
+```
+API Service:
+  - Auth Controller
+  - User Controller
+  - Order Controller
+  - Payment Service
+  - Notification Service
 ```
 
-**Document for each API:**
-- Caller → Callee
-- Purpose
-- Authentication method
-- Data format (JSON, XML, etc.)
+### Step 15: Write Architecture Document
 
-#### 2. Identify Asynchronous Communication
-
-**Message queues:**
-```bash
-# Find message queue usage
-grep -r "rabbitmq\|kafka\|sqs\|pubsub" .
-
-# Find publishers
-grep -r "publish\|send\|produce" .
-
-# Find consumers
-grep -r "subscribe\|consume\|listen" .
-```
-
-**Document for each message:**
-- Publisher → Queue/Topic → Consumer
-- Message type
-- Purpose
-- Failure handling
-
-#### 3. Identify Database Access
-
-```bash
-# Find database connections
-grep -r "DATABASE_URL\|MONGO_URI\|REDIS_URL" .
-
-# Find ORM usage
-grep -r "sequelize\|mongoose\|sqlalchemy\|hibernate" .
-```
-
-**Document:**
-- Which component owns which database
-- Shared databases (anti-pattern but common)
-- Database types (SQL, NoSQL, cache)
-
-### Phase 4: Data Architecture
-
-#### 1. Identify Data Stores
-
-**Types:**
-- Relational databases (PostgreSQL, MySQL)
-- NoSQL databases (MongoDB, DynamoDB)
-- Caches (Redis, Memcached)
-- Object storage (S3, GCS)
-- Search engines (Elasticsearch)
-
-**For each data store:**
-- Type and technology
-- Owner (which service)
-- Purpose
-- Size/scale
-- Backup/recovery
-
-#### 2. Map Data Flows
-
-**Identify:**
-- Where data originates
-- How it flows through the system
-- Where it's transformed
-- Where it's stored
-- Where it's consumed
-
-**Create data flow diagrams:**
-```
-User Input → API → Service A → Database
-                 ↓
-              Queue → Service B → Cache
-```
-
-### Phase 5: Infrastructure Analysis
-
-#### 1. Deployment Architecture
-
-**Cloud provider:**
-- AWS, GCP, Azure, or on-prem?
-- Which services are used?
-
-**Container orchestration:**
-- Kubernetes, ECS, Docker Swarm?
-- Cluster configuration
-
-**Networking:**
-- VPC/network configuration
-- Load balancers
-- CDN
-- DNS
-
-#### 2. Scaling and Reliability
-
-**Scaling:**
-- Horizontal vs. vertical
-- Auto-scaling configuration
-- Load balancing strategy
-
-**Reliability:**
-- Redundancy
-- Failover mechanisms
-- Backup and recovery
-
-### Phase 6: Documentation
-
-#### 1. Create System Context Diagram
-
-**Include:**
-- The system (as a box)
-- External users
-- External systems
-- Key integrations
-
-**Tools:**
-- draw.io
-- Lucidchart
-- PlantUML
-- Mermaid
-
-**Example (Mermaid):**
-```mermaid
-graph TB
-    Users[Users] --> WebApp[Web Application]
-    WebApp --> System[E-commerce System]
-    System --> PaymentGateway[Payment Gateway]
-    System --> EmailService[Email Service]
-    System --> InventorySystem[Inventory System]
-```
-
-#### 2. Create Container Diagram
-
-**Include:**
-- All services/applications
-- Databases
-- Message queues
-- Caches
-- Communication patterns
-
-**Example:**
-```mermaid
-graph TB
-    WebApp[Web App<br/>React] --> API[API Gateway<br/>Node.js]
-    API --> AuthService[Auth Service<br/>Node.js]
-    API --> ProductService[Product Service<br/>Java]
-    AuthService --> AuthDB[(Auth DB<br/>PostgreSQL)]
-    ProductService --> ProductDB[(Product DB<br/>PostgreSQL)]
-    ProductService --> Cache[(Cache<br/>Redis)]
-```
-
-#### 3. Write Architecture Documentation
-
-**Structure:**
+Structure:
 ```markdown
 # System Architecture
 
-## Overview
-[High-level description]
+## 1. Overview
+- Purpose
+- Key capabilities
+- Users
 
-## System Context
-[External dependencies and users]
+## 2. System Context
+- Diagram
+- External dependencies
 
-## Components
-### Component A
-- Purpose:
-- Technology:
-- Responsibilities:
-- Dependencies:
-- Data stores:
+## 3. Components
+- List and describe each component
 
-## Communication Patterns
-### Synchronous
-[REST APIs, gRPC, etc.]
+## 4. Technology Stack
+- Languages
+- Frameworks
+- Infrastructure
 
-### Asynchronous
-[Message queues, events, etc.]
+## 5. Data Architecture
+- Data stores
+- Data flows
 
-## Data Architecture
-[Data stores, ownership, flows]
+## 6. Integration Architecture
+- Internal communication
+- External integrations
 
-## Infrastructure
-[Deployment, scaling, networking]
+## 7. Deployment Architecture
+- Infrastructure
+- Deployment process
+- Environments
 
-## Technology Stack
-[Languages, frameworks, tools]
+## 8. Security
+- Authentication
+- Authorization
+- Data protection
 
-## Known Issues
-[Technical debt, limitations]
+## 9. Scalability
+- Current approach
+- Bottlenecks
 
-## Future Considerations
-[Planned changes, improvements]
+## 10. Technical Debt
+- Known issues
+- Improvement opportunities
+
+## 11. Unknowns
+- Areas needing further investigation
 ```
 
-### Phase 7: Validation
+### Step 16: Validate Findings
+1. Review with team members
+2. Walk through diagrams
+3. Correct misunderstandings
+4. Fill in gaps
+5. Get sign-off
 
-#### 1. Verify Against Running System
+## Tips for Efficiency
 
-**Check logs:**
-- Confirm communication patterns
-- Verify component interactions
+### Quick Wins
+- Start with README and existing docs
+- Talk to team early
+- Use code search to find patterns
+- Run the application and explore
+- Check recent commits for active areas
 
-**Check metrics:**
-- Validate traffic patterns
-- Confirm scaling behavior
+### Tools to Use
+- **Code navigation**: IDE features, grep, ripgrep
+- **Dependency analysis**: `npm list`, `mvn dependency:tree`, etc.
+- **Runtime analysis**: Debugger, profiler, logs
+- **Diagram generation**: PlantUML, Mermaid, Structurizr
 
-**Check traces:**
-- Verify request flows
-- Confirm dependencies
+### Time-Saving Strategies
+- Focus on your objectives (don't document everything)
+- Start high-level, add detail as needed
+- Use existing diagrams as starting point
+- Automate diagram generation where possible
+- Pair with team member for faster understanding
 
-#### 2. Review with Team
+## Common Pitfalls
 
-**Stakeholders:**
-- Original architects
-- Current engineers
-- Operations team
-
-**Questions:**
-- Is this accurate?
-- What's missing?
-- What's changed recently?
-- What should be highlighted?
-
-## Tools and Techniques
-
-### Code Analysis Tools
-
-**Dependency visualization:**
-- `madge` (JavaScript)
-- `pydeps` (Python)
-- `jdeps` (Java)
-
-**Architecture visualization:**
-- Structurizr
-- C4 model tools
-- PlantUML
-
-### Infrastructure Analysis
-
-**Cloud:**
-- AWS: `aws-cli`, CloudMapper
-- GCP: `gcloud`, Forseti
-- Azure: `az-cli`
-
-**Kubernetes:**
-- `kubectl get all`
-- `kubectl describe`
-- Lens (GUI)
-
-### Runtime Analysis
-
-**Tracing:**
-- Jaeger
-- Zipkin
-- AWS X-Ray
-
-**Logging:**
-- ELK stack
-- Splunk
-- CloudWatch
-
-**Metrics:**
-- Prometheus
-- Grafana
-- Datadog
-
-## Common Patterns to Look For
-
-### Microservices
-- Multiple small services
-- API gateway
-- Service mesh
-- Event-driven communication
-
-### Monolith
-- Single large application
-- Shared database
-- Internal modules
-
-### Serverless
-- Functions as a Service
-- Event-driven
-- Managed services
-
-### Event-Driven
-- Message queues
-- Event bus
-- Async processing
-
-## Next Steps
-
-After architecture discovery:
-
-1. **Architecture Review**: Assess the discovered architecture
-2. **Technical Debt Analysis**: Identify issues and improvements
-3. **Migration Planning**: Plan architectural improvements
+- **Analysis paralysis**: Don't try to understand everything
+- **Outdated docs**: Always verify against code
+- **Skipping team interviews**: Tribal knowledge is valuable
+- **Too much detail**: Stay at architecture level
+- **No validation**: Always review with team

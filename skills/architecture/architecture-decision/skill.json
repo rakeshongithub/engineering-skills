@@ -2,30 +2,42 @@
   "name": "architecture-decision",
   "category": "architecture",
   "version": "1.0.0",
-  "description": "Make and document architectural decisions using a structured approach with clear rationale and tradeoffs",
+  "description": "Make and document architectural and technology decisions using a structured, evidence-based approach with Architecture Decision Records (ADRs).",
   "inputs": [
-    "decision-context",
-    "alternatives",
+    "decision_context",
+    "requirements",
     "constraints",
-    "requirements"
+    "alternatives",
+    "stakeholder_input"
   ],
   "outputs": [
-    "decision",
-    "adr",
-    "rationale",
-    "consequences"
+    "architecture_decision_record",
+    "decision_outcome",
+    "consequences_assessment",
+    "action_items"
   ],
-  "requires": [],
+  "requires": [
+    "requirements-analysis"
+  ],
   "commonly_followed_by": [
-    "technical-specification",
-    "implementation"
+    "system-design",
+    "technical-design-document",
+    "migration-planning"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "tradeoff-analysis",
+    "architecture-review",
+    "risk-analysis"
   ],
   "tags": [
     "architecture",
-    "decision",
+    "decision-making",
     "adr",
-    "tradeoffs"
+    "documentation",
+    "governance"
   ],
   "complexity": "intermediate",
-  "estimated_time": "1-2 hours"
+  "estimated_time": "2-6 hours",
+  "skill_type": "decision"
 }
