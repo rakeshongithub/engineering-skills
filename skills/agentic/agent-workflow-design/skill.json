@@ -1,0 +1,47 @@
+{
+  "name": "agent-workflow-design",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Design and orchestrate multi-agent workflows that coordinate multiple AI agents to accomplish complex engineering tasks efficiently, reliably, and with clear handoffs and error handling.",
+  "inputs": [
+    "task-decomposition",
+    "agent-capabilities",
+    "workflow-requirements",
+    "constraints",
+    "handoff-specifications",
+    "error-handling-requirements"
+  ],
+  "outputs": [
+    "workflow-diagram",
+    "execution-plan",
+    "agent-assignments",
+    "coordination-logic",
+    "error-handling-strategy",
+    "monitoring-plan"
+  ],
+  "requires": [
+    "agent-task-decomposition"
+  ],
+  "commonly_followed_by": [
+    "agent-context-engineering",
+    "agent-instruction-design",
+    "agent-handoff-design"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "agent-evaluation",
+    "agent-observability",
+    "agent-guardrails"
+  ],
+  "tags": [
+    "agentic",
+    "workflow",
+    "orchestration",
+    "coordination",
+    "multi-agent",
+    "design"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-4 hours",
+  "skill_type": "design"
+}

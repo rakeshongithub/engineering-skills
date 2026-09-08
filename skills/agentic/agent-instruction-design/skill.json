@@ -1,0 +1,106 @@
+{
+  "name": "agent-instruction-design",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Design clear, executable instructions that enable AI agents to perform complex tasks autonomously with high success rates and minimal ambiguity.",
+  "inputs": [
+    {
+      "name": "task_definition",
+      "type": "string",
+      "description": "What needs to be accomplished",
+      "required": true
+    },
+    {
+      "name": "context_package",
+      "type": "object",
+      "description": "All information the agent needs",
+      "required": true
+    },
+    {
+      "name": "success_criteria",
+      "type": "array",
+      "description": "How to measure successful completion",
+      "required": true
+    },
+    {
+      "name": "agent_capabilities",
+      "type": "object",
+      "description": "What tools and knowledge the agent has",
+      "required": true
+    },
+    {
+      "name": "constraints",
+      "type": "array",
+      "description": "Limitations, requirements, or rules to follow",
+      "required": false
+    },
+    {
+      "name": "error_scenarios",
+      "type": "array",
+      "description": "Known failure modes and how to handle them",
+      "required": false
+    },
+    {
+      "name": "examples",
+      "type": "array",
+      "description": "Reference implementations or expected outputs",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "name": "instruction_document",
+      "type": "object",
+      "description": "Step-by-step, executable instructions"
+    },
+    {
+      "name": "decision_trees",
+      "type": "array",
+      "description": "Logic for handling conditional paths"
+    },
+    {
+      "name": "validation_criteria",
+      "type": "array",
+      "description": "How agent verifies each step succeeded"
+    },
+    {
+      "name": "error_handling_guide",
+      "type": "object",
+      "description": "What to do when things go wrong"
+    }
+  ],
+  "requires": [
+    "requirements-analysis",
+    "agent-task-decomposition",
+    "agent-context-engineering"
+  ],
+  "commonly_followed_by": [
+    "agent-tool-selection",
+    "agent-guardrails",
+    "agent-evaluation"
+  ],
+  "works_with": [
+    "agent-workflow-design",
+    "agent-handoff-design",
+    "agent-observability"
+  ],
+  "alternative_to": [],
+  "tags": [
+    "instruction-design",
+    "agent-orchestration",
+    "task-specification",
+    "prompt-engineering",
+    "ai-agents",
+    "workflow-automation",
+    "agent-performance"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "1-3 hours",
+  "success_metrics": [
+    "success_rate",
+    "first_time_success",
+    "clarity_score",
+    "completeness_score",
+    "error_recovery_rate"
+  ]
+}

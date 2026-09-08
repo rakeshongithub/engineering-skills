@@ -1,0 +1,84 @@
+{
+  "name": "agent-handoff-design",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Design effective handoffs between agents in multi-agent workflows to ensure seamless information transfer, maintain context continuity, and maximize overall system success.",
+  "inputs": [
+    {
+      "name": "workflow_design",
+      "type": "object",
+      "description": "Multi-agent workflow structure",
+      "required": true
+    },
+    {
+      "name": "agent_capabilities",
+      "type": "object",
+      "description": "What each agent can and cannot do",
+      "required": true
+    },
+    {
+      "name": "task_dependencies",
+      "type": "object",
+      "description": "Which tasks depend on which outputs",
+      "required": true
+    },
+    {
+      "name": "context_requirements",
+      "type": "object",
+      "description": "What information each agent needs",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "handoff_specification",
+      "type": "object",
+      "description": "Detailed handoff protocol for each transition"
+    },
+    {
+      "name": "context_transfer_schema",
+      "type": "object",
+      "description": "What information passes between agents"
+    },
+    {
+      "name": "validation_criteria",
+      "type": "array",
+      "description": "How to verify successful handoffs"
+    },
+    {
+      "name": "error_handling_protocol",
+      "type": "object",
+      "description": "What to do when handoffs fail"
+    }
+  ],
+  "requires": [
+    "agent-task-decomposition",
+    "agent-workflow-design",
+    "agent-context-engineering"
+  ],
+  "commonly_followed_by": [
+    "agent-guardrails",
+    "agent-observability",
+    "agent-evaluation"
+  ],
+  "works_with": [
+    "agent-instruction-design",
+    "agent-tool-selection"
+  ],
+  "alternative_to": [],
+  "tags": [
+    "handoff-design",
+    "multi-agent",
+    "workflow-coordination",
+    "context-transfer",
+    "agent-collaboration"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-3 hours",
+  "success_metrics": [
+    "handoff_success_rate",
+    "context_completeness",
+    "handoff_latency",
+    "error_recovery_rate"
+  ]
+}

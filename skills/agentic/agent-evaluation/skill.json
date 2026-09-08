@@ -1,0 +1,64 @@
+{
+  "name": "agent-evaluation",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Evaluate AI agent performance and output quality to measure effectiveness, identify improvements, and ensure agents meet success criteria.",
+  "inputs": [
+    "agent_implementation",
+    "evaluation_criteria",
+    "test_dataset",
+    "baseline_performance",
+    "business_requirements",
+    "historical_data"
+  ],
+  "outputs": [
+    "evaluation_report",
+    "performance_metrics",
+    "quality_assessment",
+    "comparison_results",
+    "improvement_recommendations",
+    "trend_analysis",
+    "risk_assessment"
+  ],
+  "requires": [
+    "agent-task-decomposition",
+    "agent-workflow-design",
+    "agent-context-engineering",
+    "agent-instruction-design",
+    "agent-tool-selection",
+    "agent-guardrails"
+  ],
+  "commonly_followed_by": [
+    "agent-observability",
+    "agentic-workflow-review",
+    "agent-workflow-design"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "agent-observability",
+    "testing-strategy",
+    "production-readiness"
+  ],
+  "tags": [
+    "evaluation",
+    "metrics",
+    "quality-assessment",
+    "benchmarking",
+    "performance",
+    "testing",
+    "continuous-improvement",
+    "a-b-testing",
+    "monitoring"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "1-3 hours",
+  "skill_type": "analysis",
+  "success_metrics": [
+    "Evaluation criteria clearly defined",
+    "Test dataset size >100 test cases",
+    "All metrics collected accurately",
+    "Failure analysis completed",
+    "Recommendations actionable and prioritized",
+    "Evaluation report comprehensive"
+  ]
+}

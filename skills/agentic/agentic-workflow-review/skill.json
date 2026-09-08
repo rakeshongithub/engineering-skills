@@ -1,0 +1,108 @@
+{
+  "name": "agentic-workflow-review",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Review and improve agentic workflows to optimize performance, enhance reliability, improve maintainability, and ensure alignment with best practices.",
+  "inputs": [
+    {
+      "name": "workflow_design",
+      "description": "Complete workflow design including tasks, agents, handoffs, and dependencies",
+      "required": true,
+      "format": "Workflow diagram, task definitions, agent specifications"
+    },
+    {
+      "name": "performance_data",
+      "description": "Historical performance metrics (latency, throughput, error rates, resource usage)",
+      "required": true,
+      "format": "Time-series data from observability platform"
+    },
+    {
+      "name": "incident_reports",
+      "description": "Documentation of past failures, outages, and issues",
+      "required": false,
+      "format": "Incident reports, postmortems, bug reports"
+    },
+    {
+      "name": "business_requirements",
+      "description": "Current and future business needs (SLAs, scale, features)",
+      "required": true,
+      "format": "Requirements document with SLAs, growth projections"
+    },
+    {
+      "name": "codebase",
+      "description": "Agent implementation code and configuration",
+      "required": true,
+      "format": "Source code, configuration files, infrastructure-as-code"
+    },
+    {
+      "name": "observability_data",
+      "description": "Logs, metrics, traces from production or staging",
+      "required": true,
+      "format": "Log files, metric dashboards, trace data"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "review_report",
+      "description": "Comprehensive assessment of workflow quality with findings and recommendations",
+      "format": "Document with executive summary, detailed findings, prioritized recommendations"
+    },
+    {
+      "name": "optimization_recommendations",
+      "description": "Specific, actionable recommendations for performance improvements",
+      "format": "List of recommendations with expected impact and implementation effort"
+    },
+    {
+      "name": "reliability_improvements",
+      "description": "Recommendations for enhancing workflow reliability",
+      "format": "List of improvements with failure modes addressed"
+    },
+    {
+      "name": "maintainability_enhancements",
+      "description": "Recommendations for improving code quality, documentation, and modularity",
+      "format": "List of enhancements with maintainability benefits"
+    },
+    {
+      "name": "improvement_plan",
+      "description": "Prioritized roadmap for implementing recommendations",
+      "format": "Project plan with tasks, timelines, owners, dependencies"
+    },
+    {
+      "name": "best_practices_checklist",
+      "description": "Checklist of best practices with current compliance status",
+      "format": "Checklist with pass/fail status for each best practice"
+    }
+  ],
+  "requires": [
+    "agent-workflow-design",
+    "agent-evaluation",
+    "agent-observability"
+  ],
+  "commonly_followed_by": [
+    "agent-workflow-design",
+    "agent-guardrails",
+    "agent-observability"
+  ],
+  "works_with": [
+    "agent-task-decomposition",
+    "agent-handoff-design",
+    "agent-context-engineering"
+  ],
+  "tags": [
+    "workflow-review",
+    "optimization",
+    "performance",
+    "reliability",
+    "maintainability",
+    "code-quality",
+    "best-practices",
+    "continuous-improvement",
+    "post-incident-review",
+    "technical-debt",
+    "refactoring",
+    "monitoring",
+    "evaluation"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-3 hours"
+}

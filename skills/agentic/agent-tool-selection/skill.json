@@ -1,0 +1,79 @@
+{
+  "name": "agent-tool-selection",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Select and configure the optimal set of tools for AI agents to execute tasks efficiently, safely, and successfully.",
+  "inputs": [
+    {
+      "name": "task_requirements",
+      "type": "object",
+      "description": "What the agent needs to accomplish",
+      "required": true
+    },
+    {
+      "name": "available_tools",
+      "type": "array",
+      "description": "Complete catalog of tools the agent can access",
+      "required": true
+    },
+    {
+      "name": "agent_capabilities",
+      "type": "object",
+      "description": "Agent's ability to use different tool types",
+      "required": true
+    },
+    {
+      "name": "constraints",
+      "type": "object",
+      "description": "Performance, security, cost limitations",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tool_selection_matrix",
+      "type": "object",
+      "description": "Recommended tools for each task requirement"
+    },
+    {
+      "name": "tool_configuration",
+      "type": "object",
+      "description": "Parameters, permissions, and settings"
+    },
+    {
+      "name": "tool_usage_guide",
+      "type": "object",
+      "description": "How and when to use each selected tool"
+    }
+  ],
+  "requires": [
+    "agent-task-decomposition",
+    "agent-context-engineering",
+    "agent-instruction-design"
+  ],
+  "commonly_followed_by": [
+    "agent-guardrails",
+    "agent-evaluation",
+    "agent-observability"
+  ],
+  "works_with": [
+    "agent-workflow-design",
+    "agent-handoff-design"
+  ],
+  "alternative_to": [],
+  "tags": [
+    "tool-selection",
+    "agent-configuration",
+    "capability-matching",
+    "tool-optimization",
+    "ai-agents"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "1-2 hours",
+  "success_metrics": [
+    "coverage",
+    "efficiency",
+    "safety",
+    "success_rate"
+  ]
+}

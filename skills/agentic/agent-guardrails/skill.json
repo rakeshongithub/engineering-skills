@@ -1,0 +1,83 @@
+{
+  "name": "agent-guardrails",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Implement safety and quality guardrails for AI agents to prevent harmful actions, ensure reliable operation, and maintain compliance with organizational policies.",
+  "inputs": [
+    {
+      "name": "agent_capabilities",
+      "type": "object",
+      "description": "What the agent can do",
+      "required": true
+    },
+    {
+      "name": "risk_assessment",
+      "type": "object",
+      "description": "Potential harmful actions and their impact",
+      "required": true
+    },
+    {
+      "name": "compliance_requirements",
+      "type": "array",
+      "description": "Regulatory and policy constraints",
+      "required": true
+    },
+    {
+      "name": "quality_standards",
+      "type": "object",
+      "description": "Expected output quality and performance",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "guardrail_specification",
+      "type": "object",
+      "description": "Detailed safety and quality constraints"
+    },
+    {
+      "name": "validation_rules",
+      "type": "array",
+      "description": "How to verify agent actions before execution"
+    },
+    {
+      "name": "monitoring_plan",
+      "type": "object",
+      "description": "How to detect guardrail violations"
+    },
+    {
+      "name": "intervention_protocols",
+      "type": "object",
+      "description": "What to do when guardrails are triggered"
+    }
+  ],
+  "requires": [
+    "agent-task-decomposition",
+    "agent-workflow-design",
+    "agent-tool-selection"
+  ],
+  "commonly_followed_by": [
+    "agent-evaluation",
+    "agent-observability"
+  ],
+  "works_with": [
+    "agent-handoff-design",
+    "agent-context-engineering"
+  ],
+  "alternative_to": [],
+  "tags": [
+    "safety",
+    "guardrails",
+    "compliance",
+    "quality-control",
+    "risk-management"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-3 hours",
+  "success_metrics": [
+    "harmful_actions_prevented",
+    "false_positive_rate",
+    "compliance_rate",
+    "guardrail_overhead"
+  ]
+}

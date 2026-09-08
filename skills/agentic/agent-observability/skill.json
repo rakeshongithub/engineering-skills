@@ -1,0 +1,112 @@
+{
+  "name": "agent-observability",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Implement comprehensive monitoring, logging, and debugging infrastructure for AI agent workflows to ensure visibility, diagnose issues quickly, and optimize performance.",
+  "inputs": [
+    {
+      "name": "agent_workflow",
+      "description": "Complete agent workflow design including tasks, handoffs, and dependencies",
+      "required": true,
+      "format": "Workflow diagram, task definitions, handoff specifications"
+    },
+    {
+      "name": "monitoring_requirements",
+      "description": "Specific observability needs (SLAs, compliance, debugging)",
+      "required": true,
+      "format": "Requirements document with metrics, SLOs, compliance needs"
+    },
+    {
+      "name": "infrastructure_constraints",
+      "description": "Available logging/monitoring tools and platforms",
+      "required": true,
+      "format": "List of available tools (e.g., CloudWatch, Datadog, Prometheus)"
+    },
+    {
+      "name": "performance_targets",
+      "description": "Target metrics for latency, throughput, error rates",
+      "required": true,
+      "format": "Quantitative targets (e.g., p95 latency < 2s, error rate < 1%)"
+    },
+    {
+      "name": "compliance_requirements",
+      "description": "Audit, retention, and privacy requirements",
+      "required": false,
+      "format": "Compliance framework (GDPR, SOC 2, HIPAA)"
+    },
+    {
+      "name": "budget_constraints",
+      "description": "Cost limits for observability infrastructure",
+      "required": false,
+      "format": "Monthly budget for logging, metrics, tracing"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "observability_plan",
+      "description": "Comprehensive plan for logging, metrics, tracing, and alerting",
+      "format": "Document with architecture, tool selection, implementation steps"
+    },
+    {
+      "name": "logging_configuration",
+      "description": "Structured logging setup with log levels, formats, and destinations",
+      "format": "Configuration files, code snippets"
+    },
+    {
+      "name": "metrics_instrumentation",
+      "description": "Code and configuration for collecting performance metrics",
+      "format": "Instrumentation code, metric definitions"
+    },
+    {
+      "name": "tracing_setup",
+      "description": "Distributed tracing configuration for multi-agent workflows",
+      "format": "Tracing configuration, span definitions"
+    },
+    {
+      "name": "dashboards",
+      "description": "Operational dashboards for monitoring agent health and performance",
+      "format": "Dashboard JSON/YAML, screenshots"
+    },
+    {
+      "name": "alerts",
+      "description": "Alert rules for proactive notification of issues",
+      "format": "Alert definitions with thresholds and notification channels"
+    },
+    {
+      "name": "runbooks",
+      "description": "Operational runbooks for common issues and debugging procedures",
+      "format": "Documentation with step-by-step troubleshooting guides"
+    }
+  ],
+  "requires": [
+    "agent-workflow-design",
+    "agent-handoff-design"
+  ],
+  "commonly_followed_by": [
+    "agent-evaluation",
+    "agentic-workflow-review"
+  ],
+  "works_with": [
+    "agent-guardrails",
+    "agent-task-decomposition"
+  ],
+  "tags": [
+    "observability",
+    "monitoring",
+    "logging",
+    "metrics",
+    "tracing",
+    "debugging",
+    "dashboards",
+    "alerts",
+    "distributed-tracing",
+    "structured-logging",
+    "performance-monitoring",
+    "incident-response",
+    "sla",
+    "slo",
+    "operational-excellence"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-4 hours"
+}

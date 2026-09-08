@@ -278,6 +278,253 @@ skills:
       - technical-writing
       - communication
 
+  # Agentic Engineering Skills
+  - name: agent-task-decomposition
+    category: agentic
+    path: skills/agentic/agent-task-decomposition
+    description: Break down complex engineering problems into agent-sized tasks with clear inputs, outputs, and dependencies for multi-agent execution
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-2 hours
+    requires:
+      - requirements-analysis
+      - architecture-discovery
+    commonly_followed_by:
+      - agent-workflow-design
+      - agent-context-engineering
+    works_with:
+      - system-design
+      - architecture-decision
+    tags:
+      - agentic
+      - task-decomposition
+      - planning
+      - multi-agent
+      - workflow
+
+  - name: agent-workflow-design
+    category: agentic
+    path: skills/agentic/agent-workflow-design
+    description: Design and orchestrate multi-agent workflows with proper coordination, error handling, and monitoring for complex engineering tasks
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-4 hours
+    requires:
+      - agent-task-decomposition
+    commonly_followed_by:
+      - agent-context-engineering
+      - agent-handoff-design
+      - agent-observability
+    works_with:
+      - system-design
+      - architecture-review
+    tags:
+      - agentic
+      - workflow-design
+      - orchestration
+      - multi-agent
+      - coordination
+      - patterns
+
+  - name: agent-context-engineering
+    category: agentic
+    path: skills/agentic/agent-context-engineering
+    description: Engineer effective context packages that enable AI agents to execute tasks with complete understanding and minimal ambiguity
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-3 hours
+    requires:
+      - architecture-discovery
+      - requirements-analysis
+      - agent-task-decomposition
+    commonly_followed_by:
+      - agent-instruction-design
+      - agent-tool-selection
+    works_with:
+      - technical-design-document
+      - code-review
+    tags:
+      - agentic
+      - context-engineering
+      - knowledge-management
+      - agent-enablement
+      - documentation
+
+  - name: agent-instruction-design
+    category: agentic
+    path: skills/agentic/agent-instruction-design
+    description: Design clear, executable instructions that enable AI agents to perform complex tasks autonomously with high success rates
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-3 hours
+    requires:
+      - requirements-analysis
+      - agent-task-decomposition
+      - agent-context-engineering
+    commonly_followed_by:
+      - agent-tool-selection
+      - agent-guardrails
+    works_with:
+      - testing-strategy
+      - code-review
+    tags:
+      - agentic
+      - instruction-design
+      - clarity
+      - agent-guidance
+      - execution
+
+  - name: agent-tool-selection
+    category: agentic
+    path: skills/agentic/agent-tool-selection
+    description: Select and configure the optimal set of tools for AI agents to execute tasks efficiently, safely, and successfully
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-2 hours
+    requires:
+      - agent-task-decomposition
+      - agent-context-engineering
+      - agent-instruction-design
+    commonly_followed_by:
+      - agent-guardrails
+      - agent-evaluation
+    works_with:
+      - architecture-decision
+      - tradeoff-analysis
+    tags:
+      - agentic
+      - tool-selection
+      - capabilities
+      - optimization
+      - safety
+
+  - name: agent-handoff-design
+    category: agentic
+    path: skills/agentic/agent-handoff-design
+    description: Design effective handoffs between agents in multi-agent workflows to ensure seamless information transfer and context continuity
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-3 hours
+    requires:
+      - agent-workflow-design
+      - agent-context-engineering
+    commonly_followed_by:
+      - agent-guardrails
+      - agent-observability
+    works_with:
+      - api-design-review
+      - data-architecture-review
+    tags:
+      - agentic
+      - handoff-design
+      - coordination
+      - context-transfer
+      - multi-agent
+      - integration
+
+  - name: agent-guardrails
+    category: agentic
+    path: skills/agentic/agent-guardrails
+    description: Implement safety and quality guardrails for AI agents to prevent harmful actions and ensure reliable, compliant operation
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-3 hours
+    requires:
+      - agent-task-decomposition
+      - agent-tool-selection
+    commonly_followed_by:
+      - agent-evaluation
+      - agent-observability
+    works_with:
+      - security-architecture-review
+      - production-readiness
+    tags:
+      - agentic
+      - guardrails
+      - safety
+      - quality
+      - compliance
+      - risk-management
+
+  - name: agent-evaluation
+    category: agentic
+    path: skills/agentic/agent-evaluation
+    description: Evaluate agent performance and output quality to measure effectiveness, identify improvements, and ensure continuous optimization
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 1-3 hours
+    requires:
+      - agent-task-decomposition
+      - agent-workflow-design
+    commonly_followed_by:
+      - agent-observability
+      - agentic-workflow-review
+    works_with:
+      - testing-strategy
+      - production-readiness
+    tags:
+      - agentic
+      - evaluation
+      - metrics
+      - quality-assessment
+      - benchmarking
+      - performance
+      - testing
+      - continuous-improvement
+      - a-b-testing
+
+  - name: agent-observability
+    category: agentic
+    path: skills/agentic/agent-observability
+    description: Implement monitoring and debugging for agent workflows to ensure visibility, diagnose issues, and optimize performance
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-4 hours
+    requires:
+      - agent-workflow-design
+      - agent-handoff-design
+    commonly_followed_by:
+      - agentic-workflow-review
+      - agent-evaluation
+    works_with:
+      - production-readiness
+    tags:
+      - agentic
+      - observability
+      - monitoring
+      - logging
+      - tracing
+      - debugging
+      - performance
+      - troubleshooting
+
+  - name: agentic-workflow-review
+    category: agentic
+    path: skills/agentic/agentic-workflow-review
+    description: Review and improve agentic workflows to optimize performance, reliability, and maintainability for production systems
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-3 hours
+    requires:
+      - agent-workflow-design
+      - agent-evaluation
+      - agent-observability
+    commonly_followed_by:
+      - agent-guardrails
+      - agent-evaluation
+    works_with:
+      - architecture-review
+      - code-review
+      - refactoring
+    tags:
+      - agentic
+      - workflow-review
+      - optimization
+      - reliability
+      - maintainability
+      - best-practices
+      - continuous-improvement
+
 # Skill categories available:
 # - meta: Meta-skills for orchestration and authoring
 # - requirements: Requirements analysis and clarification
@@ -287,4 +534,12 @@ skills:
 # - agentic: AI agent development and workflows
 # - operations: DevOps and platform engineering
 
-# This catalog will be expanded as new skills are added to the library
+# This catalog now includes 30 skills:
+# - Meta: 2 skills
+# - Requirements: 1 skill
+# - Architecture: 9 skills
+# - Security: 1 skill
+# - Engineering: 5 skills
+# - Operations: 1 skill
+# - Documentation: 1 skill
+# - Agentic: 10 skills (Phase 2 complete)

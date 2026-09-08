@@ -1,0 +1,48 @@
+{
+  "name": "agent-task-decomposition",
+  "category": "agentic",
+  "version": "1.0.0",
+  "description": "Break down large, complex engineering problems into agent-sized tasks that can be executed independently by AI coding agents while maintaining coherence and achieving the overall objective.",
+  "inputs": [
+    "engineering-problem",
+    "requirements",
+    "constraints",
+    "context",
+    "agent-capabilities",
+    "success-criteria"
+  ],
+  "outputs": [
+    "task-list",
+    "task-dependencies",
+    "task-sizing",
+    "handoff-points",
+    "validation-criteria",
+    "rollback-strategy"
+  ],
+  "requires": [
+    "requirements-analysis",
+    "architecture-discovery"
+  ],
+  "commonly_followed_by": [
+    "agent-workflow-design",
+    "agent-context-engineering",
+    "agent-instruction-design"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "agent-handoff-design",
+    "agent-evaluation",
+    "testing-strategy"
+  ],
+  "tags": [
+    "agentic",
+    "planning",
+    "task-management",
+    "decomposition",
+    "workflow",
+    "multi-agent"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "1-2 hours",
+  "skill_type": "planning"
+}
