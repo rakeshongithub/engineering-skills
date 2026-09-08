@@ -1,0 +1,31 @@
+{
+  "name": "architecture-decision",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Make and document architectural decisions using a structured approach with clear rationale and tradeoffs",
+  "inputs": [
+    "decision-context",
+    "alternatives",
+    "constraints",
+    "requirements"
+  ],
+  "outputs": [
+    "decision",
+    "adr",
+    "rationale",
+    "consequences"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "technical-specification",
+    "implementation"
+  ],
+  "tags": [
+    "architecture",
+    "decision",
+    "adr",
+    "tradeoffs"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "1-2 hours"
+}

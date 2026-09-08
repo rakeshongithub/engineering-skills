@@ -1,0 +1,33 @@
+{
+  "name": "migration-planning",
+  "category": "engineering",
+  "version": "1.0.0",
+  "description": "Plan technology or platform migrations with minimal risk and downtime",
+  "inputs": [
+    "current-state",
+    "target-state",
+    "constraints",
+    "dependencies"
+  ],
+  "outputs": [
+    "migration-plan",
+    "risk-mitigation",
+    "rollback-strategy",
+    "timeline"
+  ],
+  "requires": [
+    "architecture-discovery"
+  ],
+  "commonly_followed_by": [
+    "architecture-decision",
+    "testing-strategy"
+  ],
+  "tags": [
+    "migration",
+    "planning",
+    "risk-management",
+    "modernization"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours"
+}

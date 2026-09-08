@@ -1,0 +1,31 @@
+{
+  "name": "refactoring",
+  "category": "engineering",
+  "version": "1.0.0",
+  "description": "Improve code structure and quality without changing external behavior through systematic refactoring",
+  "inputs": [
+    "code-to-refactor",
+    "quality-issues",
+    "test-coverage",
+    "constraints"
+  ],
+  "outputs": [
+    "refactoring-plan",
+    "refactored-code",
+    "test-results",
+    "documentation"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "code-review",
+    "testing-strategy"
+  ],
+  "tags": [
+    "refactoring",
+    "code-quality",
+    "maintainability",
+    "technical-debt"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-8 hours"
+}

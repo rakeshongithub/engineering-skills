@@ -1,0 +1,31 @@
+{
+  "name": "scalability-analysis",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Analyze system scalability to identify bottlenecks and design solutions for growth",
+  "inputs": [
+    "architecture",
+    "current-load",
+    "expected-growth",
+    "performance-metrics"
+  ],
+  "outputs": [
+    "bottlenecks",
+    "capacity-analysis",
+    "scaling-strategy",
+    "recommendations"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "architecture-decision",
+    "capacity-planning"
+  ],
+  "tags": [
+    "scalability",
+    "performance",
+    "capacity",
+    "bottlenecks"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-6 hours"
+}

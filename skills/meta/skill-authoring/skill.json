@@ -1,0 +1,32 @@
+{
+  "name": "skill-authoring",
+  "category": "meta",
+  "version": "1.0.0",
+  "description": "Teaches contributors how to create high-quality, reusable engineering skills following the standard skill contract",
+  "inputs": [
+    "engineering-problem",
+    "skill-idea",
+    "target-audience",
+    "skill-category"
+  ],
+  "outputs": [
+    "skill-definition",
+    "skill-documentation",
+    "skill-metadata",
+    "skill-examples",
+    "quality-validation"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "The newly created skill"
+  ],
+  "tags": [
+    "authoring",
+    "contribution",
+    "skill-creation",
+    "documentation",
+    "meta-skill"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours"
+}

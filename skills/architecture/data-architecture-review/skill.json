@@ -1,0 +1,31 @@
+{
+  "name": "data-architecture-review",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Review data architecture including data models, storage choices, and data flows for correctness and efficiency",
+  "inputs": [
+    "data-model",
+    "data-flows",
+    "storage-choices",
+    "data-requirements"
+  ],
+  "outputs": [
+    "data-issues",
+    "optimization-opportunities",
+    "recommendations",
+    "migration-plan"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "architecture-decision",
+    "migration-planning"
+  ],
+  "tags": [
+    "data",
+    "database",
+    "schema",
+    "storage"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-6 hours"
+}

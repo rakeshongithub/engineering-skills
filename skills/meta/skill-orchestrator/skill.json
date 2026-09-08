@@ -1,0 +1,31 @@
+{
+  "name": "skill-orchestrator",
+  "category": "meta",
+  "version": "1.0.0",
+  "description": "Determines which engineering skills to use, in what order, and why, based on the engineering problem at hand",
+  "inputs": [
+    "engineering-problem",
+    "context",
+    "constraints",
+    "goals"
+  ],
+  "outputs": [
+    "skill-sequence",
+    "workflow-plan",
+    "rationale",
+    "dependencies"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "First skill in the composed sequence"
+  ],
+  "tags": [
+    "orchestration",
+    "composition",
+    "workflow",
+    "planning",
+    "meta-skill"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "15min"
+}

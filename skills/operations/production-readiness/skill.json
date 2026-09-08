@@ -1,0 +1,31 @@
+{
+  "name": "production-readiness",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Assess whether a system is ready for production deployment across operational, security, and reliability dimensions",
+  "inputs": [
+    "system",
+    "requirements",
+    "sla-targets",
+    "operational-requirements"
+  ],
+  "outputs": [
+    "readiness-assessment",
+    "gaps",
+    "go-no-go-decision",
+    "action-items"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "deployment",
+    "monitoring"
+  ],
+  "tags": [
+    "production",
+    "readiness",
+    "deployment",
+    "operations"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-6 hours"
+}

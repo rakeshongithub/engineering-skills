@@ -1,0 +1,33 @@
+{
+  "name": "technical-design-document",
+  "category": "documentation",
+  "version": "1.0.0",
+  "description": "Create comprehensive technical design documentation for systems, features, or architectural changes",
+  "inputs": [
+    "requirements",
+    "architecture",
+    "design-decisions",
+    "stakeholders"
+  ],
+  "outputs": [
+    "design-document",
+    "diagrams",
+    "decision-rationale",
+    "implementation-guide"
+  ],
+  "requires": [
+    "system-design"
+  ],
+  "commonly_followed_by": [
+    "technical-specification",
+    "implementation"
+  ],
+  "tags": [
+    "documentation",
+    "design",
+    "technical-writing",
+    "communication"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours"
+}

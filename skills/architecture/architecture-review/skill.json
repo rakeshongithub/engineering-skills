@@ -1,0 +1,36 @@
+{
+  "name": "architecture-review",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Systematically review an existing or proposed architecture to identify risks, issues, and improvement opportunities",
+  "inputs": [
+    "architecture-documentation",
+    "requirements",
+    "constraints",
+    "codebase"
+  ],
+  "outputs": [
+    "findings",
+    "risks",
+    "recommendations",
+    "action-items"
+  ],
+  "requires": [
+    "architecture-discovery"
+  ],
+  "commonly_followed_by": [
+    "scalability-analysis",
+    "security-architecture-review",
+    "reliability-analysis",
+    "architecture-decision"
+  ],
+  "tags": [
+    "architecture",
+    "review",
+    "assessment",
+    "quality",
+    "risks"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "code-review",
+  "category": "engineering",
+  "version": "1.0.0",
+  "description": "Systematically review code for quality, correctness, security, and maintainability",
+  "inputs": [
+    "code-changes",
+    "requirements",
+    "coding-standards",
+    "context"
+  ],
+  "outputs": [
+    "review-comments",
+    "issues-found",
+    "approval-status",
+    "learning-points"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "refactoring",
+    "testing"
+  ],
+  "tags": [
+    "code-review",
+    "quality",
+    "standards",
+    "feedback"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "30min-2 hours"
+}

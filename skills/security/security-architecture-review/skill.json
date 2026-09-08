@@ -1,0 +1,31 @@
+{
+  "name": "security-architecture-review",
+  "category": "security",
+  "version": "1.0.0",
+  "description": "Review architecture from a security perspective to identify threats, vulnerabilities, and required controls",
+  "inputs": [
+    "architecture",
+    "security-requirements",
+    "threat-model",
+    "compliance-requirements"
+  ],
+  "outputs": [
+    "security-findings",
+    "threat-assessment",
+    "required-controls",
+    "remediation-plan"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "architecture-decision",
+    "security-implementation"
+  ],
+  "tags": [
+    "security",
+    "threats",
+    "vulnerabilities",
+    "controls"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours"
+}

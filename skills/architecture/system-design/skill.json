@@ -1,0 +1,36 @@
+{
+  "name": "system-design",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Convert requirements into a comprehensive system design with components, APIs, data flows, and technical decisions",
+  "inputs": [
+    "requirements",
+    "constraints",
+    "non-functional-requirements",
+    "existing-architecture"
+  ],
+  "outputs": [
+    "system-architecture",
+    "component-design",
+    "api-specifications",
+    "data-model",
+    "technology-choices"
+  ],
+  "requires": [
+    "requirements-analysis"
+  ],
+  "commonly_followed_by": [
+    "architecture-review",
+    "api-design-review",
+    "data-architecture-review"
+  ],
+  "tags": [
+    "design",
+    "architecture",
+    "system-design",
+    "components",
+    "apis"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours"
+}

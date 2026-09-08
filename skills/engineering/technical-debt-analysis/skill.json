@@ -1,0 +1,31 @@
+{
+  "name": "technical-debt-analysis",
+  "category": "engineering",
+  "version": "1.0.0",
+  "description": "Identify, quantify, and prioritize technical debt for systematic remediation",
+  "inputs": [
+    "codebase",
+    "architecture",
+    "quality-metrics",
+    "team-feedback"
+  ],
+  "outputs": [
+    "debt-inventory",
+    "impact-assessment",
+    "prioritization",
+    "remediation-plan"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "refactoring",
+    "migration-planning"
+  ],
+  "tags": [
+    "technical-debt",
+    "code-quality",
+    "prioritization",
+    "remediation"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "4-8 hours"
+}

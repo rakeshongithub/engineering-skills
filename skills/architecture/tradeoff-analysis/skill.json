@@ -1,0 +1,30 @@
+{
+  "name": "tradeoff-analysis",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Systematically compare architectural alternatives by analyzing tradeoffs across multiple dimensions",
+  "inputs": [
+    "alternatives",
+    "evaluation-criteria",
+    "constraints",
+    "context"
+  ],
+  "outputs": [
+    "comparison-matrix",
+    "tradeoff-analysis",
+    "recommendation",
+    "risk-assessment"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "architecture-decision"
+  ],
+  "tags": [
+    "architecture",
+    "tradeoffs",
+    "comparison",
+    "analysis"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours"
+}

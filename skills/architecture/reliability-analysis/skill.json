@@ -1,0 +1,31 @@
+{
+  "name": "reliability-analysis",
+  "category": "architecture",
+  "version": "1.0.0",
+  "description": "Analyze system reliability to identify failure modes and design resilience mechanisms",
+  "inputs": [
+    "architecture",
+    "availability-requirements",
+    "failure-history",
+    "dependencies"
+  ],
+  "outputs": [
+    "failure-modes",
+    "risk-assessment",
+    "mitigation-strategies",
+    "sla-analysis"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "architecture-decision",
+    "disaster-recovery"
+  ],
+  "tags": [
+    "reliability",
+    "availability",
+    "resilience",
+    "failure-modes"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-6 hours"
+}

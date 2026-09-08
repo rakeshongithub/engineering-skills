@@ -1,0 +1,43 @@
+# Engineering Skills Catalog
+# Machine-readable catalog of all skills in the library
+
+skills:
+  # Meta Skills
+  - name: skill-orchestrator
+    category: meta
+    path: skills/meta/skill-orchestrator
+    description: Determines which engineering skills to use, in what order, and why, based on the engineering problem at hand
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 15min
+    tags:
+      - orchestration
+      - composition
+      - workflow
+      - planning
+      - meta-skill
+
+  - name: skill-authoring
+    category: meta
+    path: skills/meta/skill-authoring
+    description: Teaches contributors how to create high-quality, reusable engineering skills following the standard skill contract
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    tags:
+      - authoring
+      - contribution
+      - skill-creation
+      - documentation
+      - meta-skill
+
+# Skill categories available:
+# - meta: Meta-skills for orchestration and authoring
+# - requirements: Requirements analysis and clarification
+# - architecture: Architecture and design skills
+# - engineering: Software engineering practices
+# - security: Security reviews and design
+# - agentic: AI agent development and workflows
+# - operations: DevOps and platform engineering
+
+# This catalog will be expanded as new skills are added to the library

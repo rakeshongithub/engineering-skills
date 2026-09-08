@@ -1,0 +1,31 @@
+{
+  "name": "testing-strategy",
+  "category": "engineering",
+  "version": "1.0.0",
+  "description": "Design a comprehensive testing strategy covering unit, integration, and end-to-end testing",
+  "inputs": [
+    "requirements",
+    "architecture",
+    "risk-areas",
+    "constraints"
+  ],
+  "outputs": [
+    "testing-plan",
+    "test-coverage-goals",
+    "testing-tools",
+    "test-automation-strategy"
+  ],
+  "requires": [],
+  "commonly_followed_by": [
+    "test-implementation",
+    "ci-cd-design"
+  ],
+  "tags": [
+    "testing",
+    "quality",
+    "automation",
+    "strategy"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours"
+}
