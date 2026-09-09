@@ -15,7 +15,7 @@ Each skill represents a practical, repeatable engineering capability with:
 - Examples
 - Relationships to other skills
 
-**Current Status:** 30 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic)
+**Current Status:** 32 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic + Phase 3: 2 operations)
 
 ## What Makes This Different
 
@@ -228,11 +228,15 @@ agent-guardrails (adjustment) → agentic-workflow-review
 - **Agent Safety & Quality** (2 skills) - Guardrails, evaluation
 - **Agent Operations** (2 skills) - Observability, workflow review
 
-### Coming Soon: Phase 3
+### Phase 3: Engineering Operations (2 Skills) ✅
+
+- **Incident Response** (2 skills) - Incident analysis, root cause analysis
+
+### Coming Soon: Phase 4
 
 - **DevOps & Platform** - CI/CD, deployment, observability design
-- **Incident Response** - Incident analysis, root cause analysis
 - **Cloud & Infrastructure** - Cloud architecture, capacity planning, cost optimization
+- **Additional specialized skills** based on community feedback
 
 ## Contributing
 
@@ -284,10 +288,11 @@ Stage 9: Phase 3 - Engineering Operations 🎯 (Next)
 
 **Current Status:**
 
-- ✅ **30 production-ready skills** (Phase 1: 20 + Phase 2: 10)
+- ✅ **32 production-ready skills** (Phase 1: 20 + Phase 2: 10 + Phase 3: 2)
 - ✅ **Complete skill graph** with relationships and dependencies
 - ✅ **Agentic engineering foundation** for multi-agent workflows
+- ✅ **Incident response foundation** for production operations
 - 🚧 **Workflow recipes** combining skills for common scenarios
-- 🎯 **Phase 3 planning** for engineering operations skills
+- 🎯 **Phase 4 planning** for additional specialized skills
 
 The goal: Make engineering expertise **discoverable, reusable, composable, and executable by both humans and AI agents**.

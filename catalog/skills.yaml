@@ -525,21 +525,88 @@ skills:
       - best-practices
       - continuous-improvement
 
-# Skill categories available:
-# - meta: Meta-skills for orchestration and authoring
-# - requirements: Requirements analysis and clarification
-# - architecture: Architecture and design skills
-# - engineering: Software engineering practices
-# - security: Security reviews and design
-# - agentic: AI agent development and workflows
-# - operations: DevOps and platform engineering
+  # Skill categories available:
+  # - meta: Meta-skills for orchestration and authoring
+  # - requirements: Requirements analysis and clarification
+  # - architecture: Architecture and design skills
+  # - engineering: Software engineering practices
+  # - security: Security reviews and design
+  # - agentic: AI agent development and workflows
+  # - operations: DevOps and platform engineering
 
-# This catalog now includes 30 skills:
+  # Phase 3: Engineering Operations Skills
+  - name: incident-analysis
+    category: operations
+    path: skills/operations/incident-analysis
+    description: Systematically analyze production incidents to understand what happened, why it happened, and how to prevent recurrence
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-6 hours
+    requires:
+      - observability-design
+      - architecture-discovery
+    commonly_followed_by:
+      - root-cause-analysis
+      - production-readiness
+      - observability-design
+      - architecture-review
+    works_with:
+      - disaster-recovery
+      - capacity-planning
+      - security-architecture-review
+      - agent-observability
+    tags:
+      - operations
+      - incident-response
+      - post-mortem
+      - reliability
+      - observability
+      - production
+      - debugging
+      - analysis
+      - root-cause
+      - lessons-learned
+      - blameless
+      - sre
+
+  - name: root-cause-analysis
+    category: operations
+    path: skills/operations/root-cause-analysis
+    description: Perform deep, systematic analysis to identify fundamental causes of problems beyond immediate symptoms using techniques like 5 Whys, Fishbone diagrams, and Fault Tree Analysis
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-8 hours
+    requires:
+      - incident-analysis
+      - architecture-discovery
+    commonly_followed_by:
+      - architecture-review
+      - production-readiness
+      - observability-design
+      - testing-strategy
+    works_with:
+      - technical-debt-analysis
+      - security-architecture-review
+    tags:
+      - operations
+      - analysis
+      - root-cause
+      - incident-response
+      - problem-solving
+      - systemic-improvement
+      - 5-whys
+      - fishbone
+      - fault-tree
+      - reliability
+      - sre
+      - post-mortem
+
+# This catalog now includes 32 skills:
 # - Meta: 2 skills
 # - Requirements: 1 skill
 # - Architecture: 9 skills
 # - Security: 1 skill
 # - Engineering: 5 skills
-# - Operations: 1 skill
+# - Operations: 3 skills (Phase 1: 1 + Phase 3: 2)
 # - Documentation: 1 skill
 # - Agentic: 10 skills (Phase 2 complete)
