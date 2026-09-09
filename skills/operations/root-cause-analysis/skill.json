@@ -1,0 +1,57 @@
+{
+  "name": "root-cause-analysis",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Perform deep, systematic analysis to identify fundamental causes of problems beyond immediate symptoms",
+  "inputs": [
+    "problem_statement",
+    "incident_data",
+    "timeline_of_events",
+    "system_architecture",
+    "historical_context",
+    "stakeholder_input"
+  ],
+  "outputs": [
+    "root_cause_analysis_report",
+    "causal_chain_diagram",
+    "systemic_recommendations",
+    "prevention_strategy",
+    "fishbone_diagram",
+    "fault_tree_analysis"
+  ],
+  "requires": [
+    "incident-analysis",
+    "architecture-discovery"
+  ],
+  "commonly_followed_by": [
+    "architecture-review",
+    "production-readiness",
+    "observability-design",
+    "testing-strategy"
+  ],
+  "alternative_to": [
+    "incident-analysis"
+  ],
+  "works_with": [
+    "failure-mode-analysis",
+    "technical-debt-analysis",
+    "security-architecture-review"
+  ],
+  "tags": [
+    "operations",
+    "analysis",
+    "root-cause",
+    "incident-response",
+    "problem-solving",
+    "systemic-improvement",
+    "5-whys",
+    "fishbone",
+    "fault-tree",
+    "reliability",
+    "sre",
+    "post-mortem"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "3-8 hours",
+  "skill_type": "analysis"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "deployment-strategy",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Select and implement deployment strategies (blue/green, canary, rolling, feature flags) that minimize risk, enable zero-downtime deployments, and provide fast rollback capabilities.",
+  "inputs": [
+    "application architecture (monolith, microservices, serverless)",
+    "deployment target (Kubernetes, cloud services, VMs, containers)",
+    "downtime tolerance (zero, seconds, minutes)",
+    "risk tolerance (low, medium, high)",
+    "rollback requirements (time, automation level)",
+    "traffic routing capability (load balancer, service mesh, DNS)",
+    "current deployment process (optional)",
+    "compliance requirements (optional)",
+    "resource constraints (optional)",
+    "monitoring capabilities (optional)"
+  ],
+  "outputs": [
+    "deployment strategy document (selected strategy, rationale, traffic shifting plan)",
+    "traffic management plan (routing configuration, gradual rollout percentages)",
+    "rollback procedure (automated triggers, manual steps, database strategy)",
+    "validation criteria (health checks, success metrics, error thresholds)",
+    "infrastructure configuration (load balancer, service mesh, DNS)",
+    "deployment automation (scripts, pipelines, runbooks)"
+  ],
+  "requires": [
+    "ci-cd-design",
+    "infrastructure-as-code",
+    "observability-design"
+  ],
+  "commonly_followed_by": [
+    "incident-analysis",
+    "production-readiness",
+    "disaster-recovery"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "capacity-planning",
+    "performance-optimization",
+    "reliability-analysis"
+  ],
+  "tags": [
+    "operations",
+    "deployment",
+    "blue-green",
+    "canary",
+    "rolling",
+    "feature-flags",
+    "zero-downtime",
+    "rollback",
+    "traffic-management",
+    "release-engineering",
+    "devops",
+    "sre"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "design"
+}

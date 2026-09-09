@@ -1,0 +1,59 @@
+{
+  "name": "disaster-recovery",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Design and implement disaster recovery (DR) plans and procedures to ensure business continuity by defining recovery objectives, failover strategies, backup automation, and recovery procedures for catastrophic failures.",
+  "inputs": [
+    "system architecture (components, dependencies, data flows)",
+    "business criticality (mission-critical systems)",
+    "RTO requirements (Recovery Time Objective - acceptable downtime)",
+    "RPO requirements (Recovery Point Objective - acceptable data loss)",
+    "data inventory (databases, file storage, object storage)",
+    "compliance requirements (regulatory DR requirements)",
+    "current DR capabilities (optional)",
+    "budget constraints (optional)",
+    "geographic requirements (optional)",
+    "incident history (optional)"
+  ],
+  "outputs": [
+    "disaster recovery plan (RTO/RPO, DR strategy, failover/recovery procedures)",
+    "DR architecture (primary site, DR site, data replication, failover mechanisms)",
+    "recovery runbooks (failover, recovery, failback, validation procedures)",
+    "DR testing plan (test scenarios, frequency, success criteria)",
+    "backup automation (automated backups, schedules, retention)",
+    "monitoring and alerting (DR-specific monitoring)"
+  ],
+  "requires": [
+    "architecture-discovery",
+    "observability-design",
+    "infrastructure-as-code"
+  ],
+  "commonly_followed_by": [
+    "incident-analysis",
+    "production-readiness",
+    "capacity-planning"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "backup-recovery",
+    "reliability-analysis",
+    "security-architecture-review"
+  ],
+  "tags": [
+    "operations",
+    "disaster-recovery",
+    "business-continuity",
+    "rto",
+    "rpo",
+    "failover",
+    "backup",
+    "replication",
+    "multi-region",
+    "high-availability",
+    "resilience",
+    "sre"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "6-12 hours",
+  "skill_type": "design"
+}

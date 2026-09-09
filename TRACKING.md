@@ -350,13 +350,32 @@ All skills include complete documentation (SKILL.md, skill.json, instructions.md
 
 ## Phase 3: Engineering Operations (10 Skills)
 
-**Status:** ⏸️ Pending
-**Target Start:** After Phase 2 completion
+**Status:** 🔄 In Progress (2/10 completed)
+**Started:** 2026-09-09
+**Target Completion:** 2026-09-10
 
-### Planned Skills
+### Completed Skills (2/10)
 
-1. incident-analysis
-2. root-cause-analysis
+#### 01. incident-analysis ✅
+
+- **Location:** `skills/operations/incident-analysis/`
+- **Category:** Operations
+- **Complexity:** Advanced
+- **Completed:** 2026-09-09
+- **Files:** SKILL.md, skill.json, instructions.md, examples.md, README.md
+- **Purpose:** Systematically analyze production incidents to understand what happened, why it happened, and how to prevent recurrence
+
+#### 02. root-cause-analysis ✅
+
+- **Location:** `skills/operations/root-cause-analysis/`
+- **Category:** Operations
+- **Complexity:** Advanced
+- **Completed:** 2026-09-09
+- **Files:** SKILL.md, skill.json, instructions.md, examples.md, README.md
+- **Purpose:** Perform deep, systematic analysis to identify fundamental causes of problems beyond immediate symptoms
+
+### Remaining Skills (8/10)
+
 3. observability-design
 4. capacity-planning
 5. disaster-recovery

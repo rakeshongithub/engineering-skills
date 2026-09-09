@@ -1,0 +1,61 @@
+{
+  "name": "observability-design",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Design comprehensive observability systems that provide visibility into system behavior through logs, metrics, and traces to enable effective monitoring, debugging, and optimization.",
+  "inputs": [
+    "System architecture (components, services, dependencies)",
+    "SLOs/SLAs (service level objectives and agreements)",
+    "User journeys (critical paths through the system)",
+    "Failure modes (known and potential failure scenarios)",
+    "Team capabilities (skills and tools available)",
+    "Existing monitoring (optional)",
+    "Incident history (optional)",
+    "Performance requirements (optional)",
+    "Compliance requirements (optional)",
+    "Budget constraints (optional)"
+  ],
+  "outputs": [
+    "Observability strategy document (logging, metrics, tracing, alerting)",
+    "Instrumentation plan (what and how to instrument)",
+    "Dashboard designs (service health, business metrics, SLO dashboards)",
+    "Alert definitions (critical, warning alerts with routing)",
+    "Tool selection recommendations",
+    "Implementation guide",
+    "Runbooks for debugging",
+    "Cost estimates",
+    "Training plan"
+  ],
+  "requires": [
+    "architecture-discovery",
+    "system-design"
+  ],
+  "commonly_followed_by": [
+    "incident-analysis",
+    "production-readiness",
+    "capacity-planning"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "agent-observability",
+    "reliability-analysis",
+    "performance-optimization",
+    "root-cause-analysis"
+  ],
+  "tags": [
+    "operations",
+    "observability",
+    "monitoring",
+    "logging",
+    "metrics",
+    "tracing",
+    "alerting",
+    "debugging",
+    "sre",
+    "production",
+    "instrumentation"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "design"
+}

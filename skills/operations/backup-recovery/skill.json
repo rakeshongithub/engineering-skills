@@ -1,0 +1,57 @@
+{
+  "name": "backup-recovery",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Design and implement backup and recovery systems to protect data from loss, corruption, or deletion by defining backup strategies, retention policies, recovery procedures, and automation for reliable data protection.",
+  "inputs": [
+    "data inventory (databases, file systems, object storage, configurations)",
+    "recovery requirements (RTO, RPO)",
+    "data criticality (mission-critical vs. nice-to-have)",
+    "compliance requirements (GDPR, HIPAA, SOC 2, PCI DSS)",
+    "storage infrastructure (S3, EBS, Glacier, tape)",
+    "current backup capabilities (optional)",
+    "budget constraints (optional)",
+    "data growth rate (optional)",
+    "retention policies (optional)"
+  ],
+  "outputs": [
+    "backup strategy document (methods, schedules, retention, 3-2-1 rule)",
+    "backup architecture (infrastructure, workflows, encryption)",
+    "recovery runbooks (step-by-step procedures, validation, troubleshooting)",
+    "backup automation (scripts, monitoring, alerting, validation)",
+    "backup testing plan (test scenarios, frequency, success criteria)",
+    "cost estimates (storage and operational costs)"
+  ],
+  "requires": [
+    "architecture-discovery",
+    "infrastructure-as-code"
+  ],
+  "commonly_followed_by": [
+    "disaster-recovery",
+    "production-readiness",
+    "compliance-audit"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "disaster-recovery",
+    "observability-design",
+    "security-architecture-review"
+  ],
+  "tags": [
+    "operations",
+    "backup",
+    "recovery",
+    "data-protection",
+    "rto",
+    "rpo",
+    "3-2-1-backup",
+    "disaster-recovery",
+    "compliance",
+    "automation",
+    "retention",
+    "encryption"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "design"
+}

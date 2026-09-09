@@ -1,0 +1,59 @@
+{
+  "name": "ci-cd-design",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Design continuous integration and continuous deployment (CI/CD) pipelines that automate building, testing, security scanning, and deployment of software to enable fast, safe, and reliable releases.",
+  "inputs": [
+    "application architecture (monolith, microservices, serverless)",
+    "tech stack (languages, frameworks, build tools)",
+    "deployment targets (cloud, on-prem, Kubernetes, serverless)",
+    "team structure (size, skills, responsibilities)",
+    "release requirements (frequency, approval process, rollback needs)",
+    "existing CI/CD (current pipelines and pain points)",
+    "compliance requirements (SOC 2, HIPAA, PCI DSS)",
+    "security requirements (SAST, DAST, dependency scanning)"
+  ],
+  "outputs": [
+    "CI/CD strategy document (pipeline architecture, build/test/deploy strategy)",
+    "pipeline definitions (CI, CD, release, rollback pipelines)",
+    "environment strategy (dev, staging, production, promotion flow)",
+    "security and compliance integration (SAST, DAST, dependency scanning, secrets management)",
+    "tool selection (CI/CD platform, security tools, monitoring)",
+    "documentation (usage guide, troubleshooting, runbooks)"
+  ],
+  "requires": [
+    "version-control",
+    "testing-strategy",
+    "architecture-discovery"
+  ],
+  "commonly_followed_by": [
+    "deployment-strategy",
+    "observability-design",
+    "production-readiness"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "infrastructure-as-code",
+    "security-architecture-review",
+    "disaster-recovery",
+    "agent-observability"
+  ],
+  "tags": [
+    "operations",
+    "ci-cd",
+    "devops",
+    "automation",
+    "deployment",
+    "pipeline",
+    "testing",
+    "security",
+    "continuous-integration",
+    "continuous-deployment",
+    "github-actions",
+    "gitlab-ci",
+    "jenkins"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "design"
+}

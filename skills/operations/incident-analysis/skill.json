@@ -1,0 +1,57 @@
+{
+  "name": "incident-analysis",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Systematically analyze production incidents to understand what happened, why it happened, and how to prevent recurrence",
+  "inputs": [
+    "incident_description",
+    "timeline_of_events",
+    "system_logs",
+    "metrics_data",
+    "alerts_notifications",
+    "response_actions"
+  ],
+  "outputs": [
+    "incident_report",
+    "root_cause_analysis",
+    "action_items",
+    "lessons_learned",
+    "timeline_visualization",
+    "impact_metrics"
+  ],
+  "requires": [
+    "observability-design"
+  ],
+  "commonly_followed_by": [
+    "root-cause-analysis",
+    "production-readiness",
+    "observability-design",
+    "architecture-review"
+  ],
+  "alternative_to": [
+    "root-cause-analysis"
+  ],
+  "works_with": [
+    "disaster-recovery",
+    "capacity-planning",
+    "security-architecture-review",
+    "agent-observability"
+  ],
+  "tags": [
+    "operations",
+    "incident-response",
+    "post-mortem",
+    "reliability",
+    "observability",
+    "production",
+    "debugging",
+    "analysis",
+    "root-cause",
+    "lessons-learned",
+    "blameless",
+    "sre"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-6 hours",
+  "skill_type": "analysis"
+}
