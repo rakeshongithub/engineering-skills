@@ -1,59 +1,500 @@
 {
   "name": "deployment-strategy",
+  "display_name": "Deployment Strategy Design",
   "category": "operations",
+  "subcategory": "deployment",
   "version": "1.0.0",
-  "description": "Select and implement deployment strategies (blue/green, canary, rolling, feature flags) that minimize risk, enable zero-downtime deployments, and provide fast rollback capabilities.",
-  "inputs": [
-    "application architecture (monolith, microservices, serverless)",
-    "deployment target (Kubernetes, cloud services, VMs, containers)",
-    "downtime tolerance (zero, seconds, minutes)",
-    "risk tolerance (low, medium, high)",
-    "rollback requirements (time, automation level)",
-    "traffic routing capability (load balancer, service mesh, DNS)",
-    "current deployment process (optional)",
-    "compliance requirements (optional)",
-    "resource constraints (optional)",
-    "monitoring capabilities (optional)"
-  ],
-  "outputs": [
-    "deployment strategy document (selected strategy, rationale, traffic shifting plan)",
-    "traffic management plan (routing configuration, gradual rollout percentages)",
-    "rollback procedure (automated triggers, manual steps, database strategy)",
-    "validation criteria (health checks, success metrics, error thresholds)",
-    "infrastructure configuration (load balancer, service mesh, DNS)",
-    "deployment automation (scripts, pipelines, runbooks)"
-  ],
-  "requires": [
-    "ci-cd-design",
-    "infrastructure-as-code",
-    "observability-design"
-  ],
-  "commonly_followed_by": [
-    "incident-analysis",
-    "production-readiness",
-    "disaster-recovery"
-  ],
-  "alternative_to": [],
-  "works_with": [
-    "capacity-planning",
-    "performance-optimization",
-    "reliability-analysis"
-  ],
+  "description": "Choose and design deployment strategies (blue/green, canary, rolling, recreate, feature flags) that minimize risk, enable rapid rollback, and ensure high availability during application releases.",
+  "purpose": "Design and implement deployment strategies that balance risk, speed, cost, and availability requirements.",
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours",
   "tags": [
-    "operations",
     "deployment",
     "blue-green",
     "canary",
-    "rolling",
+    "rolling-deployment",
     "feature-flags",
     "zero-downtime",
     "rollback",
+    "progressive-delivery",
     "traffic-management",
-    "release-engineering",
-    "devops",
-    "sre"
+    "kubernetes",
+    "load-balancing",
+    "health-checks",
+    "deployment-automation",
+    "risk-mitigation"
   ],
-  "complexity": "advanced",
-  "estimated_time": "3-6 hours",
-  "skill_type": "design"
+  "inputs": {
+    "required": [
+      {
+        "name": "application_characteristics",
+        "type": "object",
+        "description": "Application architecture, stateful/stateless nature, dependencies, startup time, resource requirements"
+      },
+      {
+        "name": "availability_requirements",
+        "type": "object",
+        "description": "Uptime SLA, acceptable downtime, maintenance windows, business hours, RTO/RPO"
+      },
+      {
+        "name": "traffic_patterns",
+        "type": "object",
+        "description": "Expected traffic volume, variability, user session duration, geographic distribution"
+      },
+      {
+        "name": "risk_tolerance",
+        "type": "object",
+        "description": "Impact of failures, acceptable error rate, rollback time requirements, blast radius tolerance"
+      },
+      {
+        "name": "infrastructure_capabilities",
+        "type": "object",
+        "description": "Deployment platform, load balancer capabilities, service mesh, monitoring tools, automation"
+      }
+    ],
+    "optional": [
+      {
+        "name": "current_deployment_process",
+        "type": "object",
+        "description": "Existing strategy, frequency, success rate, common failures, rollback procedures"
+      },
+      {
+        "name": "team_capabilities",
+        "type": "object",
+        "description": "Team size, expertise, on-call coverage, automation maturity, incident response"
+      },
+      {
+        "name": "business_context",
+        "type": "object",
+        "description": "Deployment frequency goals, release coordination, stakeholder notifications, competitive pressure"
+      },
+      {
+        "name": "technical_constraints",
+        "type": "object",
+        "description": "Legacy integrations, network latency, data residency, compliance, budget"
+      },
+      {
+        "name": "feature_flag_infrastructure",
+        "type": "object",
+        "description": "Existing feature flag system, maturity, dynamic configuration, user targeting"
+      }
+    ]
+  },
+  "outputs": {
+    "primary": [
+      {
+        "name": "deployment_strategy_recommendation",
+        "type": "document",
+        "description": "Selected deployment strategy with justification, comparison matrix, risk assessment, rollback approach"
+      },
+      {
+        "name": "implementation_plan",
+        "type": "document",
+        "description": "Infrastructure requirements, traffic management configuration, health checks, automation scripts"
+      },
+      {
+        "name": "deployment_workflow_documentation",
+        "type": "document",
+        "description": "Step-by-step procedures, checklists, validation steps, rollback triggers and procedures"
+      },
+      {
+        "name": "risk_mitigation_plan",
+        "type": "document",
+        "description": "Identified risks, mitigation strategies, monitoring mechanisms, incident response procedures"
+      },
+      {
+        "name": "configuration_specifications",
+        "type": "code",
+        "description": "Load balancer config, service mesh config, feature flag config, traffic routing rules"
+      }
+    ],
+    "supporting": [
+      {
+        "name": "deployment_architecture_diagrams",
+        "type": "diagram",
+        "description": "Current state, target state, traffic flow, rollback flow, multi-region topology"
+      },
+      {
+        "name": "monitoring_metrics_plan",
+        "type": "document",
+        "description": "Key metrics, alert definitions, dashboard specs, success criteria, baselines"
+      },
+      {
+        "name": "testing_strategy",
+        "type": "document",
+        "description": "Pre-deployment testing, canary validation, smoke tests, performance tests, rollback testing"
+      },
+      {
+        "name": "runbooks_and_procedures",
+        "type": "document",
+        "description": "Deployment runbook, rollback runbook, troubleshooting guide, escalation procedures"
+      },
+      {
+        "name": "training_materials",
+        "type": "document",
+        "description": "Strategy overview, operator training, developer guidelines, FAQ, lessons learned"
+      }
+    ]
+  },
+  "workflow": [
+    {
+      "step": 1,
+      "name": "Requirements Analysis",
+      "description": "Understand application characteristics and constraints",
+      "estimated_time": "15-30 minutes"
+    },
+    {
+      "step": 2,
+      "name": "Strategy Evaluation",
+      "description": "Evaluate deployment strategy options against requirements",
+      "estimated_time": "20-30 minutes"
+    },
+    {
+      "step": 3,
+      "name": "Strategy Selection",
+      "description": "Choose optimal deployment strategy",
+      "estimated_time": "10-15 minutes"
+    },
+    {
+      "step": 4,
+      "name": "Infrastructure Design",
+      "description": "Design infrastructure to support chosen strategy",
+      "estimated_time": "20-30 minutes"
+    },
+    {
+      "step": 5,
+      "name": "Traffic Management Configuration",
+      "description": "Configure traffic routing for deployment strategy",
+      "estimated_time": "15-25 minutes"
+    },
+    {
+      "step": 6,
+      "name": "Deployment Automation",
+      "description": "Automate deployment execution",
+      "estimated_time": "20-30 minutes"
+    },
+    {
+      "step": 7,
+      "name": "Monitoring and Alerting Setup",
+      "description": "Implement monitoring for deployment validation",
+      "estimated_time": "15-20 minutes"
+    },
+    {
+      "step": 8,
+      "name": "Rollback Procedure Design",
+      "description": "Define and automate rollback procedures",
+      "estimated_time": "15-20 minutes"
+    },
+    {
+      "step": 9,
+      "name": "Testing and Validation",
+      "description": "Validate deployment strategy works as designed",
+      "estimated_time": "20-30 minutes"
+    },
+    {
+      "step": 10,
+      "name": "Documentation and Training",
+      "description": "Enable teams to execute deployment strategy",
+      "estimated_time": "15-25 minutes"
+    }
+  ],
+  "requires": [
+    "infrastructure-as-code",
+    "monitoring-and-observability",
+    "container-orchestration"
+  ],
+  "commonly_followed_by": [
+    "ci-cd-design",
+    "incident-response",
+    "performance-testing"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "load-balancing",
+    "service-mesh",
+    "feature-flag-management",
+    "database-migration",
+    "capacity-planning"
+  ],
+  "decision_framework": {
+    "blue_green": {
+      "choose_when": [
+        "Zero downtime is absolutely critical",
+        "Can afford duplicate infrastructure costs",
+        "Need instant rollback capability (< 1 minute)",
+        "Database changes are backward compatible",
+        "Want to validate entire deployment before cutover"
+      ],
+      "avoid_when": [
+        "Infrastructure costs are prohibitive (2x resources)",
+        "Database schema changes require migration",
+        "Application has complex state management",
+        "Cannot maintain two complete environments"
+      ]
+    },
+    "canary": {
+      "choose_when": [
+        "Want to test with real production traffic",
+        "Need gradual risk mitigation",
+        "Have sophisticated monitoring and metrics",
+        "Can route traffic based on criteria",
+        "Want to detect issues before full rollout"
+      ],
+      "avoid_when": [
+        "Cannot run multiple versions simultaneously",
+        "Lack sophisticated traffic routing capabilities",
+        "Monitoring and metrics are insufficient",
+        "Cannot tolerate any production errors"
+      ]
+    },
+    "rolling": {
+      "choose_when": [
+        "Have multiple instances to update incrementally",
+        "Want to minimize infrastructure costs",
+        "Can tolerate mixed versions temporarily",
+        "Need automatic rollback on failure",
+        "Application supports backward compatibility"
+      ],
+      "avoid_when": [
+        "Cannot tolerate mixed versions",
+        "Need instant rollback capability",
+        "Database changes require all instances on same version",
+        "Have only single instance"
+      ]
+    },
+    "recreate": {
+      "choose_when": [
+        "Downtime is acceptable",
+        "Cannot run multiple versions simultaneously",
+        "Have database schema changes requiring downtime",
+        "Want simplest deployment approach",
+        "Have maintenance window availability"
+      ],
+      "avoid_when": [
+        "Zero downtime is required",
+        "Deployment frequency is high",
+        "Downtime impacts revenue significantly",
+        "SLA doesn't permit downtime"
+      ]
+    },
+    "feature_flags": {
+      "choose_when": [
+        "Want to decouple deployment from release",
+        "Need to enable features for specific users",
+        "Want to conduct A/B testing",
+        "Need emergency feature kill switch",
+        "Want to gradually roll out features"
+      ],
+      "avoid_when": [
+        "Features are simple and low-risk",
+        "Don't have feature flag infrastructure",
+        "Code complexity from flags is too high",
+        "Team lacks feature flag management discipline"
+      ]
+    }
+  },
+  "quality_checklist": {
+    "strategy_selection": [
+      "Strategy aligns with availability requirements",
+      "Strategy supports required deployment frequency",
+      "Strategy is compatible with application architecture",
+      "Strategy fits within infrastructure capabilities",
+      "Strategy meets rollback time requirements",
+      "Strategy is within budget constraints",
+      "Strategy is appropriate for team maturity",
+      "Strategy addresses identified risks"
+    ],
+    "infrastructure": [
+      "Load balancer supports required traffic routing",
+      "Health checks accurately detect application health",
+      "Readiness probes prevent premature traffic routing",
+      "Infrastructure can handle peak load",
+      "Monitoring provides adequate visibility",
+      "Infrastructure is properly sized"
+    ],
+    "deployment_automation": [
+      "Deployment is fully automated",
+      "Deployment is idempotent",
+      "Deployment handles failures gracefully",
+      "Deployment provides clear status",
+      "Deployment supports rollback",
+      "Deployment validates success"
+    ],
+    "rollback": [
+      "Rollback procedures are documented",
+      "Rollback can be executed quickly",
+      "Rollback is tested and validated",
+      "Rollback triggers are defined",
+      "Rollback automation works reliably"
+    ]
+  },
+  "common_mistakes": [
+    {
+      "mistake": "Choosing strategy based on hype",
+      "impact": "Strategy doesn't match requirements, causes deployment issues",
+      "solution": "Evaluate strategies objectively against specific requirements"
+    },
+    {
+      "mistake": "Ignoring infrastructure constraints",
+      "impact": "Cannot implement chosen strategy, delays and rework",
+      "solution": "Assess infrastructure capabilities before strategy selection"
+    },
+    {
+      "mistake": "Inadequate health checks",
+      "impact": "Traffic routed to unhealthy instances, user-facing errors",
+      "solution": "Implement comprehensive health and readiness checks"
+    },
+    {
+      "mistake": "Missing rollback automation",
+      "impact": "Extended outages, increased MTTR",
+      "solution": "Automate rollback procedures"
+    },
+    {
+      "mistake": "Not defining rollback triggers",
+      "impact": "Delayed rollback decisions, extended incidents",
+      "solution": "Define clear rollback triggers and thresholds"
+    }
+  ],
+  "examples": [
+    {
+      "name": "E-Commerce Platform - Canary Deployment with Istio",
+      "context": "High-traffic e-commerce platform with microservices on Kubernetes",
+      "strategy": "Canary Deployment with Istio + Feature Flags",
+      "key_results": [
+        "Deployment frequency increased from weekly to 3-5 times per week",
+        "Zero revenue-impacting outages",
+        "Issues detected and rolled back before affecting >10% of users",
+        "Average rollback time: 2 minutes"
+      ]
+    },
+    {
+      "name": "Banking Application - Blue/Green Deployment",
+      "context": "Core banking application with strict regulatory compliance",
+      "strategy": "Blue/Green Deployment with Database Versioning",
+      "key_results": [
+        "Deployment downtime reduced from 4 hours to 30 seconds",
+        "Rollback time: < 30 seconds",
+        "Zero failed deployments",
+        "Complete audit trail for compliance"
+      ]
+    },
+    {
+      "name": "Mobile API - Rolling Deployment with Health Checks",
+      "context": "Mobile backend API with budget constraints",
+      "strategy": "Rolling Deployment with Sophisticated Health Checks + PodDisruptionBudget",
+      "key_results": [
+        "Daily deployments with zero user-facing errors",
+        "Infrastructure costs minimized",
+        "99.95% availability maintained",
+        "Zero manual rollbacks needed"
+      ]
+    },
+    {
+      "name": "SaaS Platform - Feature Flag Deployment",
+      "context": "B2B SaaS with diverse customer requirements",
+      "strategy": "Continuous Deployment + Feature Flags (LaunchDarkly)",
+      "key_results": [
+        "Multiple deployments per day",
+        "Feature release independent of deployments",
+        "Instant feature rollback (< 1 second)",
+        "Successful A/B testing program"
+      ]
+    }
+  ],
+  "evaluation_criteria": {
+    "strategy_selection": {
+      "weight": 25,
+      "metrics": [
+        "Alignment with requirements",
+        "Infrastructure compatibility",
+        "Cost effectiveness",
+        "Team capability",
+        "Scalability"
+      ]
+    },
+    "implementation_quality": {
+      "weight": 30,
+      "metrics": [
+        "Automation completeness",
+        "Health check comprehensiveness",
+        "Traffic management correctness",
+        "Monitoring adequacy",
+        "Rollback reliability"
+      ]
+    },
+    "operational_excellence": {
+      "weight": 25,
+      "metrics": [
+        "Deployment success rate",
+        "Rollback frequency",
+        "Mean time to deploy",
+        "Mean time to rollback",
+        "Deployment confidence"
+      ]
+    },
+    "business_impact": {
+      "weight": 20,
+      "metrics": [
+        "Availability during deployments",
+        "User-facing errors",
+        "Deployment frequency capability",
+        "Time to market",
+        "Risk mitigation effectiveness"
+      ]
+    }
+  },
+  "success_metrics": {
+    "deployment": {
+      "success_rate": "> 95%",
+      "frequency": "Meets business requirements",
+      "duration": "< 30 minutes",
+      "rollback_time": "< 5 minutes",
+      "rollback_frequency": "< 10%"
+    },
+    "availability": {
+      "uptime_during_deployments": "Meets SLA",
+      "user_facing_errors": "< 0.1% during deployments",
+      "service_degradation": "Minimal or none"
+    },
+    "business": {
+      "time_to_market": "Reduced by deployment strategy",
+      "deployment_confidence": "High team confidence",
+      "customer_impact": "Minimal customer complaints",
+      "revenue_impact": "Zero revenue loss from deployments"
+    }
+  },
+  "resources": [
+    {
+      "type": "documentation",
+      "name": "Kubernetes Deployment Strategies",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    },
+    {
+      "type": "documentation",
+      "name": "Istio Traffic Management",
+      "url": "https://istio.io/latest/docs/concepts/traffic-management/"
+    },
+    {
+      "type": "tool",
+      "name": "LaunchDarkly Feature Flags",
+      "url": "https://launchdarkly.com/"
+    },
+    {
+      "type": "tool",
+      "name": "Argo Rollouts",
+      "url": "https://argoproj.github.io/argo-rollouts/"
+    },
+    {
+      "type": "book",
+      "name": "Continuous Delivery",
+      "author": "Jez Humble, David Farley"
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-15",
+    "last_updated": "2024-01-15",
+    "author": "Engineering Skills Library",
+    "status": "active",
+    "priority": "medium"
+  }
 }

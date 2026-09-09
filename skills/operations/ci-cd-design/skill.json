@@ -2,58 +2,65 @@
   "name": "ci-cd-design",
   "category": "operations",
   "version": "1.0.0",
-  "description": "Design continuous integration and continuous deployment (CI/CD) pipelines that automate building, testing, security scanning, and deployment of software to enable fast, safe, and reliable releases.",
+  "description": "Design continuous integration and continuous deployment pipelines that automate software delivery from code commit to production deployment with quality gates, security checks, and rollback capabilities.",
   "inputs": [
-    "application architecture (monolith, microservices, serverless)",
-    "tech stack (languages, frameworks, build tools)",
-    "deployment targets (cloud, on-prem, Kubernetes, serverless)",
-    "team structure (size, skills, responsibilities)",
-    "release requirements (frequency, approval process, rollback needs)",
-    "existing CI/CD (current pipelines and pain points)",
-    "compliance requirements (SOC 2, HIPAA, PCI DSS)",
-    "security requirements (SAST, DAST, dependency scanning)"
+    "Application architecture and technology stack",
+    "Infrastructure details and deployment targets",
+    "Quality requirements and testing strategy",
+    "Deployment strategy and rollback requirements",
+    "Team structure and branching strategy",
+    "Security and compliance requirements",
+    "Monitoring and observability needs",
+    "Existing infrastructure and tooling"
   ],
   "outputs": [
-    "CI/CD strategy document (pipeline architecture, build/test/deploy strategy)",
-    "pipeline definitions (CI, CD, release, rollback pipelines)",
-    "environment strategy (dev, staging, production, promotion flow)",
-    "security and compliance integration (SAST, DAST, dependency scanning, secrets management)",
-    "tool selection (CI/CD platform, security tools, monitoring)",
-    "documentation (usage guide, troubleshooting, runbooks)"
+    "Pipeline architecture document with diagrams",
+    "Detailed pipeline specifications and configurations",
+    "Environment configuration and infrastructure-as-code",
+    "Quality gate definitions and thresholds",
+    "Deployment procedures and runbooks",
+    "CI/CD configuration files (pipeline-as-code)",
+    "Integration documentation for tools and services",
+    "Monitoring and alerting setup",
+    "Security implementation (scanning, secret management)",
+    "Team enablement materials and documentation"
   ],
   "requires": [
-    "version-control",
-    "testing-strategy",
-    "architecture-discovery"
+    "version-control-setup",
+    "infrastructure-provisioning",
+    "test-automation-design"
   ],
   "commonly_followed_by": [
-    "deployment-strategy",
-    "observability-design",
-    "production-readiness"
+    "monitoring-setup",
+    "incident-response-planning",
+    "performance-optimization"
   ],
-  "alternative_to": [],
+  "alternative_to": [
+    "manual-deployment-process",
+    "script-based-automation"
+  ],
   "works_with": [
+    "container-orchestration",
     "infrastructure-as-code",
-    "security-architecture-review",
-    "disaster-recovery",
-    "agent-observability"
+    "secret-management",
+    "security-scanning",
+    "feature-flag-implementation"
   ],
   "tags": [
-    "operations",
     "ci-cd",
     "devops",
     "automation",
     "deployment",
     "pipeline",
-    "testing",
-    "security",
     "continuous-integration",
     "continuous-deployment",
-    "github-actions",
-    "gitlab-ci",
-    "jenkins"
+    "gitops",
+    "infrastructure",
+    "quality-gates",
+    "security",
+    "monitoring"
   ],
-  "complexity": "advanced",
-  "estimated_time": "4-8 hours",
-  "skill_type": "design"
+  "complexity": "intermediate-to-advanced",
+  "estimated_time": "2-4 weeks for comprehensive pipeline design and implementation",
+  "skill_type": "design-and-implementation"
 }

@@ -1,0 +1,68 @@
+{
+  "name": "capacity-planning",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Estimate and plan infrastructure capacity to meet current and future demand while optimizing costs, performance, and reliability.",
+  "inputs": [
+    "Current infrastructure inventory and utilization metrics",
+    "Historical usage data and traffic patterns",
+    "Business growth projections and requirements",
+    "Application characteristics and resource consumption",
+    "Performance metrics and SLA requirements",
+    "Cost constraints and budget limitations",
+    "Technology constraints and preferences",
+    "Business context and roadmap",
+    "Risk tolerance and operational context"
+  ],
+  "outputs": [
+    "Capacity plan document with recommendations",
+    "Resource sizing recommendations for all infrastructure layers",
+    "Growth projections over multiple time horizons",
+    "Cost analysis and optimization recommendations",
+    "Risk assessment and mitigation strategies",
+    "Implementation roadmap with phased approach",
+    "Monitoring and alerting strategy",
+    "Scaling policies and procedures",
+    "Architecture recommendations for scalability",
+    "Documentation and knowledge transfer materials"
+  ],
+  "requires": [
+    "monitoring-setup",
+    "infrastructure-inventory",
+    "performance-baselining"
+  ],
+  "commonly_followed_by": [
+    "infrastructure-provisioning",
+    "auto-scaling-configuration",
+    "cost-optimization",
+    "performance-testing"
+  ],
+  "alternative_to": [
+    "reactive-scaling",
+    "manual-capacity-management"
+  ],
+  "works_with": [
+    "cloud-migration",
+    "disaster-recovery-planning",
+    "architecture-design",
+    "database-optimization",
+    "load-testing"
+  ],
+  "tags": [
+    "capacity-planning",
+    "infrastructure",
+    "scalability",
+    "forecasting",
+    "resource-management",
+    "cost-optimization",
+    "performance",
+    "growth-planning",
+    "sla",
+    "availability",
+    "operations",
+    "cloud"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-4 weeks for comprehensive capacity planning",
+  "skill_type": "planning-and-analysis"
+}

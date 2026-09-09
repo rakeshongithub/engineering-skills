@@ -1,2873 +1,1574 @@
-# Observability Design: Step-by-Step Instructions
-
-This guide provides detailed instructions for designing comprehensive observability systems using the three pillars: logs, metrics, and traces.
-
----
+# Observability Design - Step-by-Step Instructions
 
 ## Overview
 
-**Total Estimated Time:** 4-8 hours  
-**Complexity:** Advanced  
-**Prerequisites:** System architecture understanding, SLO definitions
+This guide provides detailed, actionable instructions for designing comprehensive observability systems. Follow these steps sequentially to create a robust observability architecture that provides complete visibility into system behavior, enables rapid incident detection and resolution, and supports data-driven operational decisions.
+
+## Phase 1: Discovery and Requirements (Week 1)
+
+### Step 1: Understand System Architecture and Context
+
+**Objective**: Build a comprehensive understanding of the system, its components, dependencies, and operational context.
+
+**Instructions**:
+
+1. **Gather Architecture Documentation**:
+   - Collect all available architecture diagrams (component, deployment, sequence, data flow)
+   - Request service dependency maps and integration points
+   - Obtain infrastructure topology diagrams (regions, zones, clusters)
+   - Review technology stack documentation (languages, frameworks, platforms)
+
+2. **Map Service Dependencies**:
+   - Create or update service dependency graph
+   - Identify synchronous dependencies (HTTP, gRPC, direct calls)
+   - Identify asynchronous dependencies (message queues, event streams)
+   - Document external dependencies (third-party APIs, SaaS services)
+   - Mark critical dependencies that impact availability
+
+3. **Identify Critical Paths**:
+   - Map critical user journeys (e.g., checkout flow, login, search)
+   - Identify services involved in each critical path
+   - Document expected latency and throughput for each path
+   - Highlight single points of failure
+
+4. **Understand Data Flows**:
+   - Trace how data flows through the system
+   - Identify data transformation and processing steps
+   - Document data storage and retrieval patterns
+   - Note data volume and velocity characteristics
+
+5. **Review Deployment Topology**:
+   - Document deployment regions and availability zones
+   - Understand load balancing and traffic routing
+   - Identify edge locations and CDN usage
+   - Map network topology and connectivity
+
+6. **Conduct Stakeholder Interviews**:
+   - Interview development teams about system behavior and pain points
+   - Talk to operations teams about current monitoring challenges
+   - Discuss with business stakeholders about critical metrics and KPIs
+   - Understand on-call team's experience with existing observability
+
+**Deliverables**:
+- Annotated architecture diagrams with observability notes
+- Service dependency graph with criticality ratings
+- Critical path analysis document
+- Technology stack inventory
+- Stakeholder interview summary
+
+**Time Estimate**: 2-3 days
 
 ---
 
-## Step 1: Define Observability Requirements (30-60 minutes)
+### Step 2: Define Observability Objectives and Success Criteria
 
-### Objective
+**Objective**: Establish clear, measurable goals and requirements for the observability system.
 
-Understand what needs to be observed and why, establishing clear observability goals aligned with business and operational needs.
+**Instructions**:
 
-### Actions
+1. **Define SLAs and SLOs**:
+   - Work with business stakeholders to define availability targets (e.g., 99.9%, 99.99%)
+   - Establish latency targets for critical operations (e.g., p95 <200ms, p99 <500ms)
+   - Define error rate thresholds (e.g., <0.1% error rate)
+   - Document throughput requirements (e.g., 10,000 requests/second)
+   - Calculate error budgets based on SLOs
 
-#### 1.1 Identify Critical User Journeys
+2. **Identify Business Metrics and KPIs**:
+   - List critical business metrics (e.g., conversion rate, revenue, active users)
+   - Define how to measure business impact of incidents
+   - Identify leading indicators of business problems
+   - Document seasonality and expected patterns
 
-**What to do:**
-- Map end-to-end user flows through your system
-- Identify the most critical paths (e.g., checkout, login, data processing)
-- Document dependencies for each journey
+3. **Establish Incident Response Objectives**:
+   - Define MTTD (Mean Time to Detect) target (e.g., <5 minutes)
+   - Define MTTR (Mean Time to Resolve) target (e.g., <30 minutes)
+   - Set alert quality goals (e.g., >70% of alerts result in action)
+   - Define escalation time objectives
 
-**Example:**
-```
-Critical Journey: E-commerce Checkout
-1. User adds item to cart (Frontend → Cart Service)
-2. User proceeds to checkout (Frontend → Checkout Service)
-3. Payment processing (Checkout → Payment Gateway)
-4. Order creation (Checkout → Order Service → Database)
-5. Inventory update (Order Service → Inventory Service)
-6. Confirmation email (Order Service → Notification Service)
-```
+4. **Document Compliance Requirements**:
+   - List applicable regulations (GDPR, HIPAA, SOC2, PCI-DSS, etc.)
+   - Document audit logging requirements (what, how long, access controls)
+   - Define data retention policies for compliance
+   - Identify PII and sensitive data handling requirements
+   - Document data residency and sovereignty constraints
 
-#### 1.2 Define SLOs for Each Service
+5. **Set Budget and Resource Constraints**:
+   - Establish observability budget (tools, storage, bandwidth)
+   - Define acceptable observability cost as % of infrastructure cost (typically <5%)
+   - Identify existing tool licenses and contracts
+   - Document team size and expertise for observability management
 
-**What to do:**
-- Establish availability targets (e.g., 99.9%)
-- Define latency targets (e.g., p95 < 500ms)
-- Set error rate thresholds (e.g., < 0.1%)
-- Document throughput requirements
+6. **Define Success Metrics**:
+   - How will you measure observability effectiveness?
+   - Example metrics:
+     - Incident detection time (MTTD)
+     - Incident resolution time (MTTR)
+     - SLO compliance percentage
+     - Alert quality (true positive rate)
+     - Observability cost as % of infrastructure cost
+     - Developer/operator satisfaction with observability tools
 
-**Template:**
-```
-Service: Checkout Service
-- Availability: 99.95% (21.6 min downtime/month)
-- Latency: p50 < 200ms, p95 < 500ms, p99 < 1s
-- Error Rate: < 0.1%
-- Throughput: 1000 req/s peak
-```
-
-#### 1.3 List Known and Potential Failure Modes
-
-**What to do:**
-- Review past incidents
-- Identify single points of failure
-- Document dependency failures
-- List resource exhaustion scenarios
-
-**Categories:**
-- Infrastructure failures (server down, network partition)
-- Dependency failures (database timeout, third-party API down)
-- Resource exhaustion (memory leak, connection pool exhaustion)
-- Configuration errors (bad deployment, incorrect settings)
-- Data issues (corrupt data, schema mismatch)
-
-#### 1.4 Identify Current Debugging Pain Points
-
-**Questions to ask:**
-- How long does it take to identify root cause of incidents?
-- What information is missing during debugging?
-- Which services are "black boxes"?
-- Where do you lack visibility?
-
-#### 1.5 Define Compliance and Regulatory Requirements
-
-**What to consider:**
-- Log retention requirements (e.g., SOC 2, GDPR)
-- PII handling and redaction
-- Audit trail requirements
-- Data residency constraints
-
-#### 1.6 Establish Observability Goals
-
-**Example goals:**
-- Reduce mean time to detection (MTTD) to < 5 minutes
-- Reduce mean time to resolution (MTTR) to < 30 minutes
-- Achieve 100% visibility into critical user journeys
-- Enable proactive issue detection before user impact
-
-### Quality Checklist
-
-- [ ] All critical user journeys documented with dependencies
-- [ ] SLOs defined for all services (availability, latency, error rate)
-- [ ] Known failure modes cataloged
-- [ ] Debugging pain points identified
-- [ ] Compliance requirements documented
-- [ ] Observability goals are specific and measurable
-- [ ] Stakeholder buy-in obtained
-
-### Common Pitfalls
-
-- **Too broad:** Trying to observe everything leads to noise
-- **No SLOs:** Without SLOs, you don't know what to monitor
-- **Ignoring compliance:** Leads to expensive retrofitting later
-
-### Outputs
-
+**Deliverables**:
 - Observability requirements document
-- Critical user journey map
-- SLO definitions
-- Failure mode catalog
+- SLI/SLO definitions with error budgets
+- Business metrics and KPIs list
+- Compliance requirements matrix
+- Budget and resource constraints document
+- Success metrics and measurement plan
+
+**Time Estimate**: 2-3 days
 
 ---
 
-## Step 2: Design Logging Strategy (45-90 minutes)
+### Step 3: Assess Current State and Identify Gaps
 
-### Objective
+**Objective**: Evaluate existing observability capabilities and identify areas for improvement.
 
-Define what, how, and where to log to enable effective debugging and compliance.
+**Instructions**:
 
-### Actions
+1. **Inventory Existing Tools**:
+   - List all current observability tools (logging, metrics, tracing, APM)
+   - Document tool versions, licenses, and costs
+   - Identify tool owners and administrators
+   - Note integration points and dependencies
 
-#### 2.1 Define Log Levels and When to Use Them
+2. **Evaluate Current Logging**:
+   - Review log formats (structured vs. unstructured)
+   - Assess log coverage (which services log, which don't)
+   - Evaluate log aggregation and centralization
+   - Check log retention and archival practices
+   - Identify PII exposure in logs
+   - Assess log volume and costs
 
-**Standard log levels:**
+3. **Evaluate Current Metrics**:
+   - Review available metrics and coverage
+   - Assess metric naming conventions and consistency
+   - Check metric cardinality and storage costs
+   - Evaluate alerting rules and quality
+   - Identify missing metrics for SLIs/SLOs
 
-```
-DEBUG: Detailed diagnostic information (disabled in production)
-  Example: "User query parameters: {params}"
+4. **Evaluate Current Tracing**:
+   - Assess distributed tracing coverage (if any)
+   - Review trace sampling strategy
+   - Check trace context propagation across services
+   - Evaluate trace storage and retention
+   - Identify gaps in end-to-end tracing
 
-INFO: General informational messages about application flow
-  Example: "Order 12345 created successfully"
+5. **Analyze Historical Incidents**:
+   - Review postmortems from last 6-12 months
+   - Identify incidents that were difficult to diagnose
+   - Document observability gaps that hindered resolution
+   - Note incidents that could have been detected earlier
+   - Identify false alarms and alert fatigue issues
 
-WARN: Potentially harmful situations that aren't errors
-  Example: "Payment gateway response time exceeded 2s"
+6. **Identify Pain Points**:
+   - Survey development and operations teams
+   - Document common complaints about current observability
+   - Identify blind spots and missing visibility
+   - Note tools that are underutilized or redundant
+   - Assess alert fatigue and noise issues
 
-ERROR: Error events that might still allow the application to continue
-  Example: "Failed to send confirmation email, will retry"
+7. **Benchmark Against Best Practices**:
+   - Compare current state to industry best practices
+   - Identify areas where current observability is strong
+   - Highlight areas needing significant improvement
+   - Prioritize gaps by impact and effort
 
-FATAL/CRITICAL: Severe errors causing application shutdown
-  Example: "Database connection pool exhausted, shutting down"
-```
+**Deliverables**:
+- Current state assessment report
+- Tool inventory and cost analysis
+- Gap analysis with prioritization
+- Historical incident analysis
+- Pain points and improvement opportunities
+- Quick wins and immediate actions
 
-**Guidelines:**
-- Use INFO for business events (order created, user registered)
-- Use WARN for degraded performance or fallback scenarios
-- Use ERROR for exceptions and failures
-- Never use DEBUG in production (performance and cost)
-
-#### 2.2 Establish Structured Logging Format
-
-**Why structured logging:**
-- Easy to parse and query
-- Consistent format across services
-- Enables log aggregation and analysis
-
-**Recommended format: JSON**
-
-```json
-{
-  "timestamp": "2026-09-09T10:15:30.123Z",
-  "level": "INFO",
-  "service": "checkout-service",
-  "environment": "production",
-  "correlation_id": "abc123-def456-ghi789",
-  "user_id": "user_12345",
-  "message": "Order created successfully",
-  "order_id": "order_67890",
-  "amount": 99.99,
-  "currency": "USD",
-  "duration_ms": 245
-}
-```
-
-**Required fields:**
-- `timestamp`: ISO 8601 format with milliseconds
-- `level`: Log level
-- `service`: Service name
-- `environment`: production, staging, development
-- `correlation_id`: Request trace ID
-- `message`: Human-readable message
-
-**Optional but recommended:**
-- `user_id`: For user-specific debugging
-- `session_id`: For session tracking
-- `version`: Service version
-- `host`: Hostname or pod ID
-
-#### 2.3 Define Log Retention Policies
-
-**Factors to consider:**
-- Compliance requirements (may require 1+ years)
-- Debugging needs (typically 7-30 days)
-- Storage costs
-- Query performance
-
-**Tiered retention strategy:**
-```
-Hot storage (fast queries): 7 days
-Warm storage (slower queries): 30 days
-Cold storage (archive): 1 year
-Deleted: After 1 year
-```
-
-**Exception: Critical logs**
-- Security events: Longer retention (1-7 years)
-- Audit logs: Per compliance requirements
-- Error logs: May warrant longer retention
-
-#### 2.4 Identify Sensitive Data to Redact
-
-**PII and sensitive data:**
-- Passwords, API keys, tokens
-- Credit card numbers
-- Social Security Numbers
-- Email addresses (depends on compliance)
-- IP addresses (GDPR consideration)
-- Health information (HIPAA)
-
-**Redaction strategies:**
-```javascript
-// Before redaction
-{ "credit_card": "4532-1234-5678-9010" }
-
-// After redaction
-{ "credit_card": "4532-****-****-9010" }
-
-// Or complete redaction
-{ "credit_card": "[REDACTED]" }
-```
-
-**Implementation:**
-- Use logging library features (e.g., Winston redaction)
-- Implement at application level, not log aggregation
-- Test redaction thoroughly
-
-#### 2.5 Choose Centralized Logging System
-
-**Options:**
-
-**ELK Stack (Elasticsearch, Logstash, Kibana)**
-- Pros: Open source, powerful search, flexible
-- Cons: Complex to operate, resource-intensive
-- Best for: Self-hosted, high volume
-
-**Splunk**
-- Pros: Powerful, enterprise features, excellent UI
-- Cons: Expensive, complex licensing
-- Best for: Large enterprises, compliance-heavy
-
-**CloudWatch Logs (AWS)**
-- Pros: Native AWS integration, simple setup
-- Cons: Limited query capabilities, AWS-only
-- Best for: AWS-native applications
-
-**Datadog Logs**
-- Pros: Integrated with metrics/traces, great UI
-- Cons: Can be expensive at scale
-- Best for: Unified observability platform
-
-**Grafana Loki**
-- Pros: Cost-effective, integrates with Prometheus
-- Cons: Limited query features vs. Elasticsearch
-- Best for: Kubernetes, cost-conscious
-
-#### 2.6 Define Log Aggregation Strategy
-
-**Collection methods:**
-
-**1. Agent-based (recommended for containers/VMs)**
-```
-Application → Log File → Fluentd/Filebeat → Centralized System
-```
-
-**2. Direct shipping**
-```
-Application → HTTP/TCP → Centralized System
-```
-
-**3. Sidecar pattern (Kubernetes)**
-```
-Application → stdout → Sidecar Container → Centralized System
-```
-
-**Best practices:**
-- Use buffering to handle backpressure
-- Implement retry logic
-- Monitor log shipping pipeline itself
-- Use compression for network efficiency
-
-### Quality Checklist
-
-- [ ] Log levels defined with clear usage guidelines
-- [ ] Structured logging format (JSON) standardized
-- [ ] Required fields documented (timestamp, level, service, correlation_id)
-- [ ] Retention policy defined (hot/warm/cold storage)
-- [ ] PII and sensitive data redaction implemented
-- [ ] Centralized logging system selected
-- [ ] Log aggregation pipeline designed
-- [ ] Cost estimates calculated
-- [ ] Team trained on logging standards
-
-### Common Pitfalls
-
-- **Logging too much:** Increases cost and noise
-- **Logging too little:** Missing critical debugging information
-- **No correlation IDs:** Can't trace requests across services
-- **Logging sensitive data:** Compliance and security risk
-- **Inconsistent formats:** Makes aggregation difficult
-
-### Outputs
-
-- Logging strategy document
-- Structured logging format specification
-- Log retention policy
-- PII redaction guidelines
-- Centralized logging system selection
+**Time Estimate**: 2-3 days
 
 ---
 
-## Step 3: Design Metrics Strategy (60-90 minutes)
-
-### Objective
-
-Define metrics to collect and monitor for understanding system health, performance, and business outcomes.
-
-### Actions
-
-#### 3.1 Identify RED Metrics (Request-based Services)
-
-**RED = Rate, Errors, Duration**
-
-**Rate:** Request throughput
-```
-Metric: http_requests_total
-Type: Counter
-Labels: service, endpoint, method, status_code
-
-Example query (requests per second):
-rate(http_requests_total[5m])
-```
-
-**Errors:** Request error rate
-```
-Metric: http_requests_total{status_code=~"5.."}
-Type: Counter
-Labels: service, endpoint, method, status_code
-
-Example query (error rate):
-sum(rate(http_requests_total{status_code=~"5.."}[5m])) 
-/ 
-sum(rate(http_requests_total[5m]))
-```
-
-**Duration:** Request latency
-```
-Metric: http_request_duration_seconds
-Type: Histogram
-Labels: service, endpoint, method
-
-Example query (p95 latency):
-histogram_quantile(0.95, 
-  rate(http_request_duration_seconds_bucket[5m])
-)
-```
-
-**Apply RED to all request-based services:**
-- API services
-- Web servers
-- RPC services
-- Message consumers
-
-#### 3.2 Define USE Metrics (Resource-based)
-
-**USE = Utilization, Saturation, Errors**
-
-**Utilization:** How busy is the resource?
-```
-CPU: cpu_usage_percent
-Memory: memory_usage_percent
-Disk: disk_usage_percent
-Network: network_bandwidth_utilization_percent
-```
-
-**Saturation:** How much queued work?
-```
-CPU: load_average (> CPU cores indicates saturation)
-Memory: swap_usage
-Disk: disk_io_queue_length
-Network: network_packet_drops
-```
-
-**Errors:** Resource errors
-```
-Disk: disk_read_errors, disk_write_errors
-Network: network_errors, network_packet_loss
-Memory: oom_kills
-```
-
-**Apply USE to:**
-- Servers/VMs
-- Containers
-- Databases
-- Message queues
-- Load balancers
-
-#### 3.3 Establish Business Metrics
-
-**Why business metrics:**
-- Connect technical metrics to business outcomes
-- Enable product and business teams to monitor health
-- Detect issues that don't show up in technical metrics
-
-**Examples:**
-
-**E-commerce:**
-```
-orders_created_total (counter)
-order_value_dollars (histogram)
-checkout_abandonment_rate (gauge)
-active_users (gauge)
-revenue_per_minute (gauge)
-```
-
-**SaaS:**
-```
-user_signups_total (counter)
-active_subscriptions (gauge)
-churn_rate (gauge)
-feature_usage_total (counter)
-api_calls_per_customer (histogram)
-```
-
-**Media/Content:**
-```
-video_plays_total (counter)
-video_watch_duration_seconds (histogram)
-concurrent_viewers (gauge)
-buffering_events_total (counter)
-```
-
-#### 3.4 Define Metric Naming Conventions
-
-**Prometheus-style naming (recommended):**
-
-```
-<namespace>_<subsystem>_<name>_<unit>
-
-Examples:
-http_requests_total
-http_request_duration_seconds
-database_connections_active
-cache_hits_total
-queue_messages_pending
-```
-
-**Rules:**
-- Use snake_case
-- Include unit in name (seconds, bytes, total)
-- Counters end in `_total`
-- Use base units (seconds not milliseconds, bytes not megabytes)
-- Be consistent across services
-
-#### 3.5 Define Label Strategy
-
-**Labels add dimensions to metrics:**
-
-```
-http_requests_total{
-  service="checkout",
-  environment="production",
-  endpoint="/api/orders",
-  method="POST",
-  status_code="200"
-}
-```
-
-**Best practices:**
-- Use labels for dimensions you want to filter/group by
-- Keep cardinality low (< 100 unique values per label)
-- Avoid high-cardinality labels (user_id, request_id)
-- Use consistent label names across services
-
-**Common labels:**
-- `service`: Service name
-- `environment`: production, staging, development
-- `region`: AWS region, datacenter
-- `version`: Service version
-- `endpoint`: API endpoint
-- `method`: HTTP method
-- `status_code`: HTTP status code
-
-**High-cardinality warning:**
-```
-❌ BAD: user_id="12345" (millions of users)
-✅ GOOD: user_tier="premium" (few tiers)
-
-❌ BAD: request_id="abc-123-def" (unique per request)
-✅ GOOD: endpoint="/api/orders" (limited endpoints)
-```
-
-#### 3.6 Choose Metrics Storage System
-
-**Options:**
-
-**Prometheus**
-- Pros: Open source, powerful query language (PromQL), pull-based
-- Cons: Limited long-term storage, single-node scalability
-- Best for: Kubernetes, self-hosted, cost-conscious
-- Long-term storage: Thanos, Cortex, Mimir
-
-**Datadog**
-- Pros: Unified platform (metrics + logs + traces), great UI
-- Cons: Can be expensive, vendor lock-in
-- Best for: Unified observability, fast setup
-
-**New Relic**
-- Pros: Comprehensive APM, good UI, easy setup
-- Cons: Expensive at scale
-- Best for: APM-focused, application monitoring
-
-**CloudWatch (AWS)**
-- Pros: Native AWS integration, simple
-- Cons: Limited query capabilities, AWS-only
-- Best for: AWS-native applications
-
-**InfluxDB**
-- Pros: Time-series optimized, SQL-like query language
-- Cons: Less ecosystem than Prometheus
-- Best for: IoT, high-frequency metrics
-
-#### 3.7 Define Metric Retention
-
-**Retention strategy:**
-
-```
-Raw data (15s resolution): 7 days
-Downsampled (1m resolution): 30 days
-Downsampled (5m resolution): 90 days
-Downsampled (1h resolution): 1 year
-```
-
-**Considerations:**
-- Query performance degrades with longer retention
-- Storage costs increase with retention
-- Compliance may require longer retention
-- Use downsampling for long-term storage
-
-### Quality Checklist
-
-- [ ] RED metrics defined for all request-based services
-- [ ] USE metrics defined for all resources
-- [ ] Business metrics identified and documented
-- [ ] Metric naming conventions established
-- [ ] Label strategy defined with cardinality limits
-- [ ] Metrics storage system selected
-- [ ] Retention policy defined with downsampling strategy
-- [ ] Cost estimates calculated
-- [ ] Metric standards documented
-
-### Common Pitfalls
-
-- **High cardinality:** Explodes storage and query performance
-- **Too many metrics:** Increases cost and complexity
-- **Inconsistent naming:** Makes queries difficult
-- **No business metrics:** Can't connect to business outcomes
-- **Wrong metric type:** Using gauge instead of counter, etc.
-
-### Outputs
-
-- Metrics strategy document
-- RED metrics definition
-- USE metrics definition
-- Business metrics catalog
-- Naming conventions guide
-- Label strategy
-- Metrics storage selection
-
----
-
-## Step 4: Design Tracing Strategy (45-75 minutes)
-
-### Objective
-
-Enable distributed request tracing to understand request flow, latency breakdown, and dependencies across services.
-
-### Actions
-
-#### 4.1 Choose Tracing Standard
-
-**Recommended: OpenTelemetry (OTel)**
-
-**Why OpenTelemetry:**
-- Vendor-neutral standard
-- Wide language support
-- Unified instrumentation (metrics, logs, traces)
-- Future-proof (industry standard)
-- Automatic instrumentation available
-
-**Alternatives:**
-- OpenTracing (deprecated, merged into OpenTelemetry)
-- Vendor-specific (Datadog APM, New Relic)
-
-**OpenTelemetry components:**
-- **SDK:** Instrument your code
-- **Auto-instrumentation:** Automatic tracing for frameworks
-- **Collector:** Receive, process, export traces
-- **Exporters:** Send to backend (Jaeger, Zipkin, Datadog)
-
-#### 4.2 Define Trace Sampling Strategy
-
-**Why sampling:**
-- Tracing every request is expensive (storage, network)
-- High-volume services generate millions of traces
-- Most requests are similar; sampling provides sufficient insight
-
-**Sampling strategies:**
-
-**1. Head-based sampling (decision at trace start):**
-
-```
-Always sample (100%):
-- Errors (status code 5xx)
-- Slow requests (duration > threshold)
-- Specific endpoints (critical paths)
-
-Probability-based sampling:
-- 10% of normal requests (high volume)
-- 50% of normal requests (medium volume)
-- 100% of normal requests (low volume)
-```
-
-**2. Tail-based sampling (decision after trace completes):**
-
-```
-Sample if:
-- Trace contains error
-- Trace duration > p95 threshold
-- Trace contains specific operation
-- Random sample (X%)
-```
-
-**Recommended approach:**
-```
-Head-based sampling:
-- 100% errors
-- 100% slow requests (> p95)
-- 10% random sample
-
-Tail-based sampling (if supported):
-- 100% traces with errors
-- 100% traces > p99 latency
-- 5% random sample
-```
-
-**Sampling configuration example:**
-```yaml
-sampling:
-  # Always sample errors
-  - type: always_on
-    condition: status_code >= 500
-  
-  # Always sample slow requests
-  - type: always_on
-    condition: duration > 1s
-  
-  # Sample 10% of everything else
-  - type: probabilistic
-    rate: 0.1
-```
-
-#### 4.3 Identify Critical Traces to Capture
-
-**Critical user journeys:**
-- Checkout flow (add to cart → payment → order confirmation)
-- User authentication (login → session creation)
-- Data processing pipelines (upload → process → store)
-- Search and discovery (search → results → detail view)
-
-**For each journey, define:**
-- Entry point (e.g., API Gateway)
-- All services involved
-- Expected latency
-- Critical operations to trace
-
-**Example: Checkout flow**
-```
-Trace: checkout_flow
-Entry: POST /api/checkout
-Services:
-  1. API Gateway (5ms)
-  2. Checkout Service (50ms)
-  3. Payment Service (200ms)
-  4. Order Service (30ms)
-  5. Inventory Service (20ms)
-  6. Notification Service (10ms)
-Total expected: ~315ms
-
-Critical spans:
-- payment_gateway_call (external, may be slow)
-- database_transaction (may lock)
-- inventory_update (may fail)
-```
-
-#### 4.4 Design Trace Context Propagation
-
-**What is trace context:**
-- Trace ID: Unique identifier for entire request
-- Span ID: Unique identifier for operation
-- Parent Span ID: Links spans into tree
-
-**Propagation methods:**
-
-**1. HTTP headers (W3C Trace Context standard):**
-```
-traceparent: 00-{trace-id}-{parent-span-id}-{flags}
-tracestate: vendor1=value1,vendor2=value2
-```
-
-**2. Message queue metadata:**
-```json
-{
-  "headers": {
-    "traceparent": "00-abc123...",
-    "tracestate": "..."
-  },
-  "body": { ... }
-}
-```
-
-**3. gRPC metadata:**
-```
-grpc-trace-bin: <binary trace context>
-```
-
-**Implementation checklist:**
-- [ ] Extract trace context from incoming requests
-- [ ] Propagate trace context to downstream services
-- [ ] Generate new span for each operation
-- [ ] Link spans with parent-child relationships
-- [ ] Add span attributes (service, operation, status)
-
-**Code example (Node.js with OpenTelemetry):**
-```javascript
-const { trace, context } = require('@opentelemetry/api');
-
-// Extract context from incoming request
-const extractedContext = propagation.extract(
-  context.active(),
-  req.headers
-);
-
-// Create span in extracted context
-const span = tracer.startSpan('process_order', {
-  kind: SpanKind.SERVER,
-  attributes: {
-    'service.name': 'order-service',
-    'order.id': orderId,
-    'user.id': userId
-  }
-}, extractedContext);
-
-// Propagate context to downstream call
-const headers = {};
-propagation.inject(context.active(), headers);
-await fetch('http://inventory-service/update', { headers });
-
-span.end();
-```
-
-#### 4.5 Choose Tracing Backend
-
-**Options:**
-
-**Jaeger**
-- Pros: Open source, CNCF project, good UI, scalable
-- Cons: Requires infrastructure management
-- Best for: Kubernetes, self-hosted, OpenTelemetry
-
-**Zipkin**
-- Pros: Open source, simple, mature
-- Cons: Less active development than Jaeger
-- Best for: Simple setups, legacy systems
-
-**Datadog APM**
-- Pros: Unified platform, excellent UI, automatic instrumentation
-- Cons: Expensive, vendor lock-in
-- Best for: Unified observability, fast setup
-
-**New Relic**
-- Pros: Comprehensive APM, good UI
-- Cons: Expensive
-- Best for: APM-focused
-
-**AWS X-Ray**
-- Pros: Native AWS integration, simple
-- Cons: AWS-only, limited features
-- Best for: AWS-native applications
-
-**Grafana Tempo**
-- Pros: Cost-effective, integrates with Grafana, object storage
-- Cons: Newer, fewer features than Jaeger
-- Best for: Cost-conscious, Grafana users
-
-**Lightstep**
-- Pros: Advanced features, tail-based sampling, excellent performance
-- Cons: Expensive
-- Best for: Large-scale, high-volume
-
-#### 4.6 Define Trace Retention
-
-**Retention strategy:**
-```
-Recent traces (full detail): 7 days
-Sampled traces: 30 days
-Aggregated trace data: 90 days
-```
-
-**Considerations:**
-- Traces are larger than metrics (more storage)
-- Query performance degrades with age
-- Compliance may require longer retention
-- Use tail-based sampling for important traces
-
-#### 4.7 Define Span Attributes
-
-**Standard attributes:**
-```
-service.name: "order-service"
-service.version: "1.2.3"
-deployment.environment: "production"
-```
-
-**HTTP spans:**
-```
-http.method: "POST"
-http.url: "/api/orders"
-http.status_code: 200
-http.user_agent: "..."
-```
-
-**Database spans:**
-```
-db.system: "postgresql"
-db.name: "orders_db"
-db.operation: "SELECT"
-db.statement: "SELECT * FROM orders WHERE id = $1"
-```
-
-**Custom attributes:**
-```
-order.id: "12345"
-user.id: "user_67890"
-payment.method: "credit_card"
-```
-
-**Best practices:**
-- Use semantic conventions (OpenTelemetry standard)
-- Add business context (order_id, user_id)
-- Avoid high-cardinality attributes in sampling decisions
-- Redact sensitive data
-
-### Quality Checklist
-
-- [ ] Tracing standard chosen (OpenTelemetry recommended)
-- [ ] Sampling strategy defined (always sample errors/slow, probabilistic for normal)
-- [ ] Critical user journeys identified for tracing
-- [ ] Trace context propagation designed (W3C Trace Context)
-- [ ] Tracing backend selected
-- [ ] Trace retention policy defined
-- [ ] Span attributes standardized (semantic conventions)
-- [ ] Sensitive data redaction implemented
-- [ ] Cost estimates calculated
-
-### Common Pitfalls
-
-- **No sampling:** Tracing everything is expensive
-- **Over-sampling:** Missing important traces due to low sample rate
-- **Broken context propagation:** Traces split across services
-- **High-cardinality attributes:** Increases storage costs
-- **No span attributes:** Traces lack context for debugging
-
-### Outputs
-
-- Tracing strategy document
-- Sampling configuration
-- Critical traces catalog
-- Trace context propagation guide
-- Tracing backend selection
-- Span attributes standards
-
----
-
-## Step 5: Design Alerting Strategy (45-75 minutes)
-
-### Objective
-
-Define when and how to alert to ensure timely response to issues while avoiding alert fatigue.
-
-### Actions
-
-#### 5.1 Define Alert Categories
-
-**Critical (P0): Immediate action required**
-- Service completely down
-- Error rate > threshold (e.g., > 5%)
-- SLO breach (availability < target)
-- Security incident
-- Data loss risk
-
-**Notification:** Page on-call engineer immediately (PagerDuty, Opsgenie)
-
-**Warning (P1): Action required soon**
-- Error rate elevated (e.g., > 1%)
-- Latency degraded (p95 > threshold)
-- Resource saturation (CPU > 80%)
-- SLO at risk (error budget burning fast)
-
-**Notification:** Slack, email, ticket
-
-**Info (P2): Awareness only**
-- Deployment completed
-- Scheduled maintenance
-- Configuration change
-
-**Notification:** Slack, email
-
-#### 5.2 Establish Alert Thresholds
-
-**SLO-based alerting (recommended):**
-
-```
-SLO: 99.9% availability (43 min downtime/month)
-Error budget: 0.1% errors allowed
-
-Alert if:
-- Error rate > 1% for 5 minutes (critical)
-- Error budget burn rate > 10x (warning)
-```
-
-**Threshold guidelines:**
-
-**Availability:**
-```
-Critical: Service down (0 successful requests in 5 min)
-Warning: Availability < 99% over 10 min
-```
-
-**Error rate:**
-```
-Critical: Error rate > 5% for 5 min
-Warning: Error rate > 1% for 10 min
-```
-
-**Latency:**
-```
-Critical: p95 latency > 2x SLO for 5 min
-Warning: p95 latency > 1.5x SLO for 10 min
-```
-
-**Resource utilization:**
-```
-Critical: CPU > 90% for 10 min, Memory > 95%
-Warning: CPU > 80% for 15 min, Memory > 85%
-```
-
-**Best practices:**
-- Use "for" duration to avoid flapping (e.g., "for 5 minutes")
-- Set thresholds based on SLOs, not arbitrary numbers
-- Use percentiles (p95, p99) not averages for latency
-- Test thresholds with historical data
-
-#### 5.3 Design Alert Routing
-
-**Who gets what alerts:**
-
-```
-Critical (P0):
-- On-call engineer (page)
-- Incident channel (Slack)
-- Engineering manager (SMS)
-
-Warning (P1):
-- Team channel (Slack)
-- Service owner (email)
-- Ticket system (Jira)
-
-Info (P2):
-- Team channel (Slack)
-- Email digest
-```
-
-**Routing rules:**
-```yaml
-routes:
-  # Critical alerts
-  - match:
-      severity: critical
-    receiver: pagerduty-oncall
-    continue: true
-  
-  - match:
-      severity: critical
-    receiver: slack-incidents
-  
-  # Warning alerts
-  - match:
-      severity: warning
-    receiver: slack-team
-    continue: true
-  
-  - match:
-      severity: warning
-      service: checkout
-    receiver: checkout-team-email
-```
-
-#### 5.4 Define Alert Fatigue Prevention
-
-**Strategies:**
-
-**1. Alert on symptoms, not causes:**
-```
-❌ BAD: Alert on high CPU (cause)
-✅ GOOD: Alert on high latency (symptom)
-
-Reason: High CPU may not impact users; high latency does
-```
-
-**2. Use alert grouping:**
-```
-Group related alerts:
-- By service
-- By time window (5 min)
-- By root cause
-
-Result: 10 alerts → 1 grouped alert
-```
-
-**3. Implement alert suppression:**
-```
-Suppress alerts during:
-- Scheduled maintenance
-- Known incidents (avoid duplicate alerts)
-- Deployment windows (if expected)
-```
-
-**4. Use escalation policies:**
-```
-Escalation:
-1. Primary on-call (immediate)
-2. Secondary on-call (after 10 min)
-3. Engineering manager (after 20 min)
-```
-
-**5. Regular alert review:**
-```
-Weekly:
-- Review all alerts fired
-- Identify noisy alerts
-- Tune or remove
-- Track alert-to-incident ratio
-
-Goal: > 50% of alerts lead to action
-```
-
-#### 5.5 Create Alert Templates
-
-**Alert template structure:**
-
-```yaml
-alert: HighErrorRate
-severity: critical
-description: |
-  Error rate for {{ $labels.service }} is {{ $value }}%
-  which exceeds the threshold of 5%.
-  
-runbook: https://wiki.company.com/runbooks/high-error-rate
-
-query: |
-  sum(rate(http_requests_total{status_code=~"5.."}[5m])) by (service)
-  /
-  sum(rate(http_requests_total[5m])) by (service)
-  > 0.05
-
-for: 5m
-
-labels:
-  severity: critical
-  team: platform
-
-annotations:
-  summary: "High error rate on {{ $labels.service }}"
-  description: "Error rate is {{ $value | humanizePercentage }}"
-  dashboard: "https://grafana.company.com/d/service-health"
-  runbook: "https://wiki.company.com/runbooks/high-error-rate"
-```
-
-**Required fields:**
-- Alert name
-- Severity
-- Description (what's wrong)
-- Query (how to detect)
-- Threshold
-- Duration ("for" clause)
-- Runbook link
-- Dashboard link
-
-#### 5.6 Establish On-Call Rotation
-
-**On-call schedule:**
-```
-Rotation: Weekly
-Primary on-call: Engineer A (Week 1)
-Secondary on-call: Engineer B (Week 1)
-
-Handoff: Monday 9am
-Compensation: Time off or pay
-```
-
-**On-call responsibilities:**
-- Respond to critical alerts within 15 min
-- Investigate and mitigate incidents
-- Escalate if needed
-- Document incident in post-mortem
-- Hand off open incidents during rotation change
-
-**On-call best practices:**
-- Limit on-call to 1 week at a time
-- Provide secondary on-call for backup
-- Ensure runbooks are up-to-date
-- Conduct on-call training
-- Review on-call load regularly (should be < 5 pages/week)
-
-### Quality Checklist
-
-- [ ] Alert categories defined (critical, warning, info)
-- [ ] Alert thresholds set based on SLOs
-- [ ] Alert routing configured (who gets what)
-- [ ] Alert fatigue prevention strategies implemented
-- [ ] Alert templates created with runbook links
-- [ ] On-call rotation established
-- [ ] Escalation policies defined
-- [ ] Alert review process in place
-- [ ] Runbooks created for common alerts
-
-### Common Pitfalls
-
-- **Too many alerts:** Leads to alert fatigue and ignored alerts
-- **Alerts without runbooks:** Engineers don't know how to respond
-- **Alerting on causes not symptoms:** Noisy alerts that don't impact users
-- **No escalation:** Alerts go unnoticed
-- **Static thresholds:** Don't adapt to traffic patterns
-
-### Outputs
-
-- Alerting strategy document
-- Alert definitions (critical, warning, info)
-- Alert routing configuration
-- Alert templates
-- On-call rotation schedule
-- Runbooks for common alerts
-
----
-
-## Step 6: Design Dashboards (45-60 minutes)
-
-### Objective
-
-Create visual representations of system health, performance, and business metrics.
-
-### Actions
-
-#### 6.1 Design Service Health Dashboards
-
-**Purpose:** At-a-glance view of service health
-
-**Key metrics:**
-```
-REDMetrics:
-- Request rate (requests/sec)
-- Error rate (%)
-- Latency (p50, p95, p99)
-
-Resource metrics:
-- CPU utilization (%)
-- Memory utilization (%)
-- Disk usage (%)
-
-Dependency health:
-- Database connection pool
-- External API response times
-- Message queue depth
-```
-
-**Dashboard layout:**
-```
-+----------------------------------+
-| Service: Checkout Service        |
-+----------------------------------+
-| Request Rate | Error Rate | p95  |
-| [graph]      | [graph]    | [graph] |
-+----------------------------------+
-| CPU          | Memory     | Disk |
-| [gauge]      | [gauge]    | [gauge] |
-+----------------------------------+
-| Database     | Payment API | Queue|
-| [status]     | [status]    | [graph]|
-+----------------------------------+
-```
-
-#### 6.2 Create SLO Dashboards
-
-**Purpose:** Track SLO compliance and error budget
-
-**Key metrics:**
-```
-SLO compliance:
-- Current availability (%)
-- Error budget remaining (%)
-- Error budget burn rate
-
-Historical:
-- 7-day availability
-- 30-day availability
-- SLO breaches (count)
-```
-
-**Dashboard example:**
-```
-+----------------------------------+
-| SLO: 99.9% Availability          |
-+----------------------------------+
-| Current: 99.95% ✅               |
-| Error Budget: 85% remaining      |
-| Burn Rate: 0.5x (healthy)        |
-+----------------------------------+
-| [30-day availability graph]      |
-+----------------------------------+
-| Recent SLO Breaches:             |
-| - 2026-09-01: 99.85% (incident)  |
-+----------------------------------+
-```
-
-#### 6.3 Build Business Metrics Dashboards
-
-**Purpose:** Connect technical metrics to business outcomes
-
-**E-commerce example:**
-```
-Business metrics:
-- Orders per minute
-- Revenue per hour
-- Checkout conversion rate
-- Cart abandonment rate
-- Average order value
-
-Technical correlation:
-- Checkout latency vs. conversion rate
-- Error rate vs. revenue impact
-```
-
-**Dashboard layout:**
-```
-+----------------------------------+
-| Business Metrics                 |
-+----------------------------------+
-| Orders/min | Revenue/hr | AOV    |
-| [graph]    | [graph]    | [gauge]|
-+----------------------------------+
-| Conversion Rate | Abandonment   |
-| [graph]         | [graph]       |
-+----------------------------------+
-| Impact Analysis:                 |
-| Latency +100ms → -2% conversion  |
-+----------------------------------+
-```
-
-#### 6.4 Design Debugging Dashboards
-
-**Purpose:** Deep-dive into specific services or issues
-
-**Content:**
-```
-Detailed metrics:
-- Per-endpoint latency
-- Per-endpoint error rate
-- Database query performance
-- Cache hit rate
-- External API latency breakdown
-
-Log integration:
-- Recent errors (log stream)
-- Slow queries (log stream)
-
-Trace integration:
-- Recent slow traces
-- Error traces
-```
-
-#### 6.5 Establish Dashboard Standards
-
-**Naming conventions:**
-```
-[Environment] [Service] - [Purpose]
-
-Examples:
-Production Checkout - Service Health
-Production - SLO Dashboard
-Staging API Gateway - Debugging
-```
-
-**Color standards:**
-```
-Green: Healthy (< 1% error rate, < SLO latency)
-Yellow: Warning (1-5% error rate, > SLO latency)
-Red: Critical (> 5% error rate, service down)
-Blue: Informational
-```
-
-**Layout standards:**
-```
-Top row: Most important metrics (RED)
-Middle rows: Supporting metrics (USE, dependencies)
-Bottom rows: Detailed metrics, logs, traces
-
-Time range: Last 1 hour (default), with selector
-Refresh: 30 seconds (auto)
-```
-
-#### 6.6 Plan Dashboard Organization
-
-**Folder structure:**
-```
-Dashboards/
-├── Overview/
-│   ├── Platform Health
-│   └── SLO Dashboard
-├── Services/
-│   ├── Checkout Service
-│   ├── Order Service
-│   └── Payment Service
-├── Infrastructure/
-│   ├── Kubernetes Cluster
-│   └── Databases
-├── Business/
-│   └── E-commerce Metrics
-└── Debugging/
-    └── Per-service debugging dashboards
-```
-
-**Access control:**
-```
-Public (all engineers):
-- Service health dashboards
-- SLO dashboards
-
-Team-specific:
-- Debugging dashboards
-- Infrastructure dashboards
-
-Leadership:
-- Business metrics dashboards
-- SLO compliance dashboards
-```
-
-### Quality Checklist
-
-- [ ] Service health dashboards created for all critical services
-- [ ] SLO dashboards track compliance and error budget
-- [ ] Business metrics dashboards connect to technical metrics
-- [ ] Debugging dashboards enable deep-dive analysis
-- [ ] Dashboard naming conventions established
-- [ ] Color and layout standards defined
-- [ ] Dashboard organization logical (folders)
-- [ ] Access control configured
-- [ ] Dashboards linked from alerts and runbooks
-
-### Common Pitfalls
-
-- **Too many metrics:** Overwhelming, hard to find signal
-- **No business metrics:** Can't connect to business impact
-- **Stale dashboards:** Not maintained, out of date
-- **No standards:** Inconsistent dashboards across teams
-- **No access control:** Sensitive data exposed
-
-### Outputs
-
-- Service health dashboards
-- SLO dashboards
-- Business metrics dashboards
-- Debugging dashboards
-- Dashboard standards guide
-- Dashboard organization structure
-
----
-
-## Step 7: Select Observability Tools (30-60 minutes)
-
-### Objective
-
-Choose the right observability tools based on requirements, budget, and team capabilities.
-
-### Actions
-
-#### 7.1 Evaluate Logging Tools
-
-**Options comparison:**
-
-| Tool | Pros | Cons | Best For | Cost |
-|------|------|------|----------|------|
-| **ELK Stack** | Open source, powerful search, flexible | Complex to operate, resource-intensive | Self-hosted, high volume | Low (infra cost) |
-| **Splunk** | Powerful, enterprise features, excellent UI | Expensive, complex licensing | Large enterprises, compliance | High |
-| **CloudWatch** | Native AWS integration, simple setup | Limited query capabilities, AWS-only | AWS-native apps | Medium |
-| **Datadog** | Integrated platform, great UI | Expensive at scale | Unified observability | High |
-| **Grafana Loki** | Cost-effective, integrates with Prometheus | Limited query features | Kubernetes, cost-conscious | Low |
-
-#### 7.2 Evaluate Metrics Tools
-
-**Options comparison:**
-
-| Tool | Pros | Cons | Best For | Cost |
-|------|------|------|----------|------|
-| **Prometheus** | Open source, powerful PromQL, pull-based | Limited long-term storage | Kubernetes, self-hosted | Low |
-| **Datadog** | Unified platform, great UI, easy setup | Expensive | Unified observability | High |
-| **New Relic** | Comprehensive APM, good UI | Expensive at scale | APM-focused | High |
-| **CloudWatch** | Native AWS integration | Limited query capabilities | AWS-native apps | Medium |
-| **InfluxDB** | Time-series optimized, SQL-like queries | Less ecosystem | IoT, high-frequency | Medium |
-
-#### 7.3 Evaluate Tracing Tools
-
-**Options comparison:**
-
-| Tool | Pros | Cons | Best For | Cost |
-|------|------|------|----------|------|
-| **Jaeger** | Open source, CNCF, good UI, scalable | Requires infrastructure | Kubernetes, OpenTelemetry | Low |
-| **Zipkin** | Open source, simple, mature | Less active development | Simple setups | Low |
-| **Datadog APM** | Unified platform, excellent UI, auto-instrumentation | Expensive | Unified observability | High |
-| **AWS X-Ray** | Native AWS integration | AWS-only, limited features | AWS-native apps | Medium |
-| **Grafana Tempo** | Cost-effective, integrates with Grafana | Newer, fewer features | Cost-conscious | Low |
-| **Lightstep** | Advanced features, tail-based sampling | Expensive | Large-scale, high-volume | High |
-
-#### 7.4 Consider All-in-One Platforms
-
-**Unified observability platforms:**
-
-**Datadog:**
-- Logs, metrics, traces, APM, RUM, synthetics
-- Excellent UI and integrations
-- Expensive but comprehensive
-- Best for: Teams wanting single platform
-
-**New Relic:**
-- APM, logs, metrics, traces, browser monitoring
-- Good UI, easy setup
-- Expensive at scale
-- Best for: APM-focused teams
-
-**Dynatrace:**
-- Full-stack monitoring, AI-powered insights
-- Automatic instrumentation
-- Very expensive
-- Best for: Large enterprises
-
-**Grafana Stack (Loki + Prometheus + Tempo):**
-- Open source, cost-effective
-- Unified Grafana UI
-- Requires infrastructure management
-- Best for: Cost-conscious, self-hosted
-
-#### 7.5 Evaluate Cost vs. Capabilities
-
-**Cost factors:**
-```
-Data ingestion:
-- Logs: $X per GB ingested
-- Metrics: $Y per million data points
-- Traces: $Z per million spans
-
-Data retention:
-- Storage costs increase with retention
-- Query costs may apply
-
-Users/seats:
-- Per-user licensing (Splunk, Datadog)
-- Unlimited users (Prometheus, Grafana)
-
-Infrastructure:
-- Self-hosted: Infrastructure costs
-- SaaS: Subscription costs
-```
-
-**Capability assessment:**
-```
-Required capabilities:
-- [ ] Structured log search
-- [ ] Metric aggregation and alerting
-- [ ] Distributed tracing
-- [ ] Dashboards
-- [ ] Alerting
-- [ ] Integrations (Slack, PagerDuty)
-- [ ] API access
-- [ ] RBAC (role-based access control)
-
-Nice-to-have:
-- [ ] Anomaly detection (AI/ML)
-- [ ] Automatic instrumentation
-- [ ] Real user monitoring (RUM)
-- [ ] Synthetic monitoring
-```
-
-**Cost estimate example:**
-```
-Datadog (all-in-one):
-- 10 services, 100 GB logs/day, 1M metrics/min, 10M spans/day
-- Cost: ~$5,000-10,000/month
-
-Open source (Prometheus + Loki + Jaeger):
-- Infrastructure: 5 VMs, 500 GB storage
-- Cost: ~$500-1,000/month + engineering time
-```
-
-#### 7.6 Plan Tool Integration
-
-**Integration points:**
-```
-Application → Observability Tools:
-- Logging library → Log aggregator
-- Metrics library → Metrics backend
-- Tracing SDK → Tracing backend
-
-Observability Tools → Alerting:
-- Prometheus → Alertmanager → PagerDuty
-- Datadog → PagerDuty/Opsgenie
-
-Observability Tools → Collaboration:
-- Alerts → Slack
-- Dashboards → Slack (links)
-- Incidents → Jira
-
-Observability Tools → CI/CD:
-- Deployment events → Observability (annotations)
-- Performance tests → Metrics
-```
-
-**Integration checklist:**
-- [ ] Logging library supports chosen log aggregator
-- [ ] Metrics library supports chosen metrics backend
-- [ ] Tracing SDK supports chosen tracing backend
-- [ ] Alerting tool integrates with on-call platform
-- [ ] Dashboards accessible via SSO
-- [ ] API access for automation
-
-### Quality Checklist
-
-- [ ] Logging tool evaluated and selected
-- [ ] Metrics tool evaluated and selected
-- [ ] Tracing tool evaluated and selected
-- [ ] All-in-one platform considered
-- [ ] Cost analysis completed (per GB, per metric, per span)
-- [ ] Capabilities matched to requirements
-- [ ] Integration plan documented
-- [ ] Decision documented with rationale
-- [ ] Budget approval obtained
-
-### Common Pitfalls
-
-- **Choosing based on hype:** Pick tools that fit your needs, not trends
-- **Ignoring cost:** Observability costs can spiral quickly
-- **Vendor lock-in:** Consider open standards (OpenTelemetry)
-- **Over-engineering:** Don't need enterprise tools for small projects
-- **Under-engineering:** Don't skimp on observability for critical systems
-
-### Outputs
-
-- Tool selection document
-- Cost analysis
-- Capability comparison matrix
-- Integration plan
-- Decision rationale
-
----
-
-## Step 8: Create Instrumentation Standards (60-90 minutes)
-
-### Objective
-
-Standardize how to instrument code across all services to ensure consistency and quality.
-
-### Actions
-
-#### 8.1 Define Logging Standards
-
-**What to log:**
-
-```javascript
-// ✅ GOOD: Log business events
-logger.info('Order created', {
-  order_id: order.id,
-  user_id: user.id,
-  amount: order.total,
-  currency: 'USD',
-  items_count: order.items.length
-});
-
-// ✅ GOOD: Log errors with context
-logger.error('Payment processing failed', {
-  order_id: order.id,
-  payment_method: 'credit_card',
-  error_code: error.code,
-  error_message: error.message,
-  stack_trace: error.stack
-});
-
-// ✅ GOOD: Log external API calls
-logger.info('Payment gateway request', {
-  gateway: 'stripe',
-  amount: 99.99,
-  duration_ms: 245
-});
-
-// ❌ BAD: Logging too much detail
-logger.debug('Processing order', {
-  full_order_object: order, // Too much data
-  full_user_object: user     // Includes PII
-});
-
-// ❌ BAD: Logging in tight loops
-for (const item of items) {
-  logger.debug('Processing item', { item }); // Too noisy
-}
-```
-
-**Logging standards document:**
-```markdown
-# Logging Standards
-
-## When to Log
-
-### INFO Level
-- Business events (order created, user registered)
-- External API calls (with duration)
-- Significant state changes
-- Startup/shutdown events
-
-### WARN Level
-- Degraded performance (slow response)
-- Fallback scenarios (cache miss, using default)
-- Deprecated API usage
-- Configuration issues (non-fatal)
-
-### ERROR Level
-- Exceptions and errors
-- Failed external API calls
-- Data validation failures
-- Resource exhaustion
-
-### FATAL Level
-- Application crashes
-- Unrecoverable errors
-- Data corruption
-
-## Required Fields
-
-Every log must include:
-- `timestamp`: ISO 8601 with milliseconds
-- `level`: Log level
-- `service`: Service name
-- `correlation_id`: Request trace ID
-- `message`: Human-readable message
-
-## Optional but Recommended
-- `user_id`: For user-specific debugging
-- `session_id`: For session tracking
-- `duration_ms`: For performance tracking
-- `error_code`: For error categorization
-
-## PII Redaction
-
-Redact the following:
-- Passwords, API keys, tokens
-- Credit card numbers (show last 4 digits only)
-- SSN, passport numbers
-- Email addresses (if required by compliance)
-- Full names (if required by compliance)
-
-## Examples
-
-See examples/ directory for language-specific examples.
-```
-
-#### 8.2 Define Metric Standards
-
-**Metric naming:**
-```
-# Standard format
-<namespace>_<subsystem>_<name>_<unit>
-
-# Examples
-http_requests_total
-http_request_duration_seconds
-http_request_size_bytes
-database_connections_active
-database_query_duration_seconds
-cache_hits_total
-cache_misses_total
-queue_messages_pending
-queue_processing_duration_seconds
-```
-
-**Metric types:**
-```
-Counter: Monotonically increasing value
-  Use for: Request counts, error counts, events
-  Example: http_requests_total
-
-Gauge: Value that can go up or down
-  Use for: Current values, resource usage
-  Example: database_connections_active
-
-Histogram: Distribution of values
-  Use for: Latencies, request sizes
-  Example: http_request_duration_seconds
-
-Summary: Similar to histogram, pre-calculated quantiles
-  Use for: Latencies (when histogram not available)
-  Example: http_request_duration_seconds (summary)
-```
-
-**Label standards:**
-```python
-# ✅ GOOD: Low cardinality labels
-http_requests_total{
-  service="checkout",
-  environment="production",
-  endpoint="/api/orders",  # Limited endpoints
-  method="POST",           # Limited methods
-  status_code="200"        # Limited status codes
-}
-
-# ❌ BAD: High cardinality labels
-http_requests_total{
-  user_id="12345",         # Millions of users
-  request_id="abc-123",    # Unique per request
-  ip_address="1.2.3.4"     # Many unique IPs
-}
-```
-
-**Metric standards document:**
-```markdown
-# Metric Standards
-
-## Required Metrics (RED)
-
-All request-based services must expose:
-- `http_requests_total` (counter)
-- `http_request_duration_seconds` (histogram)
-
-## Required Metrics (USE)
-
-All services must expose:
-- `process_cpu_seconds_total` (counter)
-- `process_resident_memory_bytes` (gauge)
-
-## Naming Conventions
-
-- Use snake_case
-- Include unit in name (seconds, bytes, total)
-- Counters end in `_total`
-- Use base units (seconds not milliseconds)
-
-## Label Guidelines
-
-- Keep cardinality low (< 100 unique values)
-- Use consistent label names across services
-- Common labels: service, environment, endpoint, method
-
-## Histogram Buckets
-
-For latency histograms:
-```
-buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
-```
-
-For size histograms:
-```
-buckets: [100, 1000, 10000, 100000, 1000000, 10000000]
-```
-```
-
-#### 8.3 Define Tracing Standards
-
-**Span naming:**
-```
-# Format: <operation> <resource>
-
-# Examples
-GET /api/orders
-POST /api/checkout
-SELECT orders
-INSERT order_items
-Publish order.created
-Consume payment.processed
-```
-
-**Span attributes:**
-```javascript
-// HTTP server span
-span.setAttributes({
-  'http.method': 'POST',
-  'http.url': '/api/orders',
-  'http.status_code': 200,
-  'http.user_agent': req.headers['user-agent'],
-  'user.id': user.id,
-  'order.id': order.id
-});
-
-// Database span
-span.setAttributes({
-  'db.system': 'postgresql',
-  'db.name': 'orders_db',
-  'db.operation': 'SELECT',
-  'db.statement': 'SELECT * FROM orders WHERE id = $1',
-  'db.rows_affected': 1
-});
-
-// External API span
-span.setAttributes({
-  'http.method': 'POST',
-  'http.url': 'https://api.stripe.com/v1/charges',
-  'http.status_code': 200,
-  'external.service': 'stripe',
-  'payment.amount': 99.99
-});
-```
-
-**Tracing standards document:**
-```markdown
-# Tracing Standards
-
-## Required Spans
-
-All services must create spans for:
-- HTTP requests (server-side)
-- HTTP requests (client-side, to other services)
-- Database queries
-- External API calls
-- Message queue publish/consume
-
-## Span Naming
-
-Format: `<operation> <resource>`
-
-Examples:
-- `GET /api/orders`
-- `SELECT orders`
-- `Publish order.created`
-
-## Required Attributes
-
-HTTP spans:
-- `http.method`, `http.url`, `http.status_code`
-
-Database spans:
-- `db.system`, `db.name`, `db.operation`
-
-Message queue spans:
-- `messaging.system`, `messaging.destination`, `messaging.operation`
-
-## Context Propagation
-
-Use W3C Trace Context standard:
-- Extract context from incoming requests
-- Propagate context to downstream services
-- Use `traceparent` header
-
-## Sampling
-
-- Always sample errors (status code 5xx)
-- Always sample slow requests (> p95)
-- Probabilistic sampling for normal requests (10%)
-```
-
-#### 8.4 Create Code Examples
-
-**Provide language-specific examples:**
-
-**Node.js example:**
-```javascript
-// examples/nodejs/instrumentation.js
-
-const { trace } = require('@opentelemetry/api');
-const winston = require('winston');
-const promClient = require('prom-client');
-
-// Logging
-const logger = winston.createLogger({
-  format: winston.format.json(),
-  defaultMeta: { service: 'checkout-service' },
-  transports: [
-    new winston.transports.Console()
-  ]
-});
-
-// Metrics
-const httpRequestsTotal = new promClient.Counter({
-  name: 'http_requests_total',
-  help: 'Total HTTP requests',
-  labelNames: ['method', 'endpoint', 'status_code']
-});
-
-const httpRequestDuration = new promClient.Histogram({
-  name: 'http_request_duration_seconds',
-  help: 'HTTP request duration',
-  labelNames: ['method', 'endpoint'],
-  buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
-});
-
-// Tracing
-const tracer = trace.getTracer('checkout-service');
-
-// Middleware example
-function instrumentedHandler(req, res) {
-  const span = tracer.startSpan(`${req.method} ${req.path}`);
-  const start = Date.now();
-  
-  try {
-    // Business logic
-    const result = processCheckout(req.body);
-    
-    // Log success
-    logger.info('Checkout completed', {
-      correlation_id: req.headers['x-correlation-id'],
-      user_id: req.user.id,
-      order_id: result.orderId,
-      amount: result.amount,
-      duration_ms: Date.now() - start
-    });
-    
-    // Record metrics
-    httpRequestsTotal.inc({
-      method: req.method,
-      endpoint: req.path,
-      status_code: 200
-    });
-    
-    httpRequestDuration.observe({
-      method: req.method,
-      endpoint: req.path
-    }, (Date.now() - start) / 1000);
-    
-    // Set span attributes
-    span.setAttributes({
-      'http.method': req.method,
-      'http.url': req.path,
-      'http.status_code': 200,
-      'user.id': req.user.id,
-      'order.id': result.orderId
-    });
-    
-    span.end();
-    res.status(200).json(result);
-    
-  } catch (error) {
-    // Log error
-    logger.error('Checkout failed', {
-      correlation_id: req.headers['x-correlation-id'],
-      user_id: req.user.id,
-      error_message: error.message,
-      error_stack: error.stack,
-      duration_ms: Date.now() - start
-    });
-    
-    // Record error metrics
-    httpRequestsTotal.inc({
-      method: req.method,
-      endpoint: req.path,
-      status_code: 500
-    });
-    
-    // Set span error
-    span.recordException(error);
-    span.setStatus({ code: SpanStatusCode.ERROR });
-    span.end();
-    
-    res.status(500).json({ error: 'Checkout failed' });
-  }
-}
-```
-
-**Python example:**
-```python
-# examples/python/instrumentation.py
-
-import logging
-import time
-from opentelemetry import trace
-from prometheus_client import Counter, Histogram
-
-# Logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(message)s'
-)
-logger = logging.getLogger(__name__)
-
-# Metrics
-http_requests_total = Counter(
-    'http_requests_total',
-    'Total HTTP requests',
-    ['method', 'endpoint', 'status_code']
-)
-
-http_request_duration = Histogram(
-    'http_request_duration_seconds',
-    'HTTP request duration',
-    ['method', 'endpoint'],
-    buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
-)
-
-# Tracing
-tracer = trace.get_tracer(__name__)
-
-def instrumented_handler(request):
-    with tracer.start_as_current_span(f"{request.method} {request.path}") as span:
-        start = time.time()
-        
-        try:
-            # Business logic
-            result = process_checkout(request.data)
-            
-            # Log success
-            logger.info({
-                'message': 'Checkout completed',
-                'correlation_id': request.headers.get('x-correlation-id'),
-                'user_id': request.user.id,
-                'order_id': result['order_id'],
-                'amount': result['amount'],
-                'duration_ms': (time.time() - start) * 1000
-            })
-            
-            # Record metrics
-            http_requests_total.labels(
-                method=request.method,
-                endpoint=request.path,
-                status_code=200
-            ).inc()
-            
-            http_request_duration.labels(
-                method=request.method,
-                endpoint=request.path
-            ).observe(time.time() - start)
-            
-            # Set span attributes
-            span.set_attributes({
-                'http.method': request.method,
-                'http.url': request.path,
-                'http.status_code': 200,
-                'user.id': request.user.id,
-                'order.id': result['order_id']
-            })
-            
-            return {'status': 200, 'data': result}
-            
-        except Exception as error:
-            # Log error
-            logger.error({
-                'message': 'Checkout failed',
-                'correlation_id': request.headers.get('x-correlation-id'),
-                'user_id': request.user.id,
-                'error_message': str(error),
-                'duration_ms': (time.time() - start) * 1000
-            })
-            
-            # Record error metrics
-            http_requests_total.labels(
-                method=request.method,
-                endpoint=request.path,
-                status_code=500
-            ).inc()
-            
-            # Set span error
-            span.record_exception(error)
-            span.set_status(trace.Status(trace.StatusCode.ERROR))
-            
-            return {'status': 500, 'error': 'Checkout failed'}
-```
-
-#### 8.5 Build Instrumentation Libraries
-
-**Create shared libraries:**
-
-```javascript
-// libraries/nodejs/observability-lib/index.js
-
-const { setupLogging } = require('./logging');
-const { setupMetrics } = require('./metrics');
-const { setupTracing } = require('./tracing');
-const { instrumentExpress } = require('./middleware');
-
-function initializeObservability(config) {
-  const logger = setupLogging(config.service);
-  const metrics = setupMetrics(config.service);
-  const tracer = setupTracing(config.service, config.tracingEndpoint);
-  
-  return {
-    logger,
-    metrics,
-    tracer,
-    instrumentExpress: () => instrumentExpress(logger, metrics, tracer)
-  };
-}
-
-module.exports = { initializeObservability };
-```
-
-**Usage:**
-```javascript
-const { initializeObservability } = require('@company/observability-lib');
-
-const obs = initializeObservability({
-  service: 'checkout-service',
-  tracingEndpoint: 'http://jaeger:14268/api/traces'
-});
-
-const app = express();
-app.use(obs.instrumentExpress());
-
-// Now all requests are automatically instrumented
-```
-
-#### 8.6 Document Best Practices
-
-**Best practices guide:**
-```markdown
-# Observability Best Practices
-
-## Logging
-
-### DO
-- Use structured logging (JSON)
-- Include correlation IDs in all logs
-- Log business events (order created, user registered)
-- Log errors with full context
-- Use appropriate log levels
-
-### DON'T
-- Log sensitive data (passwords, credit cards)
-- Log in tight loops (performance impact)
-- Use string concatenation (use structured fields)
-- Log entire objects (log specific fields)
-
-## Metrics
-
-### DO
-- Expose RED metrics for all services
-- Use histograms for latency (not averages)
-- Keep label cardinality low
-- Use consistent naming across services
-
-### DON'T
-- Use high-cardinality labels (user_id, request_id)
-- Create too many metrics (increases cost)
-- Use gauges for counters (or vice versa)
-
-## Tracing
-
-### DO
-- Propagate trace context across all services
-- Sample intelligently (always trace errors)
-- Add meaningful span attributes
-- Use semantic conventions (OpenTelemetry)
-
-### DON'T
-- Trace everything (expensive)
-- Forget to propagate context (broken traces)
-- Add high-cardinality attributes
-
-## General
-
-### DO
-- Design observability from the start
-- Use correlation IDs to connect logs, metrics, traces
-- Monitor observability costs
-- Regularly review and tune
-
-### DON'T
-- Add observability as an afterthought
-- Ignore cost (can spiral quickly)
-- Set and forget (requires ongoing tuning)
-```
-
-### Quality Checklist
-
-- [ ] Logging standards documented (what, when, how)
-- [ ] Metric standards documented (naming, labels, types)
-- [ ] Tracing standards documented (spans, attributes, propagation)
-- [ ] Code examples provided for all supported languages
-- [ ] Instrumentation libraries created
-- [ ] Best practices guide published
-- [ ] Standards reviewed and approved by team
-- [ ] Training materials created
-
-### Common Pitfalls
-
-- **No standards:** Each service instruments differently
-- **Too complex:** Standards are ignored if too difficult
-- **No examples:** Engineers don't know how to implement
-- **No libraries:** Duplicate instrumentation code
-- **No training:** Team doesn't follow standards
-
-### Outputs
-
+## Phase 2: Design Logging Strategy (Week 2)
+
+### Step 4: Design Structured Logging Framework
+
+**Objective**: Create comprehensive, consistent, and actionable logging standards.
+
+**Instructions**:
+
+1. **Choose Structured Logging Format**:
+   - **Recommended**: JSON for machine readability and flexibility
+   - Alternative: logfmt for human readability and simplicity
+   - Decision factors: tooling support, team preference, parsing efficiency
+
+2. **Define Standard Log Fields**:
+   - **Required fields** (every log entry must include):
+     - `timestamp`: ISO 8601 format with timezone (e.g., `2026-09-09T10:30:45.123Z`)
+     - `level`: Log level (DEBUG, INFO, WARN, ERROR, FATAL)
+     - `service`: Service name (e.g., `checkout-service`)
+     - `version`: Service version (e.g., `2.3.1`)
+     - `environment`: Environment (e.g., `production`, `staging`)
+     - `message`: Human-readable log message
+   - **Recommended fields** (include when applicable):
+     - `trace_id`: Distributed trace ID for correlation
+     - `span_id`: Span ID within trace
+     - `user_id`: User identifier (hashed if PII)
+     - `request_id`: Request identifier
+     - `session_id`: Session identifier
+     - `correlation_id`: Custom correlation ID
+   - **Context fields** (add as needed):
+     - Service-specific fields (e.g., `order_id`, `transaction_id`)
+     - Performance fields (e.g., `duration_ms`, `db_query_time_ms`)
+     - Business fields (e.g., `amount`, `currency`, `payment_method`)
+
+3. **Define Log Levels and Usage**:
+   - **DEBUG**: Detailed diagnostic information for development and troubleshooting
+     - Use: Variable values, function entry/exit, detailed state
+     - Production: Disabled by default, enable dynamically for troubleshooting
+   - **INFO**: General informational messages about normal operation
+     - Use: Request received, operation completed, state changes
+     - Production: Enabled, but may be sampled for high-volume services
+   - **WARN**: Warning messages about potentially problematic situations
+     - Use: Deprecated API usage, fallback behavior, retries, slow operations
+     - Production: Always enabled, 100% sampling
+   - **ERROR**: Error messages about failures that don't stop the application
+     - Use: Handled exceptions, failed operations, validation errors
+     - Production: Always enabled, 100% sampling
+   - **FATAL**: Critical errors that cause application shutdown
+     - Use: Unrecoverable errors, startup failures, critical resource unavailability
+     - Production: Always enabled, 100% sampling
+
+4. **Create Log Message Templates**:
+   - Define templates for common scenarios:
+     - Request received: `"Request received: {method} {path}"`
+     - Request completed: `"Request completed: {method} {path} {status_code} {duration_ms}ms"`
+     - Error occurred: `"Error processing request: {error_message}"`
+     - External call: `"External API call: {service} {endpoint} {status_code} {duration_ms}ms"`
+   - Include relevant context in each template
+   - Use consistent wording and structure
+
+5. **Design Error Logging Standards**:
+   - Always include:
+     - Error message and error code
+     - Stack trace (for exceptions)
+     - Request context (user, request ID, parameters)
+     - State information (what was being attempted)
+   - Sanitize error messages (remove PII, secrets)
+   - Include error classification (e.g., `error_type: "validation"`, `"network"`, `"database"`)
+
+6. **Design Audit Logging** (for compliance):
+   - Define what to audit:
+     - Authentication and authorization events
+     - Data access and modifications
+     - Configuration changes
+     - Privilege escalations
+   - Include in audit logs:
+     - Who (user ID, IP address)
+     - What (action, resource)
+     - When (timestamp)
+     - Where (service, endpoint)
+     - Result (success, failure, reason)
+   - Ensure tamper-evidence (cryptographic signatures, append-only storage)
+
+7. **Define PII Masking Rules**:
+   - Identify PII fields (email, phone, SSN, credit card, etc.)
+   - Define masking strategies:
+     - **Redaction**: Replace with `[REDACTED]` or `***`
+     - **Hashing**: One-way hash for correlation (e.g., `hash_abc123`)
+     - **Tokenization**: Replace with token, store mapping securely
+     - **Partial masking**: Show first/last characters (e.g., `****1234`)
+   - Implement automatic PII detection and masking
+   - Audit logs for accidental PII exposure
+
+8. **Create Code Examples**:
+   - Provide logging examples in each language used:
+     - Python: Using `structlog` or `python-json-logger`
+     - Node.js: Using `winston` or `pino`
+     - Java: Using `Logback` with JSON encoder
+     - Go: Using `zap` or `logrus`
+   - Include examples for:
+     - Basic logging with standard fields
+     - Adding context fields
+     - Error logging with stack traces
+     - PII masking
+
+**Deliverables**:
 - Logging standards document
-- Metric standards document
-- Tracing standards document
-- Code examples (per language)
-- Instrumentation libraries
-- Best practices guide
+- Structured log schema (JSON schema or documentation)
+- Log level usage guidelines
+- Log message templates
+- Error logging standards
+- Audit logging requirements
+- PII masking rules and implementation
+- Code examples and templates
+
+**Time Estimate**: 2-3 days
 
 ---
 
-## Step 9: Plan Implementation (30-45 minutes)
+### Step 5: Design Log Aggregation and Storage Architecture
 
-### Objective
+**Objective**: Create scalable, cost-effective log collection and storage infrastructure.
 
-Create a phased rollout plan for implementing observability across all services.
+**Instructions**:
 
-### Actions
+1. **Select Log Aggregation Platform**:
+   - Evaluate options based on requirements:
+     - **ELK Stack (Elasticsearch, Logstash, Kibana)**: Self-hosted, flexible, powerful search
+     - **Splunk**: Enterprise, mature, expensive
+     - **Datadog Logs**: Cloud-native, integrated observability, easy setup
+     - **CloudWatch Logs**: AWS-native, simple, limited features
+     - **Grafana Loki**: Cost-effective, Kubernetes-native, label-based search
+     - **New Relic Logs**: Unified platform, good correlation
+   - Decision factors:
+     - Cost (data volume, retention, search)
+     - Integration with existing tools
+     - Search and query capabilities
+     - Scalability and performance
+     - Team expertise and learning curve
 
-#### 9.1 Prioritize Services to Instrument
+2. **Design Log Collection and Shipping**:
+   - Choose collection method:
+     - **Agent-based**: Fluentd, Logstash, Vector, Datadog agent, CloudWatch agent
+     - **Sidecar**: Fluentd/Fluent Bit sidecar in Kubernetes
+     - **Library-based**: Direct shipping from application (e.g., Winston → CloudWatch)
+   - Configure buffering and retry logic
+   - Implement backpressure handling
+   - Design for high availability (redundant collectors)
 
-**Prioritization criteria:**
-```
-High priority:
-- Critical user journeys (checkout, login)
-- Services with frequent incidents
-- Services with poor visibility
-- New services (easier to instrument)
+3. **Plan Log Indexing and Search**:
+   - Define indexing strategy:
+     - **Full-text indexing**: Index all fields (expensive, powerful search)
+     - **Label-based indexing**: Index only labels/tags (cheap, limited search)
+     - **Hybrid**: Index critical fields, archive rest
+   - Design index patterns (e.g., by date, service, environment)
+   - Configure index lifecycle management (hot/warm/cold tiers)
 
-Medium priority:
-- Supporting services
-- Services with some observability
-- Stable services with few incidents
+4. **Define Retention Policies**:
+   - **Operational logs**:
+     - Hot (fast search): 7-30 days
+     - Warm (slower search): 30-90 days
+     - Cold (archive): 90 days - 1 year
+   - **Audit logs**:
+     - Retention based on compliance (1-7 years)
+     - Tamper-evident storage (WORM, append-only)
+   - **Debug logs**:
+     - Short retention (1-7 days)
+     - Enable dynamically for troubleshooting
+   - Balance retention with cost and compliance
 
-Low priority:
-- Internal tools
-- Rarely used services
-- Services being deprecated
-```
+5. **Design Archival and Cold Storage**:
+   - Archive to object storage (S3, GCS, Azure Blob)
+   - Compress archived logs (gzip, zstd)
+   - Configure lifecycle policies (move to cheaper tiers, delete after retention)
+   - Ensure archived logs are searchable (if needed)
+   - Implement restore process for archived logs
 
-**Example prioritization:**
-```
-Phase 1 (Week 1-2): Critical services
-- Checkout Service
-- Payment Service
-- Order Service
-- API Gateway
+6. **Plan Capacity and Scaling**:
+   - Estimate log volume:
+     - Requests/second × average log entries per request × average log size
+     - Example: 10,000 req/s × 10 logs/req × 500 bytes = 50 MB/s = 4.3 TB/day
+   - Plan for growth (2x-10x over 1-2 years)
+   - Design auto-scaling for log collectors and storage
+   - Monitor log ingestion rate and storage usage
 
-Phase 2 (Week 3-4): Supporting services
-- Inventory Service
-- Notification Service
-- User Service
+7. **Estimate Costs**:
+   - Calculate costs for:
+     - Data ingestion (per GB)
+     - Data storage (per GB per month, by tier)
+     - Data search and query (per GB scanned)
+     - Data egress (if applicable)
+   - Example (Datadog Logs):
+     - 4.3 TB/day × 30 days = 129 TB/month
+     - Ingestion: 129,000 GB × $0.10/GB = $12,900/month
+     - Retention (15 days): 64.5 TB × $0.05/GB = $3,225/month
+     - Total: ~$16,125/month
+   - Identify cost optimization opportunities (sampling, filtering, shorter retention)
 
-Phase 3 (Week 5-6): Remaining services
-- Analytics Service
-- Reporting Service
-- Admin Service
-```
+**Deliverables**:
+- Log aggregation architecture diagram
+- Tool selection and justification
+- Log collection and shipping configuration
+- Indexing and search strategy
+- Retention and archival policies
+- Capacity planning and scaling design
+- Cost estimation and optimization plan
 
-#### 9.2 Define Implementation Phases
-
-**Phase structure:**
-
-**Phase 1: Foundation (Week 1-2)**
-```
-Goals:
-- Set up centralized logging (ELK/Datadog/etc.)
-- Set up metrics backend (Prometheus/Datadog/etc.)
-- Set up tracing backend (Jaeger/Datadog/etc.)
-- Create instrumentation libraries
-- Document standards
-
-Deliverables:
-- Infrastructure ready
-- Libraries published
-- Standards documented
-```
-
-**Phase 2: Critical Services (Week 3-4)**
-```
-Goals:
-- Instrument 4 critical services
-- Create dashboards for each service
-- Set up alerts for critical services
-- Validate observability works end-to-end
-
-Deliverables:
-- 4 services fully instrumented
-- 4 service health dashboards
-- Critical alerts configured
-- SLO dashboard created
-```
-
-**Phase 3: Expansion (Week 5-8)**
-```
-Goals:
-- Instrument remaining services
-- Create debugging dashboards
-- Refine alerting based on feedback
-- Conduct team training
-
-Deliverables:
-- All services instrumented
-- Complete dashboard suite
-- Tuned alerting
-- Team trained
-```
-
-**Phase 4: Optimization (Week 9-12)**
-```
-Goals:
-- Optimize sampling rates
-- Reduce observability costs
-- Improve alert signal-to-noise
-- Create runbooks
-
-Deliverables:
-- Cost-optimized observability
-- Low alert fatigue
-- Comprehensive runbooks
-- Observability review process
-```
-
-#### 9.3 Assign Ownership
-
-**Ownership model:**
-
-```
-Observability Platform Team:
-- Infrastructure (logging, metrics, tracing backends)
-- Instrumentation libraries
-- Standards and best practices
-- Training and support
-
-Service Teams:
-- Instrument their services
-- Create service-specific dashboards
-- Define service-specific alerts
-- Maintain runbooks
-
-SRE Team:
-- SLO definitions
-- Cross-service dashboards
-- Incident response
-- On-call rotation
-```
-
-**RACI matrix:**
-
-| Task | Platform Team | Service Teams | SRE Team |
-|------|---------------|---------------|----------|
-| Infrastructure setup | R, A | I | C |
-| Instrumentation libraries | R, A | C | I |
-| Service instrumentation | C | R, A | I |
-| Dashboards (service-specific) | C | R, A | C |
-| Dashboards (cross-service) | C | I | R, A |
-| Alerting | C | R | A |
-| Incident response | I | C | R, A |
-| Standards | R, A | C | C |
-
-R = Responsible, A = Accountable, C = Consulted, I = Informed
-
-#### 9.4 Estimate Effort
-
-**Per-service effort:**
-```
-Small service (< 5 endpoints):
-- Instrumentation: 4-8 hours
-- Dashboard creation: 2-4 hours
-- Alert setup: 2-4 hours
-- Testing: 2-4 hours
-Total: 10-20 hours (1-2.5 days)
-
-Medium service (5-15 endpoints):
-- Instrumentation: 8-16 hours
-- Dashboard creation: 4-8 hours
-- Alert setup: 4-8 hours
-- Testing: 4-8 hours
-Total: 20-40 hours (2.5-5 days)
-
-Large service (> 15 endpoints):
-- Instrumentation: 16-32 hours
-- Dashboard creation: 8-16 hours
-- Alert setup: 8-16 hours
-- Testing: 8-16 hours
-Total: 40-80 hours (5-10 days)
-```
-
-**Total effort estimate:**
-```
-Infrastructure setup: 40-80 hours (1-2 weeks)
-Library development: 40-80 hours (1-2 weeks)
-Documentation: 20-40 hours (0.5-1 week)
-
-10 services (mixed sizes): 200-400 hours (5-10 weeks)
-
-Total: 300-600 hours (7.5-15 weeks)
-
-With 2-3 engineers: 3-6 months
-```
-
-#### 9.5 Plan Training
-
-**Training plan:**
-
-**Week 1: Kickoff**
-- Observability strategy presentation
-- Standards overview
-- Tool demonstrations
-- Q&A session
-
-**Week 2-3: Hands-on workshops**
-- Workshop 1: Logging (2 hours)
-- Workshop 2: Metrics (2 hours)
-- Workshop 3: Tracing (2 hours)
-- Workshop 4: Dashboards and alerts (2 hours)
-
-**Ongoing: Office hours**
-- Weekly office hours for questions
-- Slack channel for support
-- Pair programming sessions
-
-**Materials:**
-- Slide decks
-- Code examples
-- Video recordings
-- Written guides
-
-#### 9.6 Define Success Criteria
-
-**Success metrics:**
-
-```
-Coverage:
-- [ ] 100% of critical services instrumented
-- [ ] 80%+ of all services instrumented
-- [ ] All services have health dashboards
-- [ ] All services have alerts
-
-Quality:
-- [ ] Mean time to detection (MTTD) < 5 min
-- [ ] Mean time to resolution (MTTR) < 30 min
-- [ ] Alert-to-incident ratio > 50%
-- [ ] Zero incidents due to lack of observability
-
-Adoption:
-- [ ] 90%+ of engineers trained
-- [ ] Instrumentation libraries used by all services
-- [ ] Standards followed consistently
-
-Cost:
-- [ ] Observability costs < 5% of infrastructure costs
-- [ ] No unexpected cost spikes
-```
-
-### Quality Checklist
-
-- [ ] Services prioritized (critical first)
-- [ ] Implementation phases defined with timelines
-- [ ] Ownership assigned (RACI matrix)
-- [ ] Effort estimated per service and total
-- [ ] Training plan created
-- [ ] Success criteria defined and measurable
-- [ ] Stakeholder buy-in obtained
-- [ ] Budget approved
-
-### Common Pitfalls
-
-- **Big bang approach:** Trying to instrument everything at once
-- **No ownership:** Unclear who's responsible
-- **Underestimating effort:** Instrumentation takes time
-- **No training:** Team doesn't know how to use observability
-- **No success criteria:** Can't measure progress
-
-### Outputs
-
-- Service prioritization list
-- Implementation phases with timelines
-- Ownership matrix (RACI)
-- Effort estimates
-- Training plan
-- Success criteria
+**Time Estimate**: 2-3 days
 
 ---
 
-## Step 10: Document and Communicate (30-45 minutes)
-
-### Objective
-
-Share observability strategy, standards, and implementation plan with all stakeholders.
-
-### Actions
-
-#### 10.1 Write Observability Strategy Document
-
-**Document structure:**
-
-```markdown
-# Observability Strategy
-
-## Executive Summary
-
-One-page overview of observability initiative, goals, and expected outcomes.
-
-## Current State
-
-- Current observability gaps
-- Incident response challenges
-- Debugging pain points
-
-## Future State
-
-- Comprehensive observability (logs, metrics, traces)
-- Fast incident detection and resolution
-- Proactive issue identification
-
-## Strategy
-
-### Logging
-- Centralized logging with [ELK/Datadog/etc.]
-- Structured JSON logs
-- 30-day retention
-
-### Metrics
-- Prometheus for metrics
-- RED metrics for all services
-- SLO-based alerting
-
-### Tracing
-- OpenTelemetry standard
-- Jaeger backend
-- Intelligent sampling
-
-### Alerting
-- PagerDuty for critical alerts
-- Slack for warnings
-- SLO-based thresholds
-
-## Implementation Plan
-
-- Phase 1: Foundation (Week 1-2)
-- Phase 2: Critical services (Week 3-4)
-- Phase 3: Expansion (Week 5-8)
-- Phase 4: Optimization (Week 9-12)
-
-## Success Criteria
-
-- MTTD < 5 min
-- MTTR < 30 min
-- 100% critical service coverage
-
-## Budget
-
-- Infrastructure: $X/month
-- Tooling: $Y/month
-- Engineering time: Z person-months
-
-## Risks and Mitigations
-
-- Risk: Cost overruns → Mitigation: Monitor costs weekly
-- Risk: Low adoption → Mitigation: Training and support
-```
-
-#### 10.2 Create Instrumentation Guide
-
-**Guide structure:**
-
-```markdown
-# Instrumentation Guide
-
-## Quick Start
-
-1. Install observability library
-2. Initialize in application
-3. Instrument HTTP endpoints
-4. Add business metrics
-5. Test locally
-6. Deploy
-
-## Detailed Instructions
-
-### Logging
-
-[Step-by-step logging setup]
-
-### Metrics
-
-[Step-by-step metrics setup]
-
-### Tracing
-
-[Step-by-step tracing setup]
-
-## Code Examples
-
-### Node.js
-[Complete example]
-
-### Python
-[Complete example]
-
-### Java
-[Complete example]
-
-## Testing
-
-### Local testing
-[How to test locally]
-
-### Validation
-[How to validate instrumentation]
-
-## Troubleshooting
-
-### Common issues
-[Solutions to common problems]
-```
-
-#### 10.3 Build Runbooks for Common Scenarios
-
-**Runbook template:**
-
-```markdown
-# Runbook: High Error Rate
-
-## Symptoms
-
-- Alert: "High error rate on [service]"
-- Error rate > 5% for 5+ minutes
-
-## Impact
-
-- Users experiencing errors
-- SLO at risk
-
-## Investigation Steps
-
-1. **Check service health dashboard**
-   - URL: [dashboard link]
-   - Look for: Error rate spike, latency increase
-
-2. **Check recent deployments**
-   - Command: `kubectl rollout history deployment/[service]`
-   - Look for: Recent changes
-
-3. **Check logs for errors**
-   - Query: `service:[service] AND level:ERROR`
-   - Look for: Error patterns, stack traces
-
-4. **Check dependencies**
-   - Database: Check connection pool, slow queries
-   - External APIs: Check response times, error rates
-
-5. **Check traces**
-   - Filter: Errors only
-   - Look for: Slow spans, failed operations
-
-## Common Causes
-
-1. **Bad deployment**
-   - Solution: Rollback deployment
-   - Command: `kubectl rollout undo deployment/[service]`
-
-2. **Database issues**
-   - Solution: Check database health, restart if needed
-
-3. **External API down**
-   - Solution: Enable circuit breaker, use fallback
-
-4. **Resource exhaustion**
-   - Solution: Scale up service
-   - Command: `kubectl scale deployment/[service] --replicas=10`
-
-## Escalation
-
-If not resolved in 30 minutes:
-- Escalate to: [Engineering Manager]
-- Contact: [phone/email]
-```
-
-**Create runbooks for:**
-- High error rate
-- High latency
-- Service down
-- Resource exhaustion
-- Database issues
-- External API failures
-
-#### 10.4 Conduct Team Training
-
-**Training sessions:**
-
-**Session 1: Observability Overview (1 hour)**
-- Why observability matters
-- Three pillars (logs, metrics, traces)
-- Our observability stack
-- Demo: Using dashboards and alerts
-
-**Session 2: Logging Workshop (2 hours)**
-- Logging standards
-- Hands-on: Instrument a service with logging
-- Hands-on: Query logs in [ELK/Datadog/etc.]
-- Best practices
-
-**Session 3: Metrics Workshop (2 hours)**
-- Metrics standards (RED, USE)
-- Hands-on: Add metrics to a service
-- Hands-on: Create a dashboard
-- Hands-on: Set up an alert
-
-**Session 4: Tracing Workshop (2 hours)**
-- Distributed tracing concepts
-- Hands-on: Instrument a service with tracing
-- Hands-on: Investigate a slow request
-- Context propagation
-
-**Session 5: Incident Response (2 hours)**
-- Using observability for incident response
-- Hands-on: Simulate an incident
-- Hands-on: Use logs, metrics, traces to debug
-- Runbook walkthrough
-
-#### 10.5 Publish Documentation
-
-**Documentation site structure:**
-
-```
-Observability Documentation/
-├── Getting Started
-│   ├── Overview
-│   ├── Quick Start
-│   └── FAQ
-├── Strategy
-│   ├── Observability Strategy
-│   ├── Implementation Plan
-│   └── Success Metrics
-├── Standards
-│   ├── Logging Standards
-│   ├── Metric Standards
-│   ├── Tracing Standards
-│   └── Best Practices
-├── Guides
-│   ├── Instrumentation Guide
-│   ├── Dashboard Guide
-│   ├── Alerting Guide
-│   └── Troubleshooting
-├── Examples
-│   ├── Node.js
-│   ├── Python
-│   ├── Java
-│   └── Go
-├── Runbooks
-│   ├── High Error Rate
-│   ├── High Latency
-│   ├── Service Down
-│   └── [More runbooks]
-└── Tools
-    ├── Logging (ELK/Datadog/etc.)
-    ├── Metrics (Prometheus/Datadog/etc.)
-    ├── Tracing (Jaeger/Datadog/etc.)
-    └── Alerting (PagerDuty/etc.)
-```
-
-**Publishing:**
-- Internal wiki (Confluence, Notion)
-- GitHub repository (for code examples)
-- Slack channel for announcements
-- Email to all engineering
-
-#### 10.6 Gather Feedback
-
-**Feedback mechanisms:**
-
-**Surveys:**
-- Post-training survey
-- Monthly observability survey
-- Incident retrospective feedback
-
-**Office hours:**
-- Weekly office hours for questions
-- Slack channel for async support
-
-**Metrics:**
-- Instrumentation adoption rate
-- Dashboard usage
-- Alert effectiveness (alert-to-incident ratio)
-- MTTD and MTTR trends
-
-**Iteration:**
-- Review feedback monthly
-- Update standards based on learnings
-- Improve tooling and libraries
-- Refine training materials
-
-### Quality Checklist
-
-- [ ] Observability strategy document written
-- [ ] Instrumentation guide created
-- [ ] Runbooks written for common scenarios
-- [ ] Team training conducted (all sessions)
-- [ ] Documentation published (accessible to all)
-- [ ] Feedback mechanisms established
-- [ ] Communication plan executed
-- [ ] Stakeholders informed
-
-### Common Pitfalls
-
-- **Poor documentation:** Team can't self-serve
-- **No training:** Low adoption
-- **One-way communication:** No feedback loop
-- **Documentation rot:** Docs become outdated
-- **No examples:** Engineers don't know how to start
-
-### Outputs
-
-- Observability strategy document
-- Instrumentation guide
-- Runbooks (5+ scenarios)
-- Training materials (slides, videos)
-- Published documentation site
-- Feedback survey
+### Step 6: Implement Log Correlation and Context Propagation
+
+**Objective**: Enable tracing requests across distributed services through correlated logs.
+
+**Instructions**:
+
+1. **Design Correlation ID Strategy**:
+   - Choose correlation ID format:
+     - **UUID v4**: Random, globally unique (e.g., `4bf92f35-77b3-4da6-a3ce-929d0e0e4736`)
+     - **Snowflake ID**: Time-ordered, sortable (e.g., `1234567890123456789`)
+     - **Custom format**: Domain-specific (e.g., `req_abc123xyz`)
+   - Decide on ID types:
+     - `trace_id`: Distributed trace ID (spans multiple services)
+     - `request_id`: Request-specific ID (single service)
+     - `correlation_id`: Custom correlation ID (business context)
+     - `session_id`: User session ID
+
+2. **Implement Trace Context Propagation**:
+   - Use standard: **W3C Trace Context** (recommended) or **B3 propagation**
+   - W3C Trace Context format:
+     - Header: `traceparent: 00-{trace_id}-{span_id}-{flags}`
+     - Example: `traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01`
+   - Propagate across:
+     - HTTP: Via headers (`traceparent`, `tracestate`)
+     - gRPC: Via metadata
+     - Message queues: Via message headers/properties
+     - Databases: Via SQL comments (for query correlation)
+
+3. **Implement Context Injection**:
+   - **Automatic injection** (preferred):
+     - Use middleware/interceptors to inject context automatically
+     - Examples:
+       - Express.js: Middleware to extract/inject trace context
+       - Spring Boot: Sleuth/Micrometer for automatic context propagation
+       - Go: OpenTelemetry SDK for automatic context
+   - **Manual injection** (when needed):
+     - Extract context from incoming request
+     - Inject context into outgoing requests
+     - Add context to logs
+
+4. **Design Context Fields**:
+   - Define which context fields to propagate:
+     - **Technical context**: `trace_id`, `span_id`, `request_id`
+     - **User context**: `user_id`, `session_id`, `tenant_id`
+     - **Business context**: `order_id`, `transaction_id`, `campaign_id`
+   - Use **baggage** for business context (W3C Trace Context supports baggage)
+   - Balance context richness with overhead (avoid large baggage)
+
+5. **Create Log Correlation Queries**:
+   - Define common correlation queries:
+     - "Show all logs for trace ID `xyz`"
+     - "Show all logs for user ID `abc` in the last hour"
+     - "Show all logs for failed requests (status 5xx) with trace context"
+   - Create saved queries/dashboards for common scenarios
+   - Document query examples for teams
+
+6. **Design Cross-Service Log Aggregation**:
+   - Create views that aggregate logs across services for a single request
+   - Example: Trace view showing logs from all services involved in a request, ordered by timestamp
+   - Enable drilling down from high-level view to detailed logs
+
+7. **Test Context Propagation**:
+   - Verify trace context propagates correctly across all services
+   - Test different communication patterns (HTTP, gRPC, message queues)
+   - Validate that logs from different services can be correlated
+   - Check for context loss or corruption
+
+**Deliverables**:
+- Context propagation standards (W3C Trace Context implementation)
+- Correlation ID generation and format specification
+- Context injection implementation guide
+- Baggage usage guidelines
+- Log correlation query examples
+- Cross-service log aggregation dashboards
+- Testing and validation results
+
+**Time Estimate**: 2 days
+
+---
+
+## Phase 3: Design Metrics and Monitoring (Week 3)
+
+### Step 7: Define Metrics Taxonomy and SLI/SLO Framework
+
+**Objective**: Establish comprehensive, meaningful metrics that align with business and operational goals.
+
+**Instructions**:
+
+1. **Define SLIs (Service Level Indicators)**:
+   - SLIs are metrics that measure service quality from user perspective
+   - Common SLI types:
+     - **Availability**: Percentage of successful requests
+       - Formula: `(successful_requests / total_requests) × 100`
+       - Example: 99.9% availability
+     - **Latency**: Response time percentiles
+       - Metrics: p50, p95, p99, p99.9
+       - Example: p95 latency <200ms
+     - **Error Rate**: Percentage of failed requests
+       - Formula: `(failed_requests / total_requests) × 100`
+       - Example: Error rate <0.1%
+     - **Throughput**: Requests per second
+       - Example: Handle 10,000 req/s
+   - Define SLIs for each critical service
+   - Ensure SLIs are measurable and meaningful
+
+2. **Establish SLOs (Service Level Objectives)**:
+   - SLOs are targets for SLIs
+   - Format: `SLI ≥ target over time window`
+   - Examples:
+     - "Availability ≥ 99.9% over 30 days"
+     - "p95 latency ≤ 200ms over 7 days"
+     - "Error rate ≤ 0.1% over 24 hours"
+   - Set SLOs based on:
+     - User expectations and requirements
+     - Business impact of downtime/slowness
+     - Historical performance
+     - Competitive benchmarks
+   - Balance ambition with achievability (don't set SLOs too high)
+
+3. **Calculate Error Budgets**:
+   - Error budget = 1 - SLO
+   - Example: 99.9% availability SLO → 0.1% error budget
+   - Convert to time:
+     - 0.1% of 30 days = 43.2 minutes of downtime/month
+   - Use error budget to:
+     - Make risk decisions (deploy during budget, freeze when exhausted)
+     - Balance reliability and feature velocity
+     - Prioritize reliability work
+
+4. **Design RED Metrics for Request-Driven Services**:
+   - **Rate**: Requests per second
+     - Metric: `http_requests_total` (counter)
+     - Labels: `service`, `method`, `endpoint`, `status_code`
+   - **Errors**: Error count and rate
+     - Metric: `http_requests_errors_total` (counter)
+     - Labels: `service`, `method`, `endpoint`, `error_type`
+   - **Duration**: Latency distribution
+     - Metric: `http_request_duration_seconds` (histogram)
+     - Labels: `service`, `method`, `endpoint`
+     - Buckets: 0.01, 0.05, 0.1, 0.5, 1, 5, 10 seconds
+   - Implement RED metrics for all request-driven services
+
+5. **Design USE Metrics for Resources**:
+   - **Utilization**: Percentage of resource capacity used
+     - CPU: `cpu_usage_percent`
+     - Memory: `memory_usage_percent`
+     - Disk: `disk_usage_percent`
+     - Network: `network_bandwidth_usage_percent`
+   - **Saturation**: Degree of resource overload
+     - Queue depth: `queue_depth`
+     - Thread pool usage: `thread_pool_active / thread_pool_max`
+     - Disk I/O wait: `disk_io_wait_percent`
+   - **Errors**: Resource errors
+     - Disk errors: `disk_errors_total`
+     - Network errors: `network_errors_total`
+     - OOM kills: `oom_kills_total`
+   - Implement USE metrics for all critical resources
+
+6. **Define Business Metrics**:
+   - Identify key business KPIs to track:
+     - E-commerce: Conversion rate, cart abandonment, revenue
+     - SaaS: Active users, feature usage, churn rate
+     - Financial: Transaction volume, transaction value, fraud rate
+   - Implement business metrics in application code
+   - Correlate business metrics with technical metrics
+
+7. **Create Metric Naming Conventions**:
+   - Follow consistent naming pattern:
+     - Format: `{namespace}_{subsystem}_{name}_{unit}`
+     - Example: `http_request_duration_seconds`
+   - Use descriptive names (avoid abbreviations)
+   - Include units in metric name (seconds, bytes, percent)
+   - Use labels for dimensions (service, environment, region)
+   - Limit label cardinality (avoid user IDs, request IDs in labels)
+
+8. **Design Custom Metrics**:
+   - Define domain-specific metrics:
+     - Example (e-commerce): `checkout_steps_completed`, `payment_method_usage`
+     - Example (ML): `model_inference_latency`, `model_accuracy`
+   - Ensure custom metrics follow naming conventions
+   - Document metric purpose and usage
+
+**Deliverables**:
+- SLI/SLO definitions document with error budgets
+- Metrics catalog (RED, USE, business, custom metrics)
+- Metric naming conventions and standards
+- Error budget policy and usage guidelines
+- Metrics implementation examples
+
+**Time Estimate**: 2-3 days
+
+---
+
+### Step 8: Design Metrics Collection and Storage
+
+**Objective**: Create efficient, scalable metrics infrastructure.
+
+**Instructions**:
+
+1. **Select Metrics Platform**:
+   - Evaluate options:
+     - **Prometheus**: Open-source, pull-based, Kubernetes-native
+     - **Datadog**: Cloud-native, push-based, integrated observability
+     - **CloudWatch**: AWS-native, push-based, simple
+     - **InfluxDB**: Time-series database, efficient storage
+     - **Grafana Cloud**: Managed Prometheus, scalable
+     - **New Relic**: Unified platform, push-based
+   - Decision factors:
+     - Push vs. pull model
+     - Scalability and performance
+     - Cost (hosts, metrics, cardinality)
+     - Integration with existing tools
+     - Query language and capabilities
+
+2. **Design Metrics Collection**:
+   - **Pull-based (Prometheus)**:
+     - Services expose `/metrics` endpoint
+     - Prometheus scrapes endpoints periodically (e.g., every 15s)
+     - Service discovery (Kubernetes, Consul, static config)
+     - Advantages: Simple, no agent config, on-demand scraping
+     - Disadvantages: Requires accessible endpoints, not ideal for short-lived jobs
+   - **Push-based (StatsD, CloudWatch)**:
+     - Services push metrics to collector/agent
+     - Collector aggregates and forwards to backend
+     - Advantages: Works for short-lived jobs, works behind firewalls
+     - Disadvantages: Requires agent configuration, potential data loss
+   - Choose based on architecture and requirements
+
+3. **Configure Metric Aggregation**:
+   - Define aggregation functions:
+     - **Sum**: Total count (e.g., total requests)
+     - **Average**: Mean value (e.g., average latency)
+     - **Min/Max**: Extremes (e.g., max latency)
+     - **Percentiles**: Distribution (e.g., p95, p99 latency)
+   - Configure aggregation intervals:
+     - Real-time: No aggregation (every data point)
+     - Short-term: 1-minute aggregation
+     - Long-term: 5-minute or 1-hour aggregation
+   - Use recording rules (Prometheus) for expensive queries
+
+4. **Define Retention and Downsampling**:
+   - **High-resolution retention**:
+     - Full resolution (e.g., 15s intervals): 15-30 days
+     - Use for recent troubleshooting and analysis
+   - **Downsampled retention**:
+     - Aggregated (e.g., 5-minute intervals): 90 days - 1 year
+     - Use for historical trends and capacity planning
+   - **Long-term retention**:
+     - Further aggregated (e.g., 1-hour intervals): 1-2 years
+     - Use for long-term analysis and compliance
+   - Balance retention with storage cost
+
+5. **Manage Metric Cardinality**:
+   - **Cardinality** = number of unique time series (metric + label combinations)
+   - High cardinality = high cost and performance issues
+   - Strategies to limit cardinality:
+     - **Limit labels**: Use only necessary labels (service, environment, region)
+     - **Avoid high-cardinality labels**: Don't use user_id, request_id, email in labels
+     - **Aggregate**: Combine low-traffic entities (e.g., `tenant=other` for small tenants)
+     - **Drop unused metrics**: Remove metrics that aren't used
+     - **Use relabeling**: Drop or modify labels before storage (Prometheus relabel_configs)
+   - Monitor cardinality and set alerts for growth
+
+6. **Plan Capacity and Scaling**:
+   - Estimate metric volume:
+     - Number of services × metrics per service × label combinations
+     - Example: 50 services × 100 metrics × 10 label combos = 50,000 time series
+   - Plan for growth (2x-10x over 1-2 years)
+   - Design for high availability:
+     - Prometheus: Federation, Thanos, Cortex
+     - Datadog: Managed, auto-scaling
+   - Monitor metrics platform performance
+
+7. **Estimate Costs**:
+   - Calculate costs based on:
+     - Number of hosts/containers (for host-based pricing)
+     - Number of custom metrics (for metric-based pricing)
+     - Data ingestion volume (for ingestion-based pricing)
+     - Cardinality (for cardinality-based pricing)
+   - Example (Datadog):
+     - 100 hosts × $15/host = $1,500/month
+     - 500 custom metrics × $5/metric = $2,500/month
+     - Total: $4,000/month
+   - Identify cost optimization opportunities
+
+**Deliverables**:
+- Metrics architecture diagram
+- Metrics platform selection and justification
+- Collection method (push vs. pull) and configuration
+- Aggregation and rollup strategy
+- Retention and downsampling policies
+- Cardinality management plan
+- Capacity planning and scaling design
+- Cost estimation and optimization plan
+
+**Time Estimate**: 2-3 days
+
+---
+
+### Step 9: Design Alerting and Notification Strategy
+
+**Objective**: Create actionable, low-noise alerting that enables rapid incident response.
+
+**Instructions**:
+
+1. **Define Alert Severity Levels**:
+   - **P0 / Critical**:
+     - Impact: Complete service outage, major user impact, data loss
+     - Response: Immediate page, all hands on deck
+     - Examples: API down, database unavailable, payment processing failed
+   - **P1 / High**:
+     - Impact: Significant degradation, partial outage, SLO violation
+     - Response: Page on-call engineer, escalate if not resolved quickly
+     - Examples: High error rate, slow response times, dependency failure
+   - **P2 / Medium**:
+     - Impact: Minor degradation, potential future issue, warning signs
+     - Response: Notify team, investigate during business hours
+     - Examples: Elevated error rate, resource usage high, approaching limits
+   - **P3 / Low**:
+     - Impact: Informational, no immediate action needed
+     - Response: Log for review, no immediate action
+     - Examples: Scheduled maintenance, configuration changes
+
+2. **Create SLO-Based Alerts**:
+   - Alert on SLO violations and error budget consumption
+   - **Availability SLO alert**:
+     - Condition: Error rate exceeds threshold for X minutes
+     - Example: Error rate >0.1% for 5 minutes (consuming error budget rapidly)
+     - Severity: P0 or P1 depending on magnitude
+   - **Latency SLO alert**:
+     - Condition: Latency percentile exceeds threshold for X minutes
+     - Example: p95 latency >200ms for 10 minutes
+     - Severity: P1
+   - **Error budget alert**:
+     - Condition: Error budget <25% remaining
+     - Action: Freeze deployments, focus on reliability
+     - Severity: P1
+
+3. **Design Symptom-Based Alerts** (Preferred):
+   - Alert on user-visible symptoms, not underlying causes
+   - **Good (symptom-based)**:
+     - "API error rate >1% for 5 minutes" (users experiencing errors)
+     - "p95 latency >500ms for 10 minutes" (users experiencing slowness)
+   - **Bad (cause-based)**:
+     - "CPU usage >80%" (may not impact users)
+     - "Disk usage >90%" (may not impact users immediately)
+   - Symptom-based alerts are more actionable and reduce noise
+
+4. **Implement Alert Aggregation and Deduplication**:
+   - **Aggregation**: Group related alerts together
+     - Example: Multiple pods failing → Single alert "Service X degraded"
+   - **Deduplication**: Avoid duplicate alerts for same issue
+     - Example: Don't alert on both "high error rate" and "low success rate"
+   - **Flapping prevention**: Avoid alerts that flip on/off rapidly
+     - Use hysteresis (different thresholds for trigger and resolve)
+     - Example: Alert at >80%, resolve at <70%
+
+5. **Define Notification Channels and Routing**:
+   - **Channels**:
+     - **PagerDuty / Opsgenie**: For P0/P1 alerts (phone, SMS, push)
+     - **Slack / Teams**: For P1/P2 alerts (channel notifications)
+     - **Email**: For P2/P3 alerts (asynchronous)
+     - **Webhook**: For integration with other systems
+   - **Routing**:
+     - Route by severity: P0 → PagerDuty, P2 → Slack
+     - Route by service: Service A → Team A, Service B → Team B
+     - Route by time: Business hours → Slack, off-hours → PagerDuty
+
+6. **Create Escalation Policies**:
+   - Define escalation paths:
+     - **Level 1**: On-call engineer (5-15 minutes)
+     - **Level 2**: Senior engineer or team lead (15-30 minutes)
+     - **Level 3**: Engineering manager or VP (30-60 minutes)
+   - Set escalation timers:
+     - P0: Escalate if not acknowledged in 5 minutes
+     - P1: Escalate if not acknowledged in 15 minutes
+   - Define on-call rotation and schedules
+
+7. **Design Alert Enrichment**:
+   - Include context in alerts:
+     - **What**: What is the problem? (e.g., "High error rate")
+     - **Where**: Which service/component? (e.g., "checkout-service")
+     - **When**: When did it start? (e.g., "Started 5 minutes ago")
+     - **Impact**: How severe? (e.g., "Affecting 10% of users")
+     - **Links**: Links to dashboards, logs, traces, runbooks
+   - Example alert:
+     ```
+     [P1] High Error Rate: checkout-service
+     Error rate: 5.2% (threshold: 1%)
+     Started: 5 minutes ago
+     Impact: ~500 failed checkouts
+     Dashboard: https://...
+     Runbook: https://...
+     ```
+
+8. **Implement Alert Fatigue Mitigation**:
+   - **Snoozing**: Temporarily silence alerts during known issues
+   - **Maintenance windows**: Suppress alerts during scheduled maintenance
+   - **Alert tuning**: Regularly review and adjust thresholds
+   - **Alert quality metrics**: Track alert-to-incident ratio (target >50%)
+   - **Runbook automation**: Automate common responses to reduce manual work
+
+9. **Create Runbooks for Alerts**:
+   - Every alert should have a runbook with:
+     - **Description**: What does this alert mean?
+     - **Impact**: What is the user impact?
+     - **Diagnosis**: How to investigate? (queries, dashboards, commands)
+     - **Mitigation**: How to fix or mitigate? (step-by-step)
+     - **Escalation**: When to escalate? Who to contact?
+   - Link runbooks from alerts
+   - Keep runbooks up-to-date based on incident learnings
+
+**Deliverables**:
+- Alerting strategy document
+- Alert severity definitions
+- SLO-based alert definitions
+- Symptom-based alert catalog
+- Notification routing and escalation policies
+- Alert enrichment templates
+- Alert fatigue mitigation strategies
+- Runbook templates and examples
+
+**Time Estimate**: 2-3 days
+
+---
+
+## Phase 4: Design Distributed Tracing (Week 4)
+
+### Step 10: Design Distributed Tracing Architecture
+
+**Objective**: Enable end-to-end request tracing across distributed services.
+
+**Instructions**:
+
+1. **Select Tracing Platform**:
+   - Evaluate options:
+     - **Jaeger**: Open-source, mature, Kubernetes-native
+     - **Zipkin**: Open-source, simple, widely supported
+     - **AWS X-Ray**: AWS-native, easy integration
+     - **Datadog APM**: Integrated observability, automatic instrumentation
+     - **Honeycomb**: High-cardinality, powerful querying
+     - **New Relic APM**: Mature, comprehensive
+     - **Lightstep**: Advanced sampling, large-scale
+   - Decision factors:
+     - Cost (spans, hosts, data volume)
+     - Sampling capabilities (head-based, tail-based, adaptive)
+     - Integration with logs and metrics
+     - Query and analysis capabilities
+     - Instrumentation ease (auto vs. manual)
+
+2. **Design Trace Context Propagation**:
+   - Use standard: **W3C Trace Context** (recommended)
+   - W3C Trace Context format:
+     - `traceparent`: `00-{trace_id}-{span_id}-{flags}`
+     - `tracestate`: Vendor-specific state
+   - Alternative: **B3 propagation** (Zipkin format)
+   - Propagate across:
+     - **HTTP**: Via headers (`traceparent`, `tracestate`)
+     - **gRPC**: Via metadata
+     - **Message queues**: Via message headers (Kafka, RabbitMQ, SQS)
+     - **Databases**: Via SQL comments (for query correlation)
+   - Ensure context propagates across all service boundaries
+
+3. **Define Span Naming Conventions**:
+   - Span name format: `{service}.{operation}`
+   - Examples:
+     - `checkout-service.create_order`
+     - `payment-service.process_payment`
+     - `database.query`
+     - `http.get /api/products`
+   - Use consistent, descriptive names
+   - Avoid high-cardinality names (don't include IDs in span names)
+
+4. **Define Span Tagging Conventions**:
+   - **Standard tags** (OpenTelemetry semantic conventions):
+     - `http.method`: HTTP method (GET, POST)
+     - `http.status_code`: HTTP status code (200, 404, 500)
+     - `http.url`: Request URL
+     - `db.type`: Database type (mysql, postgres, redis)
+     - `db.statement`: Database query (sanitized, no PII)
+     - `error`: Boolean indicating error
+     - `error.message`: Error message
+     - `error.stack`: Stack trace
+   - **Custom tags** (business context):
+     - `user.id`: User identifier (hashed)
+     - `order.id`: Order identifier
+     - `tenant.id`: Tenant identifier
+   - Balance tag richness with cardinality and cost
+
+5. **Design Sampling Strategy**:
+   - **Head-based sampling** (decide at trace start):
+     - Simple, low overhead
+     - May miss interesting traces (errors, slow requests)
+     - Example: Sample 10% of all traces
+   - **Tail-based sampling** (decide after trace completes):
+     - Capture all errors and slow requests
+     - More complex, higher overhead
+     - Example: Keep all errors, 10% of slow requests, 1% of normal requests
+   - **Adaptive sampling** (adjust based on traffic):
+     - Increase sampling during incidents
+     - Decrease sampling during high traffic
+     - Example: Sample 10% normally, 50% during incidents
+   - Choose based on:
+     - Cost constraints
+     - Importance of capturing errors
+     - System complexity
+   - Recommended: Start with head-based, move to tail-based if needed
+
+6. **Plan Trace Storage and Retention**:
+   - **Hot storage** (recent traces, fast search):
+     - Retention: 7-30 days
+     - Use for active troubleshooting
+   - **Cold storage** (historical traces, slower search):
+     - Retention: 30-90 days
+     - Use for historical analysis
+   - Balance retention with cost
+   - Estimate storage:
+     - Spans per day × average span size × retention days
+     - Example: 10M spans/day × 2KB/span × 30 days = 600GB
+
+7. **Design Service Dependency Mapping**:
+   - Automatically generate service dependency graph from traces
+   - Visualize:
+     - Services and their dependencies
+     - Request flow and volume
+     - Error rates between services
+     - Latency between services
+   - Use dependency map for:
+     - Understanding system architecture
+     - Identifying critical dependencies
+     - Impact analysis (what breaks if service X fails?)
+
+8. **Create Trace Analysis and Visualization**:
+   - **Trace view**: End-to-end view of single request
+     - Timeline showing all spans
+     - Service boundaries and latency
+     - Errors and anomalies
+   - **Service view**: Aggregated view of service performance
+     - Request rate, error rate, latency
+     - Dependency health
+   - **Comparison view**: Compare traces (slow vs. fast)
+   - **Search and filter**: Find traces by criteria (error, latency, tags)
+
+**Deliverables**:
+- Distributed tracing architecture diagram
+- Tracing platform selection and justification
+- Trace context propagation standards (W3C Trace Context)
+- Span naming and tagging conventions
+- Sampling strategy and configuration
+- Storage and retention policies
+- Service dependency mapping design
+- Trace visualization and analysis dashboards
+
+**Time Estimate**: 2-3 days
+
+---
+
+### Step 11: Define Instrumentation Standards and Guidelines
+
+**Objective**: Ensure consistent, comprehensive instrumentation across all services.
+
+**Instructions**:
+
+1. **Select Instrumentation Libraries and SDKs**:
+   - **Recommended**: OpenTelemetry (vendor-neutral, future-proof)
+   - **Alternative**: Vendor-specific SDKs (Datadog, New Relic, AWS X-Ray)
+   - OpenTelemetry advantages:
+     - Vendor-neutral (avoid lock-in)
+     - Supports logs, metrics, and traces
+     - Wide language support
+     - Active development and community
+   - Vendor SDK advantages:
+     - Easier setup and integration
+     - Better integration with vendor platform
+     - More features (sometimes)
+
+2. **Design Auto-Instrumentation Strategy**:
+   - **Auto-instrumentation**: Automatic tracing of frameworks and libraries
+   - Supported frameworks:
+     - **HTTP servers**: Express.js, Flask, Spring Boot, Gin
+     - **HTTP clients**: axios, requests, RestTemplate, net/http
+     - **Databases**: MySQL, PostgreSQL, MongoDB, Redis
+     - **Message queues**: Kafka, RabbitMQ, SQS
+     - **gRPC**: Client and server
+   - Advantages:
+     - Easy setup (minimal code changes)
+     - Consistent instrumentation
+     - Covers common scenarios
+   - Disadvantages:
+     - Less control over spans and tags
+     - May not cover custom logic
+   - Recommendation: Use auto-instrumentation as baseline, add manual instrumentation for custom logic
+
+3. **Define Manual Instrumentation Guidelines**:
+   - When to add manual instrumentation:
+     - Custom business logic (not covered by auto-instrumentation)
+     - External API calls (if not auto-instrumented)
+     - Expensive operations (database queries, computations)
+     - Critical code paths
+   - How to create spans:
+     ```python
+     # Python example with OpenTelemetry
+     from opentelemetry import trace
+     
+     tracer = trace.get_tracer(__name__)
+     
+     def process_order(order_id):
+         with tracer.start_as_current_span("process_order") as span:
+             span.set_attribute("order.id", order_id)
+             # ... business logic ...
+             if error:
+                 span.set_status(Status(StatusCode.ERROR, "Order processing failed"))
+                 span.record_exception(error)
+     ```
+   - Best practices:
+     - Create spans for logical operations (not every function)
+     - Add relevant tags (IDs, parameters, results)
+     - Record errors and exceptions
+     - Keep span granularity balanced (not too many, not too few)
+
+4. **Specify Span Attributes and Tags**:
+   - **Required attributes** (every span should have):
+     - `service.name`: Service name
+     - `service.version`: Service version
+     - Operation name (span name)
+   - **Recommended attributes** (when applicable):
+     - HTTP: `http.method`, `http.status_code`, `http.url`
+     - Database: `db.type`, `db.statement`, `db.name`
+     - RPC: `rpc.service`, `rpc.method`
+     - Error: `error`, `error.message`, `error.stack`
+   - **Custom attributes** (business context):
+     - User: `user.id`, `user.role`
+     - Business: `order.id`, `transaction.id`, `tenant.id`
+   - Sanitize attributes (remove PII, secrets)
+
+5. **Design Error and Exception Capture**:
+   - Always capture errors in spans:
+     ```python
+     try:
+         # ... operation ...
+     except Exception as e:
+         span.set_status(Status(StatusCode.ERROR, str(e)))
+         span.record_exception(e)
+         raise
+     ```
+   - Include:
+     - Error message
+     - Stack trace
+     - Error type/code
+     - Context (what was being attempted)
+   - Mark span as error: `span.set_status(StatusCode.ERROR)`
+
+6. **Create Instrumentation Testing Procedures**:
+   - Test that:
+     - Trace context propagates correctly across services
+     - Spans are created for all critical operations
+     - Span attributes are correct and complete
+     - Errors are captured and marked correctly
+     - Sampling works as expected
+   - Use test environments to validate instrumentation
+   - Review traces in tracing platform
+
+7. **Document Performance Overhead**:
+   - Measure instrumentation overhead:
+     - Latency impact: Typically <5% for well-implemented tracing
+     - CPU overhead: Typically <2-3%
+     - Memory overhead: Typically <5%
+   - Optimize if overhead is too high:
+     - Reduce span granularity (fewer spans)
+     - Reduce attribute cardinality
+     - Increase sampling (trace fewer requests)
+     - Use async/buffered exporting
+   - Monitor overhead in production
+
+8. **Create Code Examples and Templates**:
+   - Provide instrumentation examples for each language:
+     - Python: Flask, FastAPI, Django
+     - Node.js: Express, Fastify
+     - Java: Spring Boot
+     - Go: net/http, Gin
+   - Include examples for:
+     - Auto-instrumentation setup
+     - Manual span creation
+     - Adding attributes and tags
+     - Error handling
+     - Context propagation
+
+**Deliverables**:
+- Instrumentation guidelines document
+- Library and SDK selection (OpenTelemetry recommended)
+- Auto-instrumentation vs. manual instrumentation strategy
+- Span attribute and tagging standards
+- Error and exception capture guidelines
+- Instrumentation testing procedures
+- Performance overhead analysis and optimization
+- Code examples and templates for each language
+
+**Time Estimate**: 2-3 days
+
+---
+
+## Phase 5: Implementation Planning and Enablement (Week 5)
+
+### Step 12: Create Dashboards and Visualization Strategy
+
+**Objective**: Design intuitive, actionable dashboards for different audiences and use cases.
+
+**Instructions**:
+
+1. **Define Dashboard Audiences**:
+   - **Executives / Business**: High-level KPIs, SLO compliance, business metrics
+   - **Engineering Managers**: Team performance, incident trends, reliability metrics
+   - **On-call Engineers**: Operational health, active incidents, troubleshooting
+   - **Developers**: Service-specific metrics, performance, errors
+   - **SRE / Operations**: Infrastructure, capacity, cost
+
+2. **Design Executive / Business Dashboards**:
+   - **Purpose**: High-level overview for non-technical stakeholders
+   - **Metrics**:
+     - SLO compliance (current month, trend)
+     - Error budget remaining
+     - Availability percentage (uptime)
+     - Business KPIs (revenue, active users, conversion rate)
+     - Incident count and MTTR
+   - **Visualizations**:
+     - Gauges for SLO compliance
+     - Line charts for trends
+     - Tables for incident summary
+   - **Refresh**: Every 5-15 minutes
+
+3. **Design Service-Level Operational Dashboards**:
+   - **Purpose**: Monitor health and performance of individual services
+   - **Metrics** (RED metrics):
+     - Request rate (requests/second)
+     - Error rate (errors/second, percentage)
+     - Latency (p50, p95, p99)
+   - **Additional metrics**:
+     - Service dependencies and health
+     - Recent errors (top errors, error trends)
+     - Resource utilization (CPU, memory)
+     - Deployment markers (show recent deployments)
+   - **Visualizations**:
+     - Time series for RED metrics
+     - Heatmaps for latency distribution
+     - Tables for recent errors
+     - Dependency graph
+   - **Refresh**: Every 1-5 minutes
+
+4. **Design Infrastructure Monitoring Dashboards**:
+   - **Purpose**: Monitor infrastructure health and capacity
+   - **Metrics** (USE metrics):
+     - CPU utilization (per node, per cluster)
+     - Memory utilization
+     - Disk usage and I/O
+     - Network bandwidth and errors
+     - Saturation metrics (queue depth, thread pool usage)
+   - **Additional metrics**:
+     - Pod/container restarts
+     - Node failures
+     - Cluster autoscaling events
+   - **Visualizations**:
+     - Heatmaps for resource utilization
+     - Time series for trends
+     - Tables for node/pod status
+   - **Refresh**: Every 1-5 minutes
+
+5. **Design Incident Response Dashboards**:
+   - **Purpose**: Quickly diagnose and respond to incidents
+   - **Metrics**:
+     - Recent errors (last 1 hour, grouped by service)
+     - Anomalies and spikes (error rate, latency)
+     - Service dependency map with health status
+     - Active alerts and incidents
+   - **Links**:
+     - Quick links to logs, traces, runbooks
+     - Links to related dashboards
+   - **Visualizations**:
+     - Time series with annotations (deployments, incidents)
+     - Error tables with drill-down
+     - Dependency graph with health indicators
+   - **Refresh**: Real-time or every 30 seconds
+
+6. **Design SLO Tracking Dashboards**:
+   - **Purpose**: Track SLO compliance and error budget
+   - **Metrics**:
+     - SLI values (availability, latency, error rate)
+     - SLO targets and compliance
+     - Error budget remaining (percentage, time)
+     - Error budget burn rate
+   - **Visualizations**:
+     - Gauges for SLO compliance
+     - Line charts for SLI trends
+     - Bar charts for error budget consumption
+   - **Refresh**: Every 5-15 minutes
+
+7. **Design Capacity Planning Dashboards**:
+   - **Purpose**: Monitor resource usage and plan for growth
+   - **Metrics**:
+     - Resource utilization trends (30 days, 90 days)
+     - Traffic growth (requests/second over time)
+     - Storage growth (database size, log volume)
+     - Saturation indicators (approaching limits)
+   - **Visualizations**:
+     - Time series with trend lines
+     - Forecasting charts (projected growth)
+     - Capacity vs. usage comparison
+   - **Refresh**: Every 1 hour or daily
+
+8. **Implement Dashboard Standards**:
+   - **Layout consistency**:
+     - Use consistent color schemes
+     - Place most important metrics at top
+     - Group related metrics together
+   - **Naming conventions**:
+     - Clear, descriptive dashboard names
+     - Consistent naming pattern (e.g., "[Service] - Operational Dashboard")
+   - **Documentation**:
+     - Add descriptions to dashboards
+     - Document metric definitions
+     - Include links to runbooks and related dashboards
+   - **Access control**:
+     - Define who can view/edit each dashboard
+     - Protect production dashboards from accidental changes
+
+9. **Create Dashboard Templates**:
+   - Create reusable templates for common dashboard types:
+     - Service operational dashboard template
+     - Infrastructure monitoring template
+     - SLO tracking template
+   - Use templates to ensure consistency across services
+   - Version control dashboard definitions (Terraform, Grafana provisioning)
+
+**Deliverables**:
+- Dashboard strategy document
+- Dashboard catalog (list of all dashboards with purpose and audience)
+- Dashboard templates and standards
+- Executive/business dashboards
+- Service operational dashboards
+- Infrastructure monitoring dashboards
+- Incident response dashboards
+- SLO tracking dashboards
+- Capacity planning dashboards
+- Dashboard access control and permissions
+
+**Time Estimate**: 2-3 days
+
+---
+
+### Step 13: Develop Implementation Roadmap and Rollout Plan
+
+**Objective**: Create a phased, risk-managed implementation plan.
+
+**Instructions**:
+
+1. **Prioritize Services and Components**:
+   - Prioritization criteria:
+     - **Criticality**: User-facing, revenue-impacting services first
+     - **Complexity**: Services with most dependencies or highest incident rate
+     - **Value**: Services where observability will have biggest impact
+     - **Ease**: Quick wins (easy to instrument, high value)
+   - Prioritization approaches:
+     - **Critical-first**: Instrument most critical services first (reduces risk)
+     - **Easy-first**: Instrument easiest services first (builds momentum)
+     - **Hybrid**: Mix of critical and easy (balance risk and momentum)
+   - Recommended: Start with 2-3 critical services, then expand
+
+2. **Define Implementation Phases**:
+   - **Phase 1: Foundation** (Weeks 1-2)
+     - Deploy observability infrastructure (logging, metrics, tracing platforms)
+     - Implement structured logging in 2-3 critical services
+     - Enable auto-instrumentation for tracing
+     - Create basic dashboards and alerts
+     - Validate end-to-end observability for critical path
+   - **Phase 2: Expansion** (Weeks 3-4)
+     - Roll out structured logging to all services
+     - Implement custom instrumentation for business logic
+     - Create comprehensive dashboards for all services
+     - Implement SLO tracking and error budget monitoring
+     - Set up alerting and on-call rotation
+   - **Phase 3: Optimization** (Weeks 5-6)
+     - Optimize sampling and filtering (logs, traces)
+     - Tune alerts (reduce noise, improve quality)
+     - Implement advanced features (tail-based sampling, anomaly detection)
+     - Create runbooks and documentation
+     - Train teams on observability tools
+   - **Phase 4: Continuous Improvement** (Ongoing)
+     - Regular reviews and optimization
+     - Feedback loops from incidents
+     - Cost monitoring and optimization
+     - Knowledge sharing and best practices
+
+3. **Create Instrumentation and Migration Guides**:
+   - **Instrumentation guide** (for developers):
+     - How to add structured logging
+     - How to instrument with OpenTelemetry
+     - How to add custom metrics
+     - Code examples for each language
+     - Testing and validation procedures
+   - **Migration guide** (for existing services):
+     - How to migrate from existing logging to structured logging
+     - How to migrate from existing metrics to new metrics platform
+     - How to add distributed tracing to existing services
+     - Rollback procedures
+
+4. **Design Validation and Testing Procedures**:
+   - **Validation checklist** (for each service):
+     - [ ] Structured logging implemented and logs flowing to aggregation platform
+     - [ ] RED metrics (rate, errors, duration) available
+     - [ ] Distributed tracing enabled and traces visible
+     - [ ] Trace context propagates to downstream services
+     - [ ] Errors are captured in logs and traces
+     - [ ] Service dashboard created
+     - [ ] Alerts configured (if applicable)
+     - [ ] Runbook created (if applicable)
+   - **Testing procedures**:
+     - Generate test traffic to service
+     - Verify logs, metrics, and traces appear correctly
+     - Test error scenarios (verify errors are captured)
+     - Test trace propagation (end-to-end)
+     - Validate alert triggering (if applicable)
+
+5. **Plan Team Training and Onboarding**:
+   - **Training topics**:
+     - Observability concepts (logs, metrics, traces)
+     - Tool usage (log search, metric queries, trace analysis)
+     - Dashboard navigation and interpretation
+     - Alert response and runbook usage
+     - Instrumentation best practices
+   - **Training formats**:
+     - Hands-on workshops (recommended)
+     - Documentation and guides
+     - Recorded demos and tutorials
+     - Office hours for Q&A
+   - **Onboarding checklist** (for new team members):
+     - [ ] Complete observability training
+     - [ ] Access to observability tools granted
+     - [ ] Reviewed key dashboards for team's services
+     - [ ] Shadowed on-call engineer
+     - [ ] Practiced incident response with runbooks
+
+6. **Define Success Metrics and Acceptance Criteria**:
+   - **Success metrics**:
+     - **Coverage**: % of services with observability (target: 100% of critical services)
+     - **MTTD**: Mean time to detect incidents (target: <5 minutes)
+     - **MTTR**: Mean time to resolve incidents (target: <30 minutes)
+     - **SLO compliance**: % of time SLOs are met (target: >99%)
+     - **Alert quality**: % of alerts that result in action (target: >70%)
+     - **Cost**: Observability cost as % of infrastructure cost (target: <5%)
+   - **Acceptance criteria** (for each phase):
+     - Phase 1: Critical services have end-to-end observability, basic dashboards and alerts exist
+     - Phase 2: All services have observability, SLO tracking implemented, on-call rotation active
+     - Phase 3: Alerts tuned (low noise), runbooks complete, teams trained
+     - Phase 4: Continuous improvement processes in place, observability is part of culture
+
+7. **Create Rollback and Contingency Plans**:
+   - **Rollback procedures**:
+     - How to disable new observability instrumentation
+     - How to revert to previous logging/metrics
+     - How to handle data migration issues
+   - **Contingency plans**:
+     - If observability platform is down: Use backup/fallback monitoring
+     - If instrumentation causes performance issues: Disable or reduce sampling
+     - If costs exceed budget: Implement aggressive sampling/filtering
+   - **Risk mitigation**:
+     - Run new observability in parallel with existing (during migration)
+     - Implement circuit breakers for observability calls (prevent cascading failures)
+     - Monitor observability system itself (meta-monitoring)
+
+8. **Create Implementation Timeline**:
+   - **Gantt chart** or **timeline** showing:
+     - Infrastructure deployment
+     - Service instrumentation (by service)
+     - Dashboard and alert creation
+     - Training and onboarding
+     - Milestones and checkpoints
+   - **Dependencies**: Identify dependencies between tasks
+   - **Resources**: Assign team members to tasks
+   - **Checkpoints**: Regular reviews and validation points
+
+**Deliverables**:
+- Service prioritization and phasing plan
+- Implementation roadmap with timeline (Gantt chart)
+- Instrumentation and migration guides
+- Validation and testing procedures
+- Training and onboarding plan
+- Success metrics and acceptance criteria
+- Rollback and contingency plans
+- Implementation timeline with milestones
+
+**Time Estimate**: 2-3 days
+
+---
+
+### Step 14: Establish Governance and Continuous Improvement
+
+**Objective**: Ensure observability system remains effective, efficient, and aligned with evolving needs.
+
+**Instructions**:
+
+1. **Define Observability Ownership and Responsibilities**:
+   - **Centralized ownership** (Platform/SRE team):
+     - Owns observability infrastructure and tools
+     - Defines standards and best practices
+     - Provides training and support
+     - Monitors costs and optimizes
+   - **Distributed ownership** (Service teams):
+     - Implements observability in their services
+     - Creates and maintains dashboards and alerts
+     - Responds to alerts and incidents
+     - Provides feedback on observability gaps
+   - **RACI matrix**:
+     - Responsible: Who does the work?
+     - Accountable: Who is ultimately accountable?
+     - Consulted: Who provides input?
+     - Informed: Who is kept informed?
+
+2. **Create Observability Review Processes**:
+   - **Weekly reviews** (operational):
+     - Review active incidents and alerts
+     - Identify observability gaps from recent incidents
+     - Discuss alert quality and noise
+     - Quick wins and immediate improvements
+   - **Monthly reviews** (tactical):
+     - Review SLO compliance and error budgets
+     - Analyze observability costs and trends
+     - Review new services and instrumentation
+     - Update runbooks and documentation
+   - **Quarterly reviews** (strategic):
+     - Review observability strategy and roadmap
+     - Evaluate tool effectiveness and alternatives
+     - Plan for capacity and growth
+     - Assess team skills and training needs
+
+3. **Establish Cost Monitoring and Optimization**:
+   - **Cost monitoring**:
+     - Track observability costs (by tool, by service, by team)
+     - Monitor cost trends and growth
+     - Set budget alerts (warn at 80%, critical at 100%)
+   - **Cost optimization practices**:
+     - **Log optimization**:
+       - Implement sampling for high-volume logs
+       - Filter noisy or low-value logs
+       - Reduce retention for non-critical logs
+       - Archive to cheaper storage
+     - **Metric optimization**:
+       - Reduce metric cardinality (drop unused labels)
+       - Drop unused metrics
+       - Use recording rules for expensive queries
+       - Aggregate small entities
+     - **Trace optimization**:
+       - Implement intelligent sampling (tail-based, adaptive)
+       - Reduce trace retention
+       - Sample less critical services more aggressively
+   - **Cost targets**:
+     - Target: Observability cost <5% of infrastructure cost
+     - Trigger optimization if cost >10%
+
+4. **Design Feedback Loops from Incidents**:
+   - **Postmortem process**:
+     - After every incident, conduct postmortem
+     - Identify observability gaps:
+       - Was the incident detected quickly? (MTTD)
+       - Was there enough context to diagnose? (logs, metrics, traces)
+       - Were alerts actionable?
+       - Were runbooks helpful?
+     - Create action items to address gaps
+   - **Observability improvements from incidents**:
+     - Add missing metrics or logs
+     - Create new alerts or tune existing ones
+     - Update runbooks with new learnings
+     - Create new dashboards for better visibility
+   - **Track improvements**:
+     - Measure MTTD and MTTR over time (should improve)
+     - Track repeat incidents (should decrease)
+
+5. **Plan Regular Reviews of SLIs, SLOs, and Alerts**:
+   - **SLI/SLO reviews** (quarterly):
+     - Are SLIs still relevant and measurable?
+     - Are SLOs still appropriate (not too high, not too low)?
+     - How is error budget being used?
+     - Do SLOs align with user expectations?
+   - **Alert reviews** (monthly):
+     - Alert quality: What % of alerts result in action?
+     - Alert noise: Are there noisy or flapping alerts?
+     - Alert coverage: Are there gaps in alerting?
+     - Alert tuning: Adjust thresholds based on learnings
+   - **Alert quality metrics**:
+     - Alert-to-incident ratio (target >50%)
+     - False positive rate (target <30%)
+     - Time to acknowledge (target <5 minutes)
+
+6. **Create Knowledge Sharing and Best Practices**:
+   - **Documentation**:
+     - Observability architecture and design docs
+     - Instrumentation guidelines and examples
+     - Runbooks and troubleshooting guides
+     - Dashboard catalog and usage guides
+   - **Knowledge sharing**:
+     - Regular lunch-and-learns or tech talks
+     - Internal blog posts or wiki articles
+     - Incident postmortem sharing
+     - Best practices and lessons learned
+   - **Community of practice**:
+     - Observability working group or guild
+     - Regular meetings to discuss challenges and solutions
+     - Slack/Teams channel for Q&A
+
+7. **Define Metrics for Observability Effectiveness**:
+   - **Operational metrics**:
+     - MTTD (Mean Time to Detect): How quickly are incidents detected?
+     - MTTR (Mean Time to Resolve): How quickly are incidents resolved?
+     - SLO compliance: Are we meeting our SLOs?
+   - **Quality metrics**:
+     - Alert quality: % of alerts that result in action
+     - Dashboard usage: Are dashboards being used?
+     - Runbook usage: Are runbooks helpful?
+   - **Cost metrics**:
+     - Observability cost as % of infrastructure cost
+     - Cost per service or team
+     - Cost trends and growth
+   - **Adoption metrics**:
+     - % of services with observability
+     - % of teams trained on observability
+     - % of incidents resolved using observability tools
+
+8. **Establish Continuous Improvement Framework**:
+   - **Improvement sources**:
+     - Incident postmortems (observability gaps)
+     - Team feedback (pain points, feature requests)
+     - Cost analysis (optimization opportunities)
+     - Industry trends (new tools, best practices)
+   - **Improvement process**:
+     - Collect improvement ideas
+     - Prioritize by impact and effort
+     - Implement and validate
+     - Measure impact
+     - Share learnings
+   - **Improvement metrics**:
+     - Number of improvements implemented per quarter
+     - Impact of improvements (MTTD/MTTR reduction, cost savings)
+
+**Deliverables**:
+- Observability governance model and RACI matrix
+- Review and optimization procedures (weekly, monthly, quarterly)
+- Cost monitoring and optimization plan
+- Incident feedback loop process
+- SLI/SLO and alert review procedures
+- Knowledge sharing and documentation plan
+- Observability effectiveness metrics
+- Continuous improvement framework
+
+**Time Estimate**: 2-3 days
 
 ---
 
 ## Summary
 
-Following these 10 steps will result in a comprehensive observability system that provides:
+By following these detailed, step-by-step instructions, you will create a comprehensive observability system that provides complete visibility into your distributed systems, enables rapid incident detection and resolution, and supports data-driven operational decisions.
 
-✅ **Visibility:** Logs, metrics, and traces for all services  
-✅ **Fast debugging:** MTTD < 5 min, MTTR < 30 min  
-✅ **Proactive monitoring:** Alerts before user impact  
-✅ **SLO tracking:** Know when you're meeting targets  
-✅ **Team enablement:** Standards, tools, and training  
+**Total Estimated Time**: 4-5 weeks for complete design and initial implementation
 
-**Total time investment:** 4-8 hours for design, 3-6 months for implementation.
+**Key Success Factors**:
+- Start with clear requirements and objectives
+- Prioritize critical services and quick wins
+- Use standards (W3C Trace Context, OpenTelemetry) for portability
+- Design for cost-effectiveness from the start
+- Implement feedback loops for continuous improvement
+- Train teams and build observability culture
+- Measure success and iterate
 
----
-
-## Next Steps
-
-After completing this workflow:
-
-1. **Implement observability** — Follow the implementation plan
-2. **Use observability for incidents** — See `incident-analysis` skill
-3. **Improve based on learnings** — Iterate on observability design
-4. **Validate production readiness** — See `production-readiness` skill
-
----
-
-## Related Skills
-
-- **incident-analysis** — Use observability for incident response
-- **root-cause-analysis** — Deep-dive analysis using observability data
-- **production-readiness** — Validate observability before production
-- **capacity-planning** — Use metrics for capacity planning
+**Next Steps After Completion**:
+- Execute implementation roadmap
+- Monitor success metrics (MTTD, MTTR, SLO compliance, cost)
+- Conduct regular reviews and optimizations
+- Expand observability to additional services
+- Build on observability foundation with SRE practices, chaos engineering, and capacity planning

@@ -1,293 +1,147 @@
-# CI/CD Design - Quick Reference
+# CI/CD Design Skill
 
-**Design continuous integration and continuous deployment (CI/CD) pipelines that automate building, testing, security scanning, and deployment of software to enable fast, safe, and reliable releases.**
+## Quick Reference
 
----
+**Purpose**: Design continuous integration and continuous deployment pipelines that automate software delivery from code commit to production deployment with quality gates, security checks, and rollback capabilities.
 
-## Quick Start
+**Complexity**: Intermediate to Advanced  
+**Estimated Time**: 2-4 weeks for comprehensive pipeline design and implementation
 
-### When to Use This Skill
+## When to Use This Skill
 
-✅ Designing CI/CD for new projects or services  
-✅ Improving existing CI/CD pipelines (slow, unreliable, insecure)  
-✅ Implementing DevOps or platform engineering practices  
-✅ Migrating from manual deployments to automation  
-✅ Adopting microservices or cloud-native architecture  
-✅ Improving deployment frequency and reliability  
+✅ **Use when**:
+- Automating software delivery processes
+- Setting up new projects or migrating legacy systems
+- Improving deployment frequency and reliability
+- Enforcing quality gates and security standards
+- Supporting multiple environments (dev, staging, production)
+- Implementing DevOps practices
+- Scaling development teams
+- Reducing deployment risk and downtime
 
-### When NOT to Use
-
-❌ For one-time scripts or prototypes  
-❌ Without version control  
-❌ Without automated tests  
-❌ For systems with no deployment (libraries, SDKs)  
-❌ Without team buy-in  
-
----
-
-## 10-Step Workflow
-
-1. **Define CI/CD Requirements** (30-60 min) — Deployment frequency, quality gates, rollback, compliance
-2. **Design Build Strategy** (45-90 min) — Build tools, caching, versioning, artifacts
-3. **Design Testing Strategy** (60-90 min) — Test types, coverage, parallelization, failure handling
-4. **Design Security Scanning Strategy** (45-90 min) — SAST, dependency scanning, container scanning, secrets scanning
-5. **Design Deployment Strategy** (60-90 min) — Deployment method, promotion flow, rollback, monitoring
-6. **Design Environment Strategy** (30-60 min) — Environments, parity, provisioning, access control
-7. **Select CI/CD Platform** (30-60 min) — Platform evaluation, cost analysis, migration plan
-8. **Design Pipeline Architecture** (60-90 min) — CI/CD pipelines, triggers, dependencies, reusability
-9. **Implement Secrets Management** (30-60 min) — Secrets tool, rotation, injection, access control
-10. **Document and Train** (30-60 min) — Strategy doc, usage guide, troubleshooting, runbooks, training
-
-**Total Time:** 4-8 hours
-
----
+❌ **Don't use when**:
+- Debugging existing pipelines (use troubleshooting skills)
+- One-time deployments
+- Purely infrastructure provisioning (use IaC skills)
+- Application architecture design
+- Security auditing of existing pipelines
 
 ## Key Inputs
 
-**Required:**
-- Application architecture (monolith, microservices, serverless)
-- Tech stack (languages, frameworks, build tools)
-- Deployment targets (cloud, on-prem, Kubernetes, serverless)
-- Team structure (size, skills, responsibilities)
-- Release requirements (frequency, approval process, rollback needs)
-
-**Optional:**
-- Existing CI/CD (current pipelines and pain points)
-- Compliance requirements (SOC 2, HIPAA, PCI DSS)
-- Security requirements (SAST, DAST, dependency scanning)
-
----
+- Application architecture and technology stack
+- Infrastructure details and deployment targets
+- Quality requirements and testing strategy
+- Deployment strategy and rollback requirements
+- Team structure and branching strategy
+- Security and compliance requirements
 
 ## Key Outputs
 
-1. **CI/CD Strategy Document** — Pipeline architecture, build/test/deploy strategy
-2. **Pipeline Definitions** — CI, CD, release, rollback pipelines
-3. **Environment Strategy** — Dev, staging, production, promotion flow
-4. **Security and Compliance** — SAST, DAST, dependency scanning, secrets management
-5. **Documentation** — Usage guide, troubleshooting, runbooks
+- Pipeline architecture document with diagrams
+- Detailed pipeline specifications
+- CI/CD configuration files (pipeline-as-code)
+- Environment configuration and infrastructure-as-code
+- Quality gate definitions
+- Deployment procedures and runbooks
+- Security implementation (scanning, secret management)
+- Team enablement materials
 
----
+## 10-Step Workflow
 
-## CI/CD Platform Comparison
+1. **Requirements Gathering**: Stakeholder interviews, current state assessment, success criteria
+2. **Pipeline Architecture**: Platform selection, stage definitions, integration planning
+3. **Build Stage Design**: Triggers, environment setup, caching, artifact creation
+4. **Testing Strategy**: Unit, integration, E2E tests with parallel execution
+5. **Security & Quality Gates**: SAST, dependency scanning, container scanning, code quality
+6. **Artifact Management**: Repository setup, versioning, publishing, retention
+7. **Deployment Automation**: Strategy selection, environment config, rollback procedures
+8. **Monitoring Integration**: Pipeline metrics, deployment tracking, validation, alerting
+9. **Documentation & Training**: Developer guides, troubleshooting, runbooks, training
+10. **Validation & Improvement**: End-to-end testing, performance benchmarks, continuous improvement
 
-| Platform | Best For | Pros | Cons |
-|----------|----------|------|------|
-| **GitHub Actions** | GitHub projects, simple pipelines | Native integration, free for public repos, easy YAML | Can be expensive for private repos |
-| **GitLab CI** | GitLab projects, complex pipelines | Built-in, powerful, generous free tier | GitLab-only, learning curve |
-| **Jenkins** | Complex pipelines, self-hosted | Highly customizable, free, large ecosystem | Complex setup, maintenance overhead |
-| **CircleCI** | Fast builds, Docker-native | Fast, good Docker support, easy config | Can be expensive, limited free tier |
-| **AWS CodePipeline** | AWS-native applications | Native AWS integration, serverless | AWS-only, limited features |
+## Quick Decision Framework
 
----
+### Platform Selection
 
-## Deployment Strategy Comparison
+- **Jenkins**: Maximum flexibility, on-premises, complex workflows
+- **GitLab CI**: Integrated platform, GitOps, built-in security
+- **GitHub Actions**: GitHub integration, easy to use, cloud-native
+- **CircleCI**: Fast builds, Docker support, managed service
+- **AWS CodePipeline**: AWS-native, managed service, AWS integration
 
-| Strategy | Downtime | Risk | Resources | Complexity | Rollback Speed |
-|----------|----------|------|-----------|------------|----------------|
-| **Rolling** | Brief | Medium | 1x | Low | Slow (minutes) |
-| **Blue/Green** | None | Low | 2x | Medium | Instant (seconds) |
-| **Canary** | None | Very Low | 1.1x | High | Fast (seconds) |
-| **Feature Flags** | None | Very Low | 1x | High | Instant (toggle) |
+### Deployment Strategy
 
-**Recommendation:**
-- **Rolling:** Standard deployments, acceptable brief downtime
-- **Blue/Green:** Zero-downtime required, fast rollback needed
-- **Canary:** Risk mitigation critical, gradual rollout desired
-- **Feature Flags:** Decouple deployment from release, A/B testing
+- **Blue-Green**: Zero downtime, instant rollback, duplicate infrastructure
+- **Canary**: Gradual rollout, real traffic testing, risk mitigation
+- **Rolling**: Incremental updates, no duplicate infrastructure, slower rollback
+- **Recreate**: Simplest approach, downtime acceptable, no version mixing
 
----
+## Common Pitfalls to Avoid
 
-## Security Scanning Tools
-
-### SAST (Static Application Security Testing)
-- **SonarQube** — Code quality + security, self-hosted or cloud
-- **Snyk Code** — Developer-friendly, IDE integration
-- **Checkmarx** — Enterprise-grade, comprehensive
-- **Semgrep** — Open-source, customizable rules
-
-### Dependency Scanning
-- **Dependabot** — GitHub native, automatic PRs
-- **Snyk** — Comprehensive, fix suggestions
-- **OWASP Dependency-Check** — Open-source, CLI-based
-- **npm audit** — Built-in for npm projects
-
-### Container Scanning
-- **Trivy** — Fast, comprehensive, open-source
-- **Snyk Container** — Developer-friendly
-- **Clair** — Open-source, API-based
-- **Docker Scan** — Built-in to Docker CLI
-
-### Secrets Scanning
-- **git-secrets** — Prevent committing secrets
-- **TruffleHog** — Find secrets in Git history
-- **GitHub Secret Scanning** — Automatic for public repos
-- **GitGuardian** — Real-time alerts
-
----
-
-## Quality Checklist
-
-### Build
-- [ ] Builds are fast (< 10 min)
-- [ ] Builds are reproducible
-- [ ] Build caching implemented
-- [ ] Artifacts versioned and stored
-
-### Testing
-- [ ] Unit tests run on every commit
-- [ ] Integration tests run on every PR
-- [ ] E2E tests run before deployment
-- [ ] Test coverage > 80%
-- [ ] Tests are fast (< 15 min total)
-
-### Security
-- [ ] SAST scanning enabled
-- [ ] Dependency scanning enabled
-- [ ] Container scanning enabled
-- [ ] Secrets scanning enabled
-- [ ] Security gates block critical vulnerabilities
-
-### Deployment
-- [ ] Deployments are automated
-- [ ] Deployments are fast (< 15 min)
-- [ ] Rollback is automated
-- [ ] Health checks validate deployment
-- [ ] Deployment notifications sent
-
-### Compliance
-- [ ] Audit logs enabled
-- [ ] Approval gates for production
-- [ ] Change tracking implemented
-- [ ] Compliance scans pass
-
----
-
-## Common Mistakes
-
-❌ **No automated tests** — CI/CD without tests deploys broken code faster  
-✅ **Implement tests first** — Start with unit tests
-
-❌ **Slow pipelines** — 30+ minute pipelines slow development  
-✅ **Optimize builds** — Caching, parallelization, fail fast
-
-❌ **No rollback strategy** — Bad deployment with no way to rollback quickly  
-✅ **Design rollback first** — Test rollback regularly
-
-❌ **Secrets in code** — Hardcoded secrets committed to Git  
-✅ **Use secrets management** — Never commit secrets
-
-❌ **No security scanning** — Vulnerabilities deployed to production  
-✅ **Scan on every build** — Catch vulnerabilities early
-
-❌ **Manual approval bottlenecks** — Waiting hours/days for approvals  
-✅ **Automate where possible** — Use time-based windows
-
-❌ **Environment drift** — Staging and production have different configs  
-✅ **Use Infrastructure as Code** — Ensure environment parity
-
-❌ **No monitoring integration** — Deployments succeed but application fails  
-✅ **Integrate health checks** — Metrics, alerts into deployment
-
----
-
-## Quick Examples
-
-### Example 1: Node.js Microservice (GitHub Actions)
-
-**Pipeline:** Lint → Unit Tests → Build → Integration Tests → Security Scan → Docker Build → Deploy  
-**Deployment:** Canary (5% → 100%)  
-**Rollback:** Automated (error rate > 1%)  
-**Time:** 20 minutes  
-
-### Example 2: Java Spring Boot (GitLab CI)
-
-**Pipeline:** Build → Unit Tests → Integration Tests → SAST → Dependency Check → Package → Deploy  
-**Deployment:** Blue/Green (zero downtime)  
-**Rollback:** Manual (switch back to blue)  
-**Time:** 35 minutes  
-
-### Example 3: Python FastAPI (CircleCI)
-
-**Pipeline:** Lint → Unit Tests → Integration Tests → Security Scan → Docker Build → Deploy  
-**Deployment:** Rolling (Cloud Run automatic)  
-**Rollback:** Instant (Cloud Run revisions)  
-**Time:** 10 minutes  
-
-### Example 4: Monorepo with Nx (GitHub Actions)
-
-**Pipeline:** Affected Projects → Lint → Test → Build → Security Scan → Deploy (selective)  
-**Deployment:** Selective (only changed services)  
-**Rollback:** Per-service  
-**Time:** 13 minutes (selective)  
-
----
+1. ❌ Overly complex pipelines
+2. ❌ Insufficient environment parity
+3. ❌ Ignoring pipeline performance
+4. ❌ Inadequate rollback strategy
+5. ❌ Poor secret management
+6. ❌ Skipping quality gates
+7. ❌ Manual steps in deployment
+8. ❌ Lack of monitoring integration
+9. ❌ No pipeline maintenance plan
+10. ❌ Insufficient documentation
 
 ## Success Metrics
 
-### Excellent
-- Deployment frequency: Multiple times per day
-- Pipeline time: < 10 min (build), < 15 min (deploy)
-- Deployment success rate: > 95%
-- Time to rollback: < 5 minutes (automated)
+**Deployment Metrics**:
+- Deployment frequency: Daily or more
+- Lead time: < 1 day from commit to production
+- MTTR: < 1 hour
+- Change failure rate: < 15%
+
+**Pipeline Metrics**:
+- Build success rate: > 90%
+- Pipeline execution time: < 30 minutes
 - Test coverage: > 80%
-- Security: Zero critical vulnerabilities
+- Security scan coverage: 100%
 
-### Good
-- Deployment frequency: Daily/weekly
-- Pipeline time: < 20 min
-- Deployment success rate: > 85%
-- Time to rollback: < 15 minutes
-- Test coverage: > 70%
-
-### Needs Improvement
-- Deployment frequency: Monthly or less
-- Pipeline time: > 30 min
-- Deployment success rate: < 75%
-- Time to rollback: > 30 minutes
-- Test coverage: < 60%
-
----
+**Quality Metrics**:
+- Production incidents from deployments: < 5%
+- Rollback rate: < 10%
+- Critical vulnerabilities in production: 0
 
 ## Related Skills
 
-**Prerequisites:**
-- `version-control` — Git workflow, branching strategy
-- `testing-strategy` — Automated testing approach
-- `architecture-discovery` — Understand system structure
+- Infrastructure as Code
+- Container Orchestration
+- Monitoring and Observability
+- Security Scanning
+- Test Automation
+- Configuration Management
+- Secret Management
 
-**Commonly Followed By:**
-- `deployment-strategy` — Choose deployment approach (blue/green, canary)
-- `observability-design` — Monitor deployments
-- `production-readiness` — Validate before production
+## Quick Start
 
-**Works With:**
-- `infrastructure-as-code` — Automate infrastructure provisioning
-- `security-architecture-review` — Security scanning and compliance
-- `disaster-recovery` — Backup and recovery automation
+1. Read [SKILL.md](SKILL.md) for comprehensive documentation
+2. Follow [instructions.md](instructions.md) for step-by-step guidance
+3. Review [examples.md](examples.md) for real-world implementations
+4. Check [skill.json](skill.json) for metadata and relationships
 
----
+## Examples
+
+See [examples.md](examples.md) for detailed examples:
+
+1. **E-Commerce Platform**: Microservices with canary deployments
+2. **Banking Application**: Compliance-focused with blue-green deployment
+3. **Multi-Cloud SaaS**: Progressive delivery across AWS, Azure, GCP
+4. **AI/ML Pipeline**: Model training and deployment automation
 
 ## Additional Resources
 
-**Documentation:**
-- [SKILL.md](./SKILL.md) — Comprehensive skill documentation
-- [instructions.md](./instructions.md) — Step-by-step workflow guide
-- [examples.md](./examples.md) — Real-world implementation examples
-
-**Books:**
-- "Continuous Delivery" by Jez Humble and David Farley
-- "The DevOps Handbook" by Gene Kim et al.
-- "Accelerate" by Nicole Forsgren et al.
-
-**Tools:**
-- GitHub Actions: https://docs.github.com/actions
-- GitLab CI: https://docs.gitlab.com/ee/ci/
-- Jenkins: https://www.jenkins.io/doc/
-- CircleCI: https://circleci.com/docs/
+- **Tools**: Jenkins, GitLab CI, GitHub Actions, CircleCI, Spinnaker, ArgoCD
+- **Concepts**: GitOps, Progressive Delivery, Feature Flags, Canary Analysis
+- **Standards**: DORA metrics, DevOps best practices, Security scanning
 
 ---
 
-**Version:** 1.0.0  
-**Category:** Operations  
-**Complexity:** Advanced  
-**Estimated Time:** 4-8 hours
+**Version**: 1.0.0  
+**Category**: Operations  
+**Last Updated**: 2024

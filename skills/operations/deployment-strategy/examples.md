@@ -1,1309 +1,720 @@
-# Deployment Strategy - Examples
+# Deployment Strategy Design - Comprehensive Examples
 
-This document provides comprehensive real-world examples of different deployment strategies (blue/green, canary, rolling, feature flags) with complete implementation details.
+This document provides four detailed, real-world examples of deployment strategy design covering diverse scenarios, industries, and approaches.
 
----
+## Example 1: E-Commerce Platform - Canary Deployment with Istio
 
-## Example 1: Blue/Green Deployment for E-commerce Platform
+[See SKILL.md Example 1 for complete details]
 
-### Context
+**Summary**: High-traffic e-commerce platform with microservices on Kubernetes, using canary deployment with Istio service mesh for sophisticated traffic management and automated rollback based on metrics.
 
-**Company:** TechMart E-commerce  
-**System:** Product catalog and checkout service  
-**Traffic:** 10,000 requests/minute peak  
-**Requirements:**
-- Zero downtime (24/7 operations)
-- Instant rollback capability (< 1 minute)
-- Revenue loss: $10,000/minute during outage
-- Deployment frequency: Weekly releases
+**Key Highlights**:
+- Deployment frequency increased from weekly to 3-5 times per week
+- Zero revenue-impacting outages since implementation
+- Issues detected and rolled back automatically before affecting >10% of users
+- Average rollback time: 2 minutes
+- Deployment confidence increased significantly
+- A/B testing enabled for new features
 
-**Current Pain Points:**
-- Rolling deployments cause brief service disruptions
-- Rollback takes 10-15 minutes (too slow)
-- Customer complaints during deployments
+**Strategy**: Canary Deployment with Istio + Feature Flags
 
-### Strategy Selection
-
-**Chosen Strategy:** Blue/Green Deployment
-
-**Rationale:**
-- **Zero Downtime:** Instant traffic switch from blue to green
-- **Fast Rollback:** < 1 minute (switch back to blue)
-- **Low Risk:** Validate green environment before switching traffic
-- **Resources:** Can afford 2x infrastructure ($15,000/month vs. $10,000/minute revenue loss)
-
-**Alternative Considered:** Canary deployment (rejected due to slower rollback time)
-
-### Architecture
-
-**Infrastructure:**
-- **Platform:** AWS (ECS Fargate)
-- **Load Balancer:** Application Load Balancer (ALB)
-- **Database:** PostgreSQL RDS with read replicas
-- **Cache:** Redis ElastiCache
-- **CDN:** CloudFront
-
-**Blue Environment:**
-- 20 ECS tasks (current production)
-- ALB target group: `techmart-blue`
-- Database: Primary RDS instance
-- Cache: Redis cluster (shared with green)
-
-**Green Environment:**
-- 20 ECS tasks (new deployment)
-- ALB target group: `techmart-green`
-- Database: Same RDS instance (shared)
-- Cache: Same Redis cluster (shared)
-
-### Traffic Management
-
-**Load Balancer Configuration:**
-
-```yaml
-# ALB Listener Rule (Initial State)
-ListenerArn: arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/techmart-alb/...
-DefaultActions:
-  - Type: forward
-    ForwardConfig:
-      TargetGroups:
-        - TargetGroupArn: arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-blue/...
-          Weight: 100
-        - TargetGroupArn: arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-green/...
-          Weight: 0
-```
-
-**Traffic Shifting Plan:**
-
-```
-T+0:  Blue 100%, Green 0%   (Deploy to green, run smoke tests)
-T+5:  Blue 0%,   Green 100% (Instant switch after validation)
-```
-
-### Deployment Procedure
-
-#### Step 1: Deploy to Green Environment (T+0)
-
-```bash
-#!/bin/bash
-# deploy-green.sh
-
-set -e
-
-echo "[T+0] Deploying to green environment..."
-
-# Update ECS service with new task definition
-aws ecs update-service \
-  --cluster techmart-prod \
-  --service techmart-green \
-  --task-definition techmart-app:v2.5.0 \
-  --force-new-deployment
-
-# Wait for green deployment to stabilize
-aws ecs wait services-stable \
-  --cluster techmart-prod \
-  --services techmart-green
-
-echo "[T+2] Green deployment complete"
-```
-
-#### Step 2: Run Smoke Tests on Green (T+2)
-
-```bash
-#!/bin/bash
-# smoke-test-green.sh
-
-set -e
-
-GREEN_URL="http://internal-green.techmart.com"
-
-echo "[T+2] Running smoke tests on green environment..."
-
-# Test 1: Health check
-HEALTH=$(curl -s "$GREEN_URL/health" | jq -r '.status')
-if [ "$HEALTH" != "healthy" ]; then
-  echo "❌ Health check failed: $HEALTH"
-  exit 1
-fi
-echo "✅ Health check passed"
-
-# Test 2: Product catalog
-PRODUCTS=$(curl -s "$GREEN_URL/api/products?limit=10" | jq '.products | length')
-if [ "$PRODUCTS" -lt 10 ]; then
-  echo "❌ Product catalog test failed: only $PRODUCTS products returned"
-  exit 1
-fi
-echo "✅ Product catalog test passed"
-
-# Test 3: Checkout flow
-CHECKOUT=$(curl -s -X POST "$GREEN_URL/api/checkout" \
-  -H "Content-Type: application/json" \
-  -d '{"cart_id": "test-cart-123"}' | jq -r '.status')
-if [ "$CHECKOUT" != "success" ]; then
-  echo "❌ Checkout test failed: $CHECKOUT"
-  exit 1
-fi
-echo "✅ Checkout test passed"
-
-# Test 4: Database connectivity
-DB_CHECK=$(curl -s "$GREEN_URL/api/db-check" | jq -r '.database')
-if [ "$DB_CHECK" != "connected" ]; then
-  echo "❌ Database check failed: $DB_CHECK"
-  exit 1
-fi
-echo "✅ Database check passed"
-
-echo "[T+4] All smoke tests passed ✅"
-```
-
-#### Step 3: Switch Traffic to Green (T+5)
-
-```bash
-#!/bin/bash
-# switch-to-green.sh
-
-set -e
-
-echo "[T+5] Switching traffic from blue to green..."
-
-# Update ALB listener to route 100% traffic to green
-aws elbv2 modify-listener \
-  --listener-arn arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/techmart-alb/... \
-  --default-actions Type=forward,ForwardConfig='{"TargetGroups":[{"TargetGroupArn":"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-green/...","Weight":100},{"TargetGroupArn":"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-blue/...","Weight":0}]}'
-
-echo "[T+5] Traffic switched to green ✅"
-echo "Monitoring for 15 minutes before declaring success..."
-```
-
-#### Step 4: Monitor Green Environment (T+5 to T+20)
-
-```bash
-#!/bin/bash
-# monitor-green.sh
-
-set -e
-
-echo "[T+5] Monitoring green environment..."
-
-for i in {1..15}; do
-  echo "Minute $i of 15..."
-  
-  # Check error rate
-  ERROR_RATE=$(aws cloudwatch get-metric-statistics \
-    --namespace "TechMart/App" \
-    --metric-name ErrorRate \
-    --dimensions Name=Environment,Value=green \
-    --start-time $(date -u -d '1 minute ago' +%Y-%m-%dT%H:%M:%S) \
-    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
-    --period 60 \
-    --statistics Average \
-    --query 'Datapoints[0].Average' \
-    --output text)
-  
-  if (( $(echo "$ERROR_RATE > 1.0" | bc -l) )); then
-    echo "❌ Error rate too high: $ERROR_RATE%"
-    echo "Triggering automatic rollback..."
-    ./rollback-to-blue.sh
-    exit 1
-  fi
-  
-  # Check latency (p95)
-  LATENCY_P95=$(aws cloudwatch get-metric-statistics \
-    --namespace "TechMart/App" \
-    --metric-name Latency \
-    --dimensions Name=Environment,Value=green \
-    --start-time $(date -u -d '1 minute ago' +%Y-%m-%dT%H:%M:%S) \
-    --end-time $(date -u +%Y-%m-%dT%H:%M:%S) \
-    --period 60 \
-    --statistics Average \
-    --extended-statistics p95 \
-    --query 'Datapoints[0].ExtendedStatistics.p95' \
-    --output text)
-  
-  if (( $(echo "$LATENCY_P95 > 500" | bc -l) )); then
-    echo "⚠️  Latency elevated: ${LATENCY_P95}ms (threshold: 500ms)"
-  fi
-  
-  echo "✅ Minute $i: Error rate ${ERROR_RATE}%, Latency p95 ${LATENCY_P95}ms"
-  sleep 60
-done
-
-echo "[T+20] Monitoring complete. Deployment successful! ✅"
-```
-
-#### Step 5: Rollback Procedure (If Needed)
-
-```bash
-#!/bin/bash
-# rollback-to-blue.sh
-
-set -e
-
-echo "[ROLLBACK] Rolling back to blue environment..."
-
-# Update ALB listener to route 100% traffic back to blue
-aws elbv2 modify-listener \
-  --listener-arn arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/techmart-alb/... \
-  --default-actions Type=forward,ForwardConfig='{"TargetGroups":[{"TargetGroupArn":"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-blue/...","Weight":100},{"TargetGroupArn":"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/techmart-green/...","Weight":0}]}'
-
-echo "[ROLLBACK] Traffic switched back to blue ✅"
-echo "Rollback completed in < 1 minute"
-
-# Send alert to team
-curl -X POST https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"🚨 TechMart deployment rolled back to blue environment due to high error rate"}'
-```
-
-### Validation Criteria
-
-**Success Metrics:**
-- ✅ Error rate < 1% (green vs. blue baseline)
-- ✅ Latency p95 < 300ms (green vs. 250ms blue baseline)
-- ✅ Checkout success rate > 99.5%
-- ✅ No critical errors in logs
-- ✅ Database connection pool healthy
-- ✅ Cache hit rate > 80%
-
-**Rollback Triggers:**
-- ❌ Error rate > 1% for 2 consecutive minutes
-- ❌ Critical errors detected (payment failures, database errors)
-- ❌ Latency p95 > 500ms for 5 consecutive minutes
-- ❌ Manual decision by engineering manager
-
-### Results
-
-**Deployment Timeline:**
-- T+0: Deploy to green (2 minutes)
-- T+2: Smoke tests (2 minutes)
-- T+5: Traffic switch (< 10 seconds)
-- T+5 to T+20: Monitoring (15 minutes)
-- **Total: 20 minutes**
-
-**Metrics:**
-- **Downtime:** 0 seconds ✅
-- **Rollback Time:** < 1 minute ✅
-- **Error Rate:** 0.3% (below 1% threshold) ✅
-- **Latency p95:** 280ms (below 300ms threshold) ✅
-- **Customer Impact:** Zero complaints ✅
-
-**Cost:**
-- **Additional Infrastructure:** $15,000/month (2x ECS tasks during deployment)
-- **Deployment Duration:** 20 minutes
-- **Cost per Deployment:** ~$7 (20 minutes of 2x infrastructure)
-- **ROI:** Prevents $10,000/minute revenue loss
+**Infrastructure**: Kubernetes with Istio service mesh, Prometheus monitoring, automated canary progression
 
 ---
 
-## Example 2: Canary Deployment for Payment Service
+## Example 2: Banking Application - Blue/Green Deployment
 
-### Context
+[See SKILL.md Example 2 for complete details]
 
-**Company:** FinPay Payment Processor  
-**System:** Payment authorization service  
-**Traffic:** 50,000 transactions/hour  
-**Requirements:**
-- Zero downtime
-- Extremely low risk (payment processing)
-- Gradual rollout with monitoring at each stage
-- Fast rollback (< 2 minutes)
-- Compliance: PCI DSS
+**Summary**: Core banking application with strict regulatory compliance requirements, using blue/green deployment to achieve near-zero downtime and instant rollback capability while maintaining complete audit trail.
 
-**Current Pain Points:**
-- Blue/green too risky (instant 100% traffic shift)
-- Need gradual rollout to detect issues early
-- Payment failures have severe business impact
+**Key Highlights**:
+- Deployment downtime reduced from 4 hours to 30 seconds
+- Rollback time: < 30 seconds (load balancer switch)
+- Zero failed deployments since implementation
+- Complete audit trail maintained for compliance
+- Deployment confidence increased significantly
+- Ability to validate before user impact
 
-### Strategy Selection
+**Strategy**: Blue/Green Deployment with Database Versioning
 
-**Chosen Strategy:** Canary Deployment
+**Infrastructure**: AWS EC2 instances, Application Load Balancer, backward-compatible database migrations
 
-**Rationale:**
-- **Very Low Risk:** Gradual rollout (5% → 25% → 50% → 100%)
-- **Early Detection:** Monitor at each stage before increasing traffic
-- **Fast Rollback:** < 2 minutes (route traffic back to stable)
-- **Cost-Effective:** Only 1.1x infrastructure (5% canary instances)
+---
 
-**Alternative Considered:** Blue/green (rejected due to instant 100% traffic shift risk)
+## Example 3: Mobile API - Rolling Deployment with Health Checks
 
-### Architecture
+[See SKILL.md Example 3 for complete details]
 
-**Infrastructure:**
-- **Platform:** Kubernetes (GKE)
-- **Service Mesh:** Istio (for traffic splitting)
-- **Database:** Cloud SQL (PostgreSQL)
-- **Monitoring:** Datadog
+**Summary**: Mobile application backend API with budget constraints, using rolling deployment with sophisticated health checks to achieve daily deployments without user-facing errors while minimizing infrastructure costs.
 
-**Stable Version:**
-- 20 pods (v2.4.0)
-- Istio virtual service weight: 95%
+**Key Highlights**:
+- Daily deployments with zero user-facing errors
+- Infrastructure costs minimized (no duplicate environments)
+- 99.95% availability maintained (exceeding 99.9% SLA)
+- Zero manual rollbacks needed
+- Automatic rollback on health check failures
 
-**Canary Version:**
-- 1 pod initially (v2.5.0)
-- Istio virtual service weight: 5%
+**Strategy**: Rolling Deployment with Sophisticated Health Checks + PodDisruptionBudget
 
-### Traffic Management
+**Infrastructure**: Kubernetes with comprehensive health checks (startup, liveness, readiness), PodDisruptionBudget
 
-**Istio Virtual Service Configuration:**
+---
 
+## Example 4: SaaS Platform - Feature Flag Deployment
+
+[See SKILL.md Example 4 for complete details]
+
+**Summary**: B2B SaaS platform with diverse customer requirements, using feature flags to decouple deployment from feature release, enabling targeted rollouts and instant feature rollback without redeployment.
+
+**Key Highlights**:
+- Deployment frequency: Multiple times per day
+- Feature release frequency: Independent of deployments
+- Zero production incidents from new features
+- Instant feature rollback (< 1 second)
+- Successful A/B testing program
+- Different feature sets per customer tier
+- Complete audit trail of feature changes
+
+**Strategy**: Continuous Deployment + Feature Flags (LaunchDarkly)
+
+**Infrastructure**: LaunchDarkly feature flag platform, gradual rollout automation, customer segmentation
+
+---
+
+## Additional Example Scenarios
+
+### Example 5: Microservices Platform - Multi-Region Blue/Green
+
+**Context**: Global microservices platform serving users across 5 continents needs to deploy updates across multiple regions while maintaining regional failover capabilities and minimizing cross-region latency.
+
+**Requirements**:
+- Deploy to multiple regions (US-East, US-West, EU, APAC, SA)
+- Maintain regional failover during deployments
+- Minimize cross-region latency
+- Support region-specific rollback
+- Coordinate deployments across regions
+- Zero downtime globally
+
+**Solution Design**:
+
+**Selected Strategy**: Multi-Region Blue/Green with Staggered Rollout
+
+**Implementation**:
+
+1. **Region Deployment Order**:
+```markdown
+## Deployment Sequence
+
+1. **Wave 1**: SA (lowest traffic, 5% of users)
+   - Deploy to green environment
+   - Monitor for 2 hours
+   - Cutover if successful
+
+2. **Wave 2**: APAC (15% of users)
+   - Deploy to green environment
+   - Monitor for 1 hour
+   - Cutover if successful
+
+3. **Wave 3**: EU (25% of users)
+   - Deploy to green environment
+   - Monitor for 1 hour
+   - Cutover if successful
+
+4. **Wave 4**: US-West (20% of users)
+   - Deploy to green environment
+   - Monitor for 1 hour
+   - Cutover if successful
+
+5. **Wave 5**: US-East (35% of users, highest traffic)
+   - Deploy to green environment
+   - Monitor for 2 hours
+   - Cutover if successful
+```
+
+2. **Regional Deployment Automation**:
+```python
+# multi_region_deployment.py
+import boto3
+import time
+from typing import List, Dict
+
+class MultiRegionDeployment:
+    def __init__(self, regions: List[str]):
+        self.regions = regions
+        self.region_clients = {
+            region: boto3.client('elbv2', region_name=region)
+            for region in regions
+        }
+    
+    def deploy_all_regions(self, new_version: str):
+        """
+        Deploy to all regions in sequence
+        """
+        deployment_order = [
+            {'region': 'sa-east-1', 'monitor_duration': 7200},
+            {'region': 'ap-southeast-1', 'monitor_duration': 3600},
+            {'region': 'eu-west-1', 'monitor_duration': 3600},
+            {'region': 'us-west-2', 'monitor_duration': 3600},
+            {'region': 'us-east-1', 'monitor_duration': 7200},
+        ]
+        
+        for wave in deployment_order:
+            region = wave['region']
+            duration = wave['monitor_duration']
+            
+            print(f"Deploying to {region}")
+            
+            # Deploy to green environment
+            self.deploy_to_green(region, new_version)
+            
+            # Validate deployment
+            if not self.validate_deployment(region):
+                print(f"Validation failed in {region}, aborting")
+                self.rollback_region(region)
+                return False
+            
+            # Cutover
+            self.cutover_region(region)
+            
+            # Monitor
+            if not self.monitor_region(region, duration):
+                print(f"Monitoring failed in {region}, rolling back")
+                self.rollback_region(region)
+                return False
+            
+            print(f"Deployment to {region} successful")
+        
+        return True
+    
+    def deploy_to_green(self, region: str, version: str):
+        """Deploy to green environment in specific region"""
+        # Implementation for deploying to green environment
+        pass
+    
+    def cutover_region(self, region: str):
+        """Switch traffic to green environment in region"""
+        client = self.region_clients[region]
+        
+        # Get green target group
+        target_groups = client.describe_target_groups(
+            Names=[f'myapp-green-{region}']
+        )
+        green_tg_arn = target_groups['TargetGroups'][0]['TargetGroupArn']
+        
+        # Update listener
+        client.modify_listener(
+            ListenerArn=self.get_listener_arn(region),
+            DefaultActions=[{
+                'Type': 'forward',
+                'TargetGroupArn': green_tg_arn
+            }]
+        )
+    
+    def monitor_region(self, region: str, duration: int) -> bool:
+        """Monitor region after cutover"""
+        start_time = time.time()
+        
+        while time.time() - start_time < duration:
+            metrics = self.get_region_metrics(region)
+            
+            if metrics['error_rate'] > 0.01:
+                return False
+            
+            if metrics['p95_latency'] > 500:
+                return False
+            
+            time.sleep(60)
+        
+        return True
+```
+
+**Results**:
+- Zero global outages during deployments
+- Regional rollback capability preserved
+- Deployment time: 12-16 hours for all regions
+- Early issue detection in low-traffic regions
+- Reduced blast radius per region
+
+---
+
+### Example 6: Legacy Monolith - Strangler Fig Pattern Deployment
+
+**Context**: Large legacy monolith application being gradually migrated to microservices needs deployment strategy that supports both old and new architectures during transition period.
+
+**Requirements**:
+- Support gradual migration from monolith to microservices
+- Route traffic between monolith and microservices
+- Enable independent deployment of microservices
+- Maintain monolith deployment capability
+- Zero downtime during migration
+- Rollback to monolith if needed
+
+**Solution Design**:
+
+**Selected Strategy**: Strangler Fig Pattern with API Gateway Routing
+
+**Implementation**:
+
+1. **API Gateway Routing Configuration**:
 ```yaml
+# api-gateway-routes.yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: payment-service
-  namespace: production
+  name: app-routing
 spec:
   hosts:
-    - payment-service.production.svc.cluster.local
+    - app.example.com
   http:
+    # Route /users to new microservice
     - match:
-        - headers:
-            x-canary:
-              exact: "true"
+        - uri:
+            prefix: /api/users
       route:
         - destination:
-            host: payment-service
-            subset: canary
+            host: user-service
           weight: 100
-    - route:
+    
+    # Route /orders to new microservice
+    - match:
+        - uri:
+            prefix: /api/orders
+      route:
         - destination:
-            host: payment-service
-            subset: stable
-          weight: 95
-        - destination:
-            host: payment-service
-            subset: canary
-          weight: 5
-```
-
-**Traffic Shifting Plan:**
-
-```
-T+0:  Stable 100%, Canary 0%   (Deploy canary)
-T+5:  Stable 95%,  Canary 5%   (Monitor for 10 min)
-T+15: Stable 75%,  Canary 25%  (Monitor for 10 min)
-T+25: Stable 50%,  Canary 50%  (Monitor for 10 min)
-T+35: Stable 0%,   Canary 100% (Complete)
-```
-
-### Deployment Procedure
-
-#### Step 1: Deploy Canary (T+0)
-
-```bash
-#!/bin/bash
-# deploy-canary.sh
-
-set -e
-
-echo "[T+0] Deploying canary version v2.5.0..."
-
-# Update canary deployment
-kubectl set image deployment/payment-service-canary \
-  payment-service=gcr.io/finpay/payment-service:v2.5.0 \
-  -n production
-
-# Wait for canary pod to be ready
-kubectl rollout status deployment/payment-service-canary -n production
-
-echo "[T+2] Canary deployment ready"
-```
-
-#### Step 2: Shift 5% Traffic to Canary (T+5)
-
-```bash
-#!/bin/bash
-# shift-traffic-5.sh
-
-set -e
-
-echo "[T+5] Shifting 5% traffic to canary..."
-
-# Update Istio virtual service
-kubectl apply -f - <<EOF
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: payment-service
-  namespace: production
-spec:
-  hosts:
-    - payment-service.production.svc.cluster.local
-  http:
-    - route:
-        - destination:
-            host: payment-service
-            subset: stable
-          weight: 95
-        - destination:
-            host: payment-service
-            subset: canary
-          weight: 5
-EOF
-
-echo "[T+5] 5% traffic shifted to canary"
-echo "Monitoring for 10 minutes..."
-```
-
-#### Step 3: Monitor Canary (5% Traffic)
-
-```bash
-#!/bin/bash
-# monitor-canary.sh
-
-set -e
-
-CANARY_WEIGHT=$1
-MONITOR_DURATION=$2
-
-echo "Monitoring canary at $CANARY_WEIGHT% traffic for $MONITOR_DURATION minutes..."
-
-for i in $(seq 1 $MONITOR_DURATION); do
-  echo "Minute $i of $MONITOR_DURATION..."
-  
-  # Get metrics from Datadog API
-  STABLE_ERROR_RATE=$(curl -s -X GET "https://api.datadoghq.com/api/v1/query?query=avg:payment.error_rate{version:stable}" \
-    -H "DD-API-KEY: $DD_API_KEY" \
-    -H "DD-APPLICATION-KEY: $DD_APP_KEY" | jq '.series[0].pointlist[-1][1]')
-  
-  CANARY_ERROR_RATE=$(curl -s -X GET "https://api.datadoghq.com/api/v1/query?query=avg:payment.error_rate{version:canary}" \
-    -H "DD-API-KEY: $DD_API_KEY" \
-    -H "DD-APPLICATION-KEY: $DD_APP_KEY" | jq '.series[0].pointlist[-1][1]')
-  
-  # Compare canary vs. stable
-  if (( $(echo "$CANARY_ERROR_RATE > $STABLE_ERROR_RATE * 1.5" | bc -l) )); then
-    echo "❌ Canary error rate too high: $CANARY_ERROR_RATE% vs stable $STABLE_ERROR_RATE%"
-    echo "Triggering rollback..."
-    ./rollback-canary.sh
-    exit 1
-  fi
-  
-  # Check for critical errors
-  CRITICAL_ERRORS=$(kubectl logs -l version=canary -n production --since=1m | grep -c "CRITICAL" || true)
-  if [ "$CRITICAL_ERRORS" -gt 0 ]; then
-    echo "❌ Critical errors detected in canary: $CRITICAL_ERRORS"
-    ./rollback-canary.sh
-    exit 1
-  fi
-  
-  echo "✅ Minute $i: Stable error rate ${STABLE_ERROR_RATE}%, Canary error rate ${CANARY_ERROR_RATE}%"
-  sleep 60
-done
-
-echo "✅ Monitoring complete. Canary healthy at $CANARY_WEIGHT% traffic."
-```
-
-#### Step 4: Gradual Traffic Increase
-
-```bash
-#!/bin/bash
-# gradual-rollout.sh
-
-set -e
-
-echo "Starting gradual canary rollout..."
-
-# Stage 1: 5% traffic
-echo "[T+5] Stage 1: 5% traffic"
-./shift-traffic.sh 5
-./monitor-canary.sh 5 10
-
-# Stage 2: 25% traffic
-echo "[T+15] Stage 2: 25% traffic"
-./shift-traffic.sh 25
-./monitor-canary.sh 25 10
-
-# Stage 3: 50% traffic
-echo "[T+25] Stage 3: 50% traffic"
-./shift-traffic.sh 50
-./monitor-canary.sh 50 10
-
-# Stage 4: 100% traffic
-echo "[T+35] Stage 4: 100% traffic"
-./shift-traffic.sh 100
-./monitor-canary.sh 100 10
-
-echo "[T+45] Canary rollout complete! ✅"
-```
-
-#### Step 5: Rollback Procedure
-
-```bash
-#!/bin/bash
-# rollback-canary.sh
-
-set -e
-
-echo "[ROLLBACK] Rolling back canary deployment..."
-
-# Route 100% traffic back to stable
-kubectl apply -f - <<EOF
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: payment-service
-  namespace: production
-spec:
-  hosts:
-    - payment-service.production.svc.cluster.local
-  http:
-    - route:
-        - destination:
-            host: payment-service
-            subset: stable
+            host: order-service
           weight: 100
+    
+    # Route everything else to monolith
+    - route:
         - destination:
-            host: payment-service
-            subset: canary
-          weight: 0
-EOF
-
-echo "[ROLLBACK] 100% traffic routed back to stable"
-
-# Scale down canary
-kubectl scale deployment/payment-service-canary --replicas=0 -n production
-
-echo "[ROLLBACK] Rollback complete in < 2 minutes ✅"
-
-# Alert team
-curl -X POST https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"🚨 Payment service canary rolled back due to elevated error rate"}'
+            host: legacy-monolith
+          weight: 100
 ```
 
-### Validation Criteria
+2. **Gradual Migration Strategy**:
+```markdown
+## Migration Phases
 
-**Success Metrics (Canary vs. Stable):**
-- ✅ Error rate within 10% of stable (e.g., stable 0.2%, canary < 0.22%)
-- ✅ Latency p95 within 20% of stable
-- ✅ Payment authorization success rate > 99.5%
-- ✅ No critical errors in logs
-- ✅ Database query latency similar to stable
+### Phase 1: User Service Migration
+- Extract user service from monolith
+- Deploy user microservice
+- Route 10% of /api/users traffic to microservice
+- Gradually increase to 100%
+- Decommission user code from monolith
 
-**Rollback Triggers:**
-- ❌ Canary error rate > 1.5x stable error rate
-- ❌ Critical errors detected (payment authorization failures)
-- ❌ Latency p95 > 2x stable latency
-- ❌ Payment success rate < 99.5%
-- ❌ Manual decision by on-call engineer
+### Phase 2: Order Service Migration
+- Extract order service from monolith
+- Deploy order microservice
+- Route 10% of /api/orders traffic to microservice
+- Gradually increase to 100%
+- Decommission order code from monolith
 
-### Results
+### Phase 3-N: Continue for other services
+```
 
-**Deployment Timeline:**
-- T+0: Deploy canary (2 minutes)
-- T+5: 5% traffic, monitor (10 minutes)
-- T+15: 25% traffic, monitor (10 minutes)
-- T+25: 50% traffic, monitor (10 minutes)
-- T+35: 100% traffic, monitor (10 minutes)
-- **Total: 45 minutes**
+3. **Deployment Procedure**:
+```python
+# strangler_deployment.py
+class StranglerDeployment:
+    def migrate_service(self, service_name: str, endpoint: str):
+        """
+        Migrate a service from monolith to microservice
+        """
+        # Deploy microservice
+        self.deploy_microservice(service_name)
+        
+        # Gradually route traffic
+        for percentage in [10, 25, 50, 75, 100]:
+            self.update_routing(endpoint, percentage)
+            
+            if not self.monitor_migration(service_name, 600):
+                print(f"Migration failed, rolling back")
+                self.update_routing(endpoint, 0)
+                return False
+        
+        # Decommission from monolith
+        self.remove_from_monolith(service_name)
+        return True
+    
+    def update_routing(self, endpoint: str, microservice_percentage: int):
+        """
+        Update API gateway routing
+        """
+        monolith_percentage = 100 - microservice_percentage
+        
+        routing_config = {
+            "routes": [
+                {
+                    "match": {"prefix": endpoint},
+                    "route": [
+                        {
+                            "destination": "microservice",
+                            "weight": microservice_percentage
+                        },
+                        {
+                            "destination": "monolith",
+                            "weight": monolith_percentage
+                        }
+                    ]
+                }
+            ]
+        }
+        
+        # Apply routing configuration
+        self.apply_routing(routing_config)
+```
 
-**Metrics:**
-- **Downtime:** 0 seconds ✅
-- **Rollback Time:** < 2 minutes ✅
-- **Error Rate (Canary):** 0.21% vs. 0.20% stable ✅
-- **Latency p95 (Canary):** 95ms vs. 90ms stable ✅
-- **Payment Success Rate:** 99.8% ✅
-- **Issues Detected:** 0 ✅
-
-**Cost:**
-- **Additional Infrastructure:** 1 canary pod (5% of 20 pods = 1 pod)
-- **Cost Increase:** ~5% during deployment
-- **Deployment Duration:** 45 minutes
+**Results**:
+- Gradual migration with zero downtime
+- Independent microservice deployments
+- Rollback capability to monolith
+- Reduced migration risk
+- Continuous delivery during migration
 
 ---
 
-## Example 3: Feature Flags for SaaS Application
+### Example 7: IoT Platform - Edge Device Deployment
 
-### Context
+**Context**: IoT platform with 100,000 edge devices needs to deploy firmware updates and application updates to devices in the field with limited connectivity and varying device capabilities.
 
-**Company:** CloudDocs SaaS  
-**System:** Document collaboration platform  
-**Users:** 500,000 active users  
-**Requirements:**
-- A/B testing for new features
-- Gradual rollout to user segments
-- Instant rollback (toggle off)
-- Decouple deployment from feature release
+**Requirements**:
+- Deploy to 100,000 geographically distributed devices
+- Handle intermittent connectivity
+- Support different device hardware versions
+- Minimize bandwidth usage
+- Enable device-level rollback
+- Monitor deployment progress
+- Support emergency stop
 
-**Current Pain Points:**
-- Can't test features with real users before full release
-- No way to gradually roll out features
-- Rollback requires code deployment (slow)
+**Solution Design**:
 
-### Strategy Selection
+**Selected Strategy**: Phased Rollout with Device Cohorts + Delta Updates
 
-**Chosen Strategy:** Feature Flags
+**Implementation**:
 
-**Rationale:**
-- **Instant Rollback:** Toggle off feature flag (< 1 second)
-- **Gradual Rollout:** Enable for 1% → 10% → 50% → 100% of users
-- **A/B Testing:** Compare feature enabled vs. disabled
-- **Decouple Deployment from Release:** Deploy code with flag disabled
-- **Cost-Effective:** No additional infrastructure (1x)
+1. **Device Cohort Strategy**:
+```markdown
+## Device Cohorts
 
-**Alternative Considered:** Canary deployment (rejected due to infrastructure overhead)
+### Cohort 1: Canary Devices (100 devices, 0.1%)
+- Internal test devices
+- Early adopter customers
+- Duration: 24 hours
 
-### Architecture
+### Cohort 2: Beta Devices (1,000 devices, 1%)
+- Beta program participants
+- Diverse hardware versions
+- Duration: 48 hours
 
-**Infrastructure:**
-- **Platform:** AWS (ECS Fargate)
-- **Feature Flag Service:** LaunchDarkly
-- **Database:** DynamoDB
-- **Analytics:** Mixpanel
+### Cohort 3: Regional Rollout (10,000 devices, 10%)
+- One geographic region
+- Monitor regional performance
+- Duration: 72 hours
 
-**Feature Flag Configuration:**
-
-```json
-{
-  "key": "real-time-collaboration",
-  "name": "Real-time Collaboration",
-  "description": "Enable real-time collaborative editing",
-  "kind": "boolean",
-  "variations": [
-    {
-      "value": false,
-      "name": "Disabled",
-      "description": "Feature disabled"
-    },
-    {
-      "value": true,
-      "name": "Enabled",
-      "description": "Feature enabled"
-    }
-  ],
-  "targeting": {
-    "rules": [
-      {
-        "clauses": [
-          {
-            "attribute": "email",
-            "op": "endsWith",
-            "values": ["@clouddocs.com"],
-            "negate": false
-          }
-        ],
-        "variation": 1,
-        "description": "Internal users"
-      },
-      {
-        "clauses": [
-          {
-            "attribute": "beta_user",
-            "op": "in",
-            "values": [true],
-            "negate": false
-          }
-        ],
-        "variation": 1,
-        "description": "Beta users"
-      }
-    ],
-    "rollout": {
-      "variations": [
-        {
-          "variation": 0,
-          "weight": 99000
-        },
-        {
-          "variation": 1,
-          "weight": 1000
-        }
-      ]
-    }
-  }
-}
+### Cohort 4: Full Rollout (88,900 devices, 88.9%)
+- All remaining devices
+- Gradual over 7 days
 ```
 
-### Code Implementation
+2. **Deployment Orchestration**:
+```python
+# iot_deployment.py
+import time
+from typing import List
 
-**Feature Flag in Application Code:**
-
-```javascript
-// services/documentService.js
-
-const LaunchDarkly = require('launchdarkly-node-server-sdk');
-const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
-
-class DocumentService {
-  async openDocument(userId, documentId) {
-    const user = await this.getUser(userId);
+class IoTDeployment:
+    def __init__(self, update_version: str):
+        self.update_version = update_version
+        self.deployed_devices = set()
+        self.failed_devices = set()
     
-    // Check feature flag
-    const isRealTimeCollabEnabled = await ldClient.variation(
-      'real-time-collaboration',
-      {
-        key: userId,
-        email: user.email,
-        custom: {
-          beta_user: user.betaUser,
-          plan: user.plan
-        }
-      },
-      false // default value if flag unavailable
-    );
+    def deploy_to_cohorts(self):
+        """
+        Deploy to device cohorts sequentially
+        """
+        cohorts = [
+            {'name': 'canary', 'size': 100, 'duration': 86400},
+            {'name': 'beta', 'size': 1000, 'duration': 172800},
+            {'name': 'regional', 'size': 10000, 'duration': 259200},
+            {'name': 'full', 'size': 88900, 'duration': 604800},
+        ]
+        
+        for cohort in cohorts:
+            print(f"Deploying to {cohort['name']} cohort")
+            
+            devices = self.select_devices_for_cohort(cohort)
+            
+            # Deploy to cohort
+            self.deploy_to_devices(devices)
+            
+            # Monitor cohort
+            if not self.monitor_cohort(cohort, cohort['duration']):
+                print(f"Cohort {cohort['name']} failed, stopping rollout")
+                self.rollback_cohort(devices)
+                return False
+            
+            print(f"Cohort {cohort['name']} successful")
+        
+        return True
     
-    if (isRealTimeCollabEnabled) {
-      // New feature: Real-time collaboration
-      return this.openDocumentWithRealTimeCollab(documentId, userId);
-    } else {
-      // Existing feature: Traditional editing
-      return this.openDocumentTraditional(documentId, userId);
-    }
-  }
-  
-  async openDocumentWithRealTimeCollab(documentId, userId) {
-    // Initialize WebSocket connection for real-time updates
-    const wsConnection = await this.websocketService.connect(userId);
+    def deploy_to_devices(self, devices: List[str]):
+        """
+        Deploy update to specific devices
+        """
+        for device_id in devices:
+            # Send update notification to device
+            self.notify_device_update(device_id, self.update_version)
+            
+            # Device will pull update when connected
+            # Track deployment status
     
-    // Subscribe to document changes
-    await this.realtimeService.subscribe(documentId, wsConnection);
+    def monitor_cohort(self, cohort: dict, duration: int) -> bool:
+        """
+        Monitor cohort deployment
+        """
+        start_time = time.time()
+        
+        while time.time() - start_time < duration:
+            metrics = self.get_cohort_metrics(cohort['name'])
+            
+            # Check success rate
+            if metrics['success_rate'] < 0.95:
+                print(f"Success rate {metrics['success_rate']} below threshold")
+                return False
+            
+            # Check device health
+            if metrics['device_health_score'] < 0.90:
+                print(f"Device health score {metrics['device_health_score']} below threshold")
+                return False
+            
+            time.sleep(3600)  # Check hourly
+        
+        return True
     
-    // Load document with operational transforms
-    const document = await this.documentRepo.findById(documentId);
-    return {
-      document,
-      realtimeEnabled: true,
-      wsConnection
-    };
-  }
-  
-  async openDocumentTraditional(documentId, userId) {
-    // Traditional document loading (no real-time)
-    const document = await this.documentRepo.findById(documentId);
-    return {
-      document,
-      realtimeEnabled: false
-    };
-  }
-}
+    def rollback_cohort(self, devices: List[str]):
+        """
+        Rollback devices in cohort
+        """
+        for device_id in devices:
+            # Send rollback command
+            self.send_rollback_command(device_id)
 ```
 
-### Rollout Plan
-
-**Phase 1: Internal Users (Day 1)**
-- Enable for all @clouddocs.com email addresses
-- Monitor for bugs and performance issues
-- Gather internal feedback
-
-**Phase 2: Beta Users (Day 3)**
-- Enable for users with `beta_user: true` flag
-- ~10,000 users (2% of total)
-- Monitor engagement metrics
-- Gather user feedback via in-app surveys
-
-**Phase 3: Gradual Rollout (Day 7-14)**
-- Day 7: 1% of all users
-- Day 9: 10% of all users
-- Day 11: 25% of all users
-- Day 13: 50% of all users
-- Day 14: 100% of all users
-
-**Phase 4: A/B Testing (Day 14-30)**
-- 50% feature enabled, 50% feature disabled
-- Measure engagement metrics:
-  - Time spent in documents
-  - Number of collaborators per document
-  - User satisfaction (NPS)
-  - Feature usage frequency
-
-### Deployment Procedure
-
-#### Step 1: Deploy Code with Flag Disabled (Day 0)
-
-```bash
-#!/bin/bash
-# deploy-with-feature-flag.sh
-
-set -e
-
-echo "[Day 0] Deploying code with real-time-collaboration flag disabled..."
-
-# Deploy new version with feature flag code
-aws ecs update-service \
-  --cluster clouddocs-prod \
-  --service clouddocs-app \
-  --task-definition clouddocs-app:v3.0.0 \
-  --force-new-deployment
-
-aws ecs wait services-stable \
-  --cluster clouddocs-prod \
-  --services clouddocs-app
-
-echo "[Day 0] Deployment complete. Feature flag 'real-time-collaboration' is DISABLED for all users."
-```
-
-#### Step 2: Enable for Internal Users (Day 1)
-
-```bash
-#!/bin/bash
-# enable-for-internal.sh
-
-set -e
-
-echo "[Day 1] Enabling real-time-collaboration for internal users..."
-
-# Update LaunchDarkly flag via API
-curl -X PATCH "https://app.launchdarkly.com/api/v2/flags/default/real-time-collaboration" \
-  -H "Authorization: $LAUNCHDARKLY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "patch": [
-      {
-        "op": "add",
-        "path": "/environments/production/targets/0",
-        "value": {
-          "values": ["internal"],
-          "variation": 1
-        }
-      }
-    ]
-  }'
-
-echo "[Day 1] Feature enabled for internal users (@clouddocs.com)"
-echo "Monitoring for 48 hours..."
-```
-
-#### Step 3: Gradual Rollout (Day 7-14)
-
-```bash
-#!/bin/bash
-# gradual-rollout.sh
-
-set -e
-
-echo "Starting gradual rollout of real-time-collaboration..."
-
-# Day 7: 1% rollout
-echo "[Day 7] Enabling for 1% of users..."
-curl -X PATCH "https://app.launchdarkly.com/api/v2/flags/default/real-time-collaboration" \
-  -H "Authorization: $LAUNCHDARKLY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "patch": [
-      {
-        "op": "replace",
-        "path": "/environments/production/rollout/variations/1/weight",
-        "value": 1000
-      }
-    ]
-  }'
-sleep $((48 * 3600))  # Wait 48 hours
-
-# Day 9: 10% rollout
-echo "[Day 9] Enabling for 10% of users..."
-curl -X PATCH "https://app.launchdarkly.com/api/v2/flags/default/real-time-collaboration" \
-  -H "Authorization: $LAUNCHDARKLY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "patch": [
-      {
-        "op": "replace",
-        "path": "/environments/production/rollout/variations/1/weight",
-        "value": 10000
-      }
-    ]
-  }'
-sleep $((48 * 3600))  # Wait 48 hours
-
-# Continue for 25%, 50%, 100%...
-```
-
-#### Step 4: Monitor Feature Performance
-
-```javascript
-// monitoring/featureFlagMetrics.js
-
-const mixpanel = require('mixpanel').init(process.env.MIXPANEL_TOKEN);
-
-class FeatureFlagMetrics {
-  async trackFeatureUsage(userId, featureKey, enabled) {
-    mixpanel.track('Feature Flag Evaluated', {
-      distinct_id: userId,
-      feature_key: featureKey,
-      enabled: enabled,
-      timestamp: new Date().toISOString()
-    });
-  }
-  
-  async trackFeatureEngagement(userId, featureKey, action) {
-    mixpanel.track('Feature Engagement', {
-      distinct_id: userId,
-      feature_key: featureKey,
-      action: action,
-      timestamp: new Date().toISOString()
-    });
-  }
-  
-  async getFeatureMetrics(featureKey) {
-    // Get metrics from Mixpanel
-    const enabledUsers = await this.getEnabledUserCount(featureKey);
-    const engagementRate = await this.getEngagementRate(featureKey);
-    const errorRate = await this.getErrorRate(featureKey);
+3. **Delta Update Optimization**:
+```python
+# delta_update.py
+class DeltaUpdateGenerator:
+    def generate_delta(self, old_version: str, new_version: str) -> bytes:
+        """
+        Generate delta update (only changes)
+        """
+        old_firmware = self.load_firmware(old_version)
+        new_firmware = self.load_firmware(new_version)
+        
+        # Binary diff
+        delta = self.binary_diff(old_firmware, new_firmware)
+        
+        # Compress delta
+        compressed_delta = self.compress(delta)
+        
+        return compressed_delta
     
-    return {
-      enabledUsers,
-      engagementRate,
-      errorRate
-    };
-  }
-}
+    def apply_delta(self, device_id: str, delta: bytes):
+        """
+        Apply delta update on device
+        """
+        current_firmware = self.get_device_firmware(device_id)
+        
+        # Apply binary patch
+        new_firmware = self.apply_patch(current_firmware, delta)
+        
+        # Verify checksum
+        if not self.verify_checksum(new_firmware):
+            raise Exception("Checksum verification failed")
+        
+        # Install new firmware
+        self.install_firmware(device_id, new_firmware)
 ```
 
-#### Step 5: Instant Rollback (If Needed)
-
-```bash
-#!/bin/bash
-# rollback-feature-flag.sh
-
-set -e
-
-echo "[ROLLBACK] Disabling real-time-collaboration feature flag..."
-
-# Disable feature flag via LaunchDarkly API
-curl -X PATCH "https://app.launchdarkly.com/api/v2/flags/default/real-time-collaboration" \
-  -H "Authorization: $LAUNCHDARKLY_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "patch": [
-      {
-        "op": "replace",
-        "path": "/environments/production/on",
-        "value": false
-      }
-    ]
-  }'
-
-echo "[ROLLBACK] Feature flag disabled for all users in < 1 second ✅"
-
-# Alert team
-curl -X POST https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"🚨 Real-time collaboration feature flag disabled due to elevated error rate"}'
-```
-
-### Validation Criteria
-
-**Success Metrics:**
-- ✅ Feature engagement rate > 30% (users who try the feature)
-- ✅ Error rate < 1% (feature-related errors)
-- ✅ User satisfaction (NPS) > 40
-- ✅ No critical bugs reported
-- ✅ Performance impact < 10% (latency increase)
-
-**Rollback Triggers:**
-- ❌ Error rate > 2% (feature-related errors)
-- ❌ Critical bugs (data loss, corruption)
-- ❌ User satisfaction (NPS) < 20
-- ❌ Performance degradation > 20%
-- ❌ Manual decision by product manager
-
-### Results
-
-**Rollout Timeline:**
-- Day 0: Deploy code with flag disabled
-- Day 1: Enable for internal users (100 users)
-- Day 3: Enable for beta users (10,000 users)
-- Day 7: 1% rollout (5,000 users)
-- Day 9: 10% rollout (50,000 users)
-- Day 11: 25% rollout (125,000 users)
-- Day 13: 50% rollout (250,000 users)
-- Day 14: 100% rollout (500,000 users)
-- **Total: 14 days**
-
-**Metrics:**
-- **Downtime:** 0 seconds ✅
-- **Rollback Time:** < 1 second (instant toggle) ✅
-- **Feature Engagement:** 45% (users tried feature) ✅
-- **Error Rate:** 0.8% ✅
-- **User Satisfaction (NPS):** 52 ✅
-- **Performance Impact:** 5% latency increase ✅
-
-**A/B Test Results (Day 14-30):**
-- **Time Spent in Documents:** +25% (feature enabled vs. disabled)
-- **Collaborators per Document:** +40%
-- **User Retention:** +15%
-- **Feature Usage Frequency:** 3.2x per week average
-
-**Cost:**
-- **LaunchDarkly:** $500/month (feature flag service)
-- **Additional Infrastructure:** $0 (no extra infrastructure needed)
-- **Total Cost:** $500/month
+**Results**:
+- 100,000 devices updated in 14 days
+- 98.5% success rate
+- Bandwidth reduced by 70% using delta updates
+- Early issue detection in canary cohort
+- Zero bricked devices
+- Emergency stop capability preserved
 
 ---
 
-## Example 4: Rolling Deployment for Microservices Platform
+### Example 8: Database-Heavy Application - Schema Migration Deployment
 
-### Context
+**Context**: Application with complex database schema needs frequent deployments with schema changes while maintaining zero downtime and data integrity.
 
-**Company:** DevOps Tools Inc.  
-**System:** Internal CI/CD platform (microservices)  
-**Users:** 200 internal developers  
-**Requirements:**
-- Brief downtime acceptable (< 1 minute)
-- Resource-constrained (limited budget)
-- Simple deployment process
-- Frequent deployments (multiple times per day)
+**Requirements**:
+- Zero downtime deployments
+- Support schema migrations
+- Maintain data integrity
+- Support rollback with data preservation
+- Handle large database (10TB+)
+- Minimize migration time
 
-**Current Pain Points:**
-- Manual deployment process (slow, error-prone)
-- No automated health checks
-- Inconsistent deployment across services
+**Solution Design**:
 
-### Strategy Selection
+**Selected Strategy**: Expand-Contract Pattern with Blue/Green Application Deployment
 
-**Chosen Strategy:** Rolling Deployment
+**Implementation**:
 
-**Rationale:**
-- **Low Complexity:** Built-in to Kubernetes (no extra tools)
-- **Cost-Effective:** No additional infrastructure (1x)
-- **Acceptable Downtime:** < 1 minute (brief instance restarts)
-- **Fast Deployment:** 5-10 minutes total
-- **Good Enough:** Internal tool, not customer-facing
+1. **Expand-Contract Migration Pattern**:
+```markdown
+## Three-Phase Migration
 
-**Alternative Considered:** Blue/green (rejected due to 2x infrastructure cost)
+### Phase 1: Expand (Add new schema)
+- Add new columns/tables
+- Keep old columns/tables
+- Both versions work
+- Deploy new application version (blue/green)
 
-### Architecture
+### Phase 2: Migrate Data
+- Copy data from old to new schema
+- Dual-write to both schemas
+- Verify data consistency
 
-**Infrastructure:**
-- **Platform:** Kubernetes (self-hosted)
-- **Services:** 15 microservices
-- **Database:** PostgreSQL (shared)
-- **Monitoring:** Prometheus + Grafana
-
-**Deployment Configuration:**
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ci-orchestrator
-  namespace: devops-platform
-spec:
-  replicas: 5
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1        # Allow 1 extra pod during rollout
-      maxUnavailable: 1  # Allow 1 pod to be unavailable
-  selector:
-    matchLabels:
-      app: ci-orchestrator
-  template:
-    metadata:
-      labels:
-        app: ci-orchestrator
-        version: v2.3.0
-    spec:
-      containers:
-        - name: ci-orchestrator
-          image: devops-tools/ci-orchestrator:v2.3.0
-          ports:
-            - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 5
-          resources:
-            requests:
-              cpu: 500m
-              memory: 512Mi
-            limits:
-              cpu: 1000m
-              memory: 1Gi
+### Phase 3: Contract (Remove old schema)
+- Stop writing to old schema
+- Remove old columns/tables
+- Clean up migration code
 ```
 
-### Traffic Management
+2. **Migration Implementation**:
+```sql
+-- Phase 1: Expand
+-- Add new column (backward compatible)
+ALTER TABLE users ADD COLUMN email_verified_v2 BOOLEAN DEFAULT FALSE;
 
-**Rolling Update Process:**
+-- Create trigger for dual-write
+CREATE OR REPLACE FUNCTION sync_email_verified()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Sync old column to new column
+    NEW.email_verified_v2 := NEW.email_verified;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-```
-T+0:  5 pods (v2.2.0) running
-T+1:  1 pod (v2.2.0) terminated, 1 pod (v2.3.0) starting
-T+2:  4 pods (v2.2.0), 1 pod (v2.3.0) ready
-T+3:  1 pod (v2.2.0) terminated, 1 pod (v2.3.0) starting
-T+4:  3 pods (v2.2.0), 2 pods (v2.3.0) ready
-T+5:  1 pod (v2.2.0) terminated, 1 pod (v2.3.0) starting
-T+6:  2 pods (v2.2.0), 3 pods (v2.3.0) ready
-T+7:  1 pod (v2.2.0) terminated, 1 pod (v2.3.0) starting
-T+8:  1 pod (v2.2.0), 4 pods (v2.3.0) ready
-T+9:  1 pod (v2.2.0) terminated, 1 pod (v2.3.0) starting
-T+10: 0 pods (v2.2.0), 5 pods (v2.3.0) ready ✅
-```
+CREATE TRIGGER sync_email_verified_trigger
+BEFORE INSERT OR UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION sync_email_verified();
 
-### Deployment Procedure
+-- Phase 2: Migrate existing data
+UPDATE users 
+SET email_verified_v2 = email_verified
+WHERE email_verified_v2 IS NULL;
 
-#### Step 1: Update Deployment Manifest
-
-```bash
-#!/bin/bash
-# deploy-rolling.sh
-
-set -e
-
-SERVICE_NAME=$1
-NEW_VERSION=$2
-
-echo "Deploying $SERVICE_NAME to version $NEW_VERSION..."
-
-# Update image version in deployment
-kubectl set image deployment/$SERVICE_NAME \
-  $SERVICE_NAME=devops-tools/$SERVICE_NAME:$NEW_VERSION \
-  -n devops-platform
-
-echo "Rolling update initiated"
+-- Phase 3: Contract (next deployment)
+-- ALTER TABLE users DROP COLUMN email_verified;
+-- ALTER TABLE users RENAME COLUMN email_verified_v2 TO email_verified;
 ```
 
-#### Step 2: Monitor Rollout
-
-```bash
-#!/bin/bash
-# monitor-rollout.sh
-
-set -e
-
-SERVICE_NAME=$1
-
-echo "Monitoring rollout of $SERVICE_NAME..."
-
-# Watch rollout status
-kubectl rollout status deployment/$SERVICE_NAME -n devops-platform
-
-if [ $? -eq 0 ]; then
-  echo "✅ Rollout successful"
-else
-  echo "❌ Rollout failed"
-  exit 1
-fi
+3. **Application Compatibility**:
+```python
+# user_model.py
+class User:
+    def __init__(self, data):
+        # Support both old and new schema
+        self.email_verified = (
+            data.get('email_verified_v2') or 
+            data.get('email_verified')
+        )
+    
+    def save(self):
+        # Write to both columns during migration
+        data = {
+            'email_verified': self.email_verified,
+            'email_verified_v2': self.email_verified
+        }
+        db.update(data)
 ```
 
-#### Step 3: Validate Deployment
+4. **Deployment Procedure**:
+```markdown
+## Deployment Procedure
 
-```bash
-#!/bin/bash
-# validate-deployment.sh
+### Week 1: Expand
+1. Deploy schema expansion (add new columns)
+2. Deploy application v2 (reads/writes both schemas)
+3. Monitor for issues
+4. Start data migration
 
-set -e
+### Week 2: Migrate
+1. Continue data migration
+2. Verify data consistency
+3. Monitor application performance
 
-SERVICE_NAME=$1
-NEW_VERSION=$2
-
-echo "Validating deployment of $SERVICE_NAME version $NEW_VERSION..."
-
-# Check all pods are running new version
-POD_COUNT=$(kubectl get pods -n devops-platform -l app=$SERVICE_NAME -o json | jq '.items | length')
-NEW_VERSION_COUNT=$(kubectl get pods -n devops-platform -l app=$SERVICE_NAME,version=$NEW_VERSION -o json | jq '.items | length')
-
-if [ "$POD_COUNT" -ne "$NEW_VERSION_COUNT" ]; then
-  echo "❌ Not all pods running new version: $NEW_VERSION_COUNT/$POD_COUNT"
-  exit 1
-fi
-
-echo "✅ All $POD_COUNT pods running version $NEW_VERSION"
-
-# Run smoke tests
-SERVICE_URL="http://$SERVICE_NAME.devops-platform.svc.cluster.local:8080"
-
-HEALTH=$(curl -s "$SERVICE_URL/health" | jq -r '.status')
-if [ "$HEALTH" != "healthy" ]; then
-  echo "❌ Health check failed: $HEALTH"
-  exit 1
-fi
-
-echo "✅ Health check passed"
-echo "✅ Deployment validation complete"
+### Week 3: Contract
+1. Deploy application v3 (uses only new schema)
+2. Verify application works
+3. Drop old schema
+4. Clean up migration code
 ```
 
-#### Step 4: Rollback Procedure (If Needed)
-
-```bash
-#!/bin/bash
-# rollback-deployment.sh
-
-set -e
-
-SERVICE_NAME=$1
-
-echo "[ROLLBACK] Rolling back $SERVICE_NAME deployment..."
-
-# Rollback to previous revision
-kubectl rollout undo deployment/$SERVICE_NAME -n devops-platform
-
-# Wait for rollback to complete
-kubectl rollout status deployment/$SERVICE_NAME -n devops-platform
-
-echo "[ROLLBACK] Rollback complete ✅"
-
-# Alert team
-curl -X POST https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK \
-  -H 'Content-Type: application/json' \
-  -d '{"text":"🚨 '$SERVICE_NAME' deployment rolled back to previous version"}'
-```
-
-### Validation Criteria
-
-**Success Metrics:**
-- ✅ All pods running new version
-- ✅ Health checks passing
-- ✅ Readiness probes passing
-- ✅ No errors in logs
-- ✅ Service responding to requests
-
-**Rollback Triggers:**
-- ❌ Pods crash looping
-- ❌ Health checks failing
-- ❌ Errors in logs (critical)
-- ❌ Service not responding
-- ❌ Manual decision by engineer
-
-### Results
-
-**Deployment Timeline:**
-- T+0: Initiate rolling update
-- T+1 to T+10: Pods updated one by one (10 minutes for 5 pods)
-- T+10: All pods running new version
-- T+11: Validation complete
-- **Total: 11 minutes**
-
-**Metrics:**
-- **Downtime:** ~30 seconds (brief, during pod restarts) ✅
-- **Rollback Time:** ~10 minutes (rolling update to previous version) ✅
-- **Deployment Success Rate:** 95% ✅
-- **Resource Usage:** 1x infrastructure (no extra cost) ✅
-- **Deployment Frequency:** 5-10 times per day ✅
-
-**Cost:**
-- **Additional Infrastructure:** $0 (no extra infrastructure)
-- **Deployment Time:** 11 minutes
-- **Total Cost:** $0 per deployment
+**Results**:
+- Zero downtime deployments with schema changes
+- Data integrity maintained
+- Rollback capability preserved
+- Migration time: 3 weeks for major changes
+- No data loss
+- Backward compatibility during migration
 
 ---
 
-## Summary
+## Comparison Matrix
 
-These four examples demonstrate how to select and implement deployment strategies based on specific requirements:
+| Example | Strategy | Downtime | Rollback Time | Complexity | Infrastructure Cost | Best For |
+|---------|----------|----------|---------------|------------|---------------------|----------|
+| 1. E-Commerce | Canary + Istio | Zero | 2 min | High | Medium | High-traffic microservices |
+| 2. Banking | Blue/Green | 30 sec | 30 sec | Medium | High (2x) | Mission-critical, compliance |
+| 3. Mobile API | Rolling | Zero | 8-10 min | Low | Low | Cost-sensitive, frequent deploys |
+| 4. SaaS | Feature Flags | Zero | < 1 sec | Medium | Low | B2B, experimentation |
+| 5. Multi-Region | Blue/Green | Zero | 5 min | High | High | Global applications |
+| 6. Legacy Migration | Strangler Fig | Zero | 10 min | High | Medium | Monolith to microservices |
+| 7. IoT | Phased Rollout | N/A | Varies | High | Low | Edge devices, IoT |
+| 8. Database-Heavy | Expand-Contract | Zero | 1 week | High | Low | Schema migrations |
 
-1. **Blue/Green (E-commerce):** Zero downtime, instant rollback, 2x infrastructure
-2. **Canary (Payment Service):** Very low risk, gradual rollout, fast rollback
-3. **Feature Flags (SaaS):** Instant rollback, A/B testing, no extra infrastructure
-4. **Rolling (Microservices):** Low complexity, cost-effective, brief downtime acceptable
+## Key Learnings Across Examples
 
-**Key Takeaways:**
-- Match strategy to requirements (downtime tolerance, risk, rollback speed)
-- Automate deployment and rollback procedures
-- Monitor closely during deployment
-- Test rollback procedures regularly
-- Document procedures for team
+### Common Success Patterns
 
-**Next Steps:**
-- Adapt these examples to your specific context
-- Implement automated deployment pipelines
-- Establish monitoring and alerting
-- Train team on deployment procedures
-- Conduct regular DR drills
+1. **Gradual Rollout**: All successful strategies use some form of gradual rollout
+2. **Automated Monitoring**: Automated monitoring and rollback is critical
+3. **Health Checks**: Comprehensive health checks prevent routing to unhealthy instances
+4. **Clear Rollback**: Well-defined rollback procedures and triggers
+5. **Testing**: Thorough testing in non-production before production deployment
+6. **Documentation**: Clear runbooks and procedures for deployment and rollback
+
+### Common Challenges and Solutions
+
+1. **Challenge**: Database schema changes
+   - **Solution**: Expand-contract pattern, backward-compatible migrations
+
+2. **Challenge**: Session management during deployment
+   - **Solution**: Externalize sessions (Redis), use stateless authentication (JWT)
+
+3. **Challenge**: High infrastructure costs
+   - **Solution**: Use rolling or canary instead of blue/green, optimize resource usage
+
+4. **Challenge**: Complex traffic routing
+   - **Solution**: Use service mesh (Istio, Linkerd) or API gateway
+
+5. **Challenge**: Monitoring and metrics
+   - **Solution**: Implement comprehensive monitoring before deployment strategy
+
+6. **Challenge**: Team adoption
+   - **Solution**: Training, documentation, gradual rollout of deployment strategy itself
+
+7. **Challenge**: Rollback with data changes
+   - **Solution**: Design backward-compatible data changes, use expand-contract pattern
+
+8. **Challenge**: Multi-region coordination
+   - **Solution**: Staggered rollout, region-specific rollback capability

@@ -1,429 +1,250 @@
-# Observability Design
+# Observability Design Skill
 
-**Quick reference guide for designing comprehensive observability systems**
+## Quick Reference
 
----
+**Purpose**: Design comprehensive logging, metrics, and distributed tracing systems for production observability.
+
+**Category**: Operations  
+**Complexity**: Advanced  
+**Estimated Time**: 4-8 weeks
 
 ## Overview
 
-Observability design is the practice of creating systems that provide visibility into application behavior through logs, metrics, and traces. This skill helps you design observability strategies that enable fast debugging, proactive monitoring, and operational excellence.
+This skill guides you through designing comprehensive observability systems that provide complete visibility into distributed systems, enable rapid incident detection and resolution, and support data-driven operational decisions.
 
-**Category:** Operations  
-**Complexity:** Advanced  
-**Time:** 4-8 hours  
-**Prerequisites:** System architecture understanding, SLO definitions
+## When to Use This Skill
 
----
+✅ **Use this skill when**:
+- Designing observability for new systems or architectures
+- Preparing systems for production deployment
+- Implementing SRE practices and SLO monitoring
+- Debugging complex distributed system failures
+- Meeting compliance and audit requirements
+- Optimizing system performance and costs
 
-## When to Use
+❌ **Don't use this skill when**:
+- Building simple, single-server applications
+- Working on early-stage prototypes or MVPs
+- Operating in resource-constrained environments (IoT, edge)
+- Dealing with legacy systems without modification access
 
-✅ Designing observability for new systems  
-✅ Improving existing monitoring capabilities  
-✅ After incidents reveal observability gaps  
-✅ Before production deployment (production readiness)  
-✅ Implementing microservices or distributed systems  
-✅ When troubleshooting time is too high  
+## Key Deliverables
 
----
+1. **Observability Architecture Document**
+   - Three-pillar design (logs, metrics, traces)
+   - Tool selection and justification
+   - Data flow and storage architecture
 
-## Quick Start
+2. **Logging Strategy**
+   - Structured logging format and standards
+   - Log aggregation and retention policies
+   - PII masking and compliance controls
 
-### 1. Define Requirements (30-60 min)
-- Identify critical user journeys
-- Define SLOs (availability, latency, error rate)
-- List known failure modes
-- Establish observability goals (MTTD, MTTR targets)
+3. **Metrics Framework**
+   - SLI/SLO definitions and error budgets
+   - RED metrics (Rate, Errors, Duration)
+   - USE metrics (Utilization, Saturation, Errors)
 
-### 2. Design Three Pillars (2-3 hours)
+4. **Distributed Tracing Design**
+   - Trace context propagation standards
+   - Sampling strategy (head-based, tail-based, adaptive)
+   - Instrumentation guidelines
 
-**Logging:**
-- Structured JSON logs
-- Centralized aggregation (ELK, Splunk, Datadog)
-- Correlation IDs for request tracing
-- PII redaction
-- Retention policy (7-30 days hot, longer for compliance)
+5. **Alerting Strategy**
+   - Alert severity levels and escalation policies
+   - SLO-based and symptom-based alerts
+   - Runbooks and notification routing
 
-**Metrics:**
-- RED metrics (Rate, Errors, Duration) for services
-- USE metrics (Utilization, Saturation, Errors) for resources
-- Business metrics (orders, revenue, conversions)
-- Low-cardinality labels
-- Prometheus, Datadog, or CloudWatch
+6. **Dashboards**
+   - Executive/business dashboards
+   - Service operational dashboards
+   - Infrastructure monitoring dashboards
+   - Incident response dashboards
 
-**Tracing:**
-- OpenTelemetry standard
-- Distributed tracing across services
-- Intelligent sampling (always trace errors, sample normal requests)
-- Jaeger, Zipkin, or Datadog APM
+7. **Implementation Roadmap**
+   - Phased rollout plan
+   - Service prioritization
+   - Training and enablement
 
-### 3. Design Alerting (45-75 min)
-- SLO-based alerts (error budget burn rate)
-- Critical alerts (page on-call)
-- Warning alerts (Slack, email)
-- Alert fatigue prevention (group, suppress, tune)
-- Runbooks for common alerts
+## Quick Start Guide
 
-### 4. Create Dashboards (45-60 min)
-- Service health dashboards (RED metrics)
-- SLO dashboards (compliance, error budget)
-- Business metrics dashboards
-- Debugging dashboards (detailed metrics, logs, traces)
+### Phase 1: Discovery (Week 1)
+1. Understand system architecture and dependencies
+2. Define SLAs, SLOs, and business KPIs
+3. Assess current observability state and identify gaps
 
-### 5. Implement (3-6 months)
-- Set up infrastructure (logging, metrics, tracing backends)
-- Create instrumentation libraries
-- Instrument services (critical first)
-- Create dashboards and alerts
-- Train team
+### Phase 2: Design Logging (Week 2)
+4. Design structured logging framework
+5. Plan log aggregation and storage
+6. Implement log correlation and context propagation
 
----
+### Phase 3: Design Metrics (Week 3)
+7. Define metrics taxonomy and SLI/SLO framework
+8. Design metrics collection and storage
+9. Create alerting and notification strategy
 
-## Three Pillars Cheat Sheet
+### Phase 4: Design Tracing (Week 4)
+10. Design distributed tracing architecture
+11. Define instrumentation standards
 
-### Logs: What Happened
+### Phase 5: Implementation Planning (Week 5)
+12. Create dashboards and visualization strategy
+13. Develop implementation roadmap
+14. Establish governance and continuous improvement
 
-**Use for:**
-- Detailed event information
-- Debugging specific requests
-- Audit trails
-- Error details
+## Three Pillars of Observability
 
-**Best practices:**
-```json
-{
-  "timestamp": "2026-09-09T10:15:30.123Z",
-  "level": "INFO",
-  "service": "checkout-service",
-  "correlation_id": "abc123",
-  "message": "Order created",
-  "order_id": "12345",
-  "duration_ms": 245
-}
+### 1. Logs
+**What**: Discrete events with context  
+**When**: Debugging specific issues, audit trails  
+**Example**: "Order 12345 failed payment processing: Invalid card"
+
+### 2. Metrics
+**What**: Numerical measurements over time  
+**When**: Monitoring trends, alerting, capacity planning  
+**Example**: "Request rate: 5,000 req/s, Error rate: 0.5%, p95 latency: 150ms"
+
+### 3. Traces
+**What**: End-to-end request flow across services  
+**When**: Understanding distributed system behavior, performance optimization  
+**Example**: "Request took 450ms: API Gateway (50ms) → Service A (200ms) → Database (150ms) → Service B (50ms)"
+
+## Common Patterns
+
+### SLI/SLO Framework
+```
+SLI (Service Level Indicator): Metric measuring service quality
+  Example: "Availability = successful_requests / total_requests"
+
+SLO (Service Level Objective): Target for SLI
+  Example: "Availability ≥ 99.9% over 30 days"
+
+Error Budget: Allowed failure
+  Example: "0.1% error budget = 43.2 minutes downtime/month"
 ```
 
-- Use structured logging (JSON)
-- Include correlation IDs
-- Redact PII
-- Use appropriate log levels
+### RED Metrics (for request-driven services)
+- **Rate**: Requests per second
+- **Errors**: Error count and rate
+- **Duration**: Latency distribution (p50, p95, p99)
 
-### Metrics: How Much, How Fast
-
-**Use for:**
-- Aggregated data
-- Trends over time
-- Alerting
-- SLO tracking
-
-**RED metrics (services):**
-```
-Rate: http_requests_total
-Errors: http_requests_total{status_code=~"5.."}
-Duration: http_request_duration_seconds
-```
-
-**USE metrics (resources):**
-```
-Utilization: cpu_usage_percent
-Saturation: load_average
-Errors: disk_errors_total
-```
-
-**Best practices:**
-- Use histograms for latency (not averages)
-- Keep label cardinality low (< 100 unique values)
-- Use consistent naming (snake_case, include unit)
-
-### Traces: Where Time Was Spent
-
-**Use for:**
-- Request flow across services
-- Latency breakdown
-- Dependency mapping
-- Performance optimization
-
-**Best practices:**
-- Use OpenTelemetry (vendor-neutral)
-- Propagate trace context (W3C Trace Context)
-- Sample intelligently:
-  - 100% errors
-  - 100% slow requests (> p95)
-  - 1-10% normal requests
-- Add meaningful span attributes
-
----
-
-## Alerting Quick Reference
-
-### Alert Categories
-
-**Critical (P0):** Page on-call immediately
-- Service completely down
-- Error rate > 5%
-- SLO breach
-- Security incident
-
-**Warning (P1):** Slack, email, ticket
-- Error rate > 1%
-- Latency degraded (> 1.5x SLO)
-- Resource saturation (CPU > 80%)
-- Error budget burning fast
-
-**Info (P2):** Awareness only
-- Deployment completed
-- Configuration change
-
-### SLO-Based Alerting
-
-```yaml
-# Fast burn rate (exhaust budget in 2 days)
-- alert: ErrorBudgetBurnRateFast
-  expr: |
-    (error_rate_1h / slo_target) > 14.4
-  for: 2m
-  severity: critical
-
-# Slow burn rate (exhaust budget in 5 days)
-- alert: ErrorBudgetBurnRateSlow
-  expr: |
-    (error_rate_6h / slo_target) > 6
-  for: 15m
-  severity: warning
-```
-
-### Alert Fatigue Prevention
-
-✅ Alert on symptoms (high latency), not causes (high CPU)  
-✅ Group related alerts (by service, time window)  
-✅ Suppress during maintenance  
-✅ Link to runbooks  
-✅ Review alerts weekly (> 50% should lead to action)  
-
----
+### USE Metrics (for resources)
+- **Utilization**: % of resource capacity used
+- **Saturation**: Degree of resource overload
+- **Errors**: Resource errors
 
 ## Tool Selection Guide
 
-### Logging
+### Logging Platforms
+- **ELK Stack**: Self-hosted, flexible, powerful search
+- **Splunk**: Enterprise, mature, expensive
+- **Datadog Logs**: Cloud-native, integrated, easy setup
+- **Grafana Loki**: Cost-effective, Kubernetes-native
 
-| Tool | Best For | Cost |
-|------|----------|------|
-| **ELK Stack** | Self-hosted, high volume | Low (infra) |
-| **Splunk** | Enterprise, compliance | High |
-| **CloudWatch** | AWS-native | Medium |
-| **Datadog** | Unified platform | High |
-| **Grafana Loki** | Kubernetes, cost-conscious | Low |
+### Metrics Platforms
+- **Prometheus**: Open-source, pull-based, Kubernetes-native
+- **Datadog**: Cloud-native, comprehensive, expensive
+- **CloudWatch**: AWS-native, simple, limited features
+- **Grafana Cloud**: Managed Prometheus, scalable
 
-### Metrics
+### Tracing Platforms
+- **Jaeger**: Open-source, mature, self-hosted
+- **Datadog APM**: Integrated, auto-instrumentation
+- **AWS X-Ray**: AWS-native, easy integration
+- **Honeycomb**: High-cardinality, powerful querying
 
-| Tool | Best For | Cost |
-|------|----------|------|
-| **Prometheus** | Kubernetes, self-hosted | Low |
-| **Datadog** | Unified platform | High |
-| **New Relic** | APM-focused | High |
-| **CloudWatch** | AWS-native | Medium |
+## Cost Optimization Tips
 
-### Tracing
+1. **Implement Sampling**
+   - Logs: Sample INFO (10%), keep all WARN/ERROR (100%)
+   - Traces: Tail-based sampling (100% errors, 1-10% normal)
 
-| Tool | Best For | Cost |
-|------|----------|------|
-| **Jaeger** | Kubernetes, OpenTelemetry | Low |
-| **Zipkin** | Simple setups | Low |
-| **Datadog APM** | Unified platform | High |
-| **Grafana Tempo** | Cost-conscious | Low |
-| **AWS X-Ray** | AWS-native | Medium |
+2. **Manage Cardinality**
+   - Limit metric labels (avoid user_id, request_id)
+   - Aggregate small entities (tenant=other)
 
-### All-in-One Platforms
+3. **Tiered Retention**
+   - Hot (7-30 days): Fast search
+   - Warm (30-90 days): Slower search
+   - Cold (90+ days): Archive
 
-**Datadog:** Logs + Metrics + Traces + APM (expensive, comprehensive)  
-**New Relic:** APM-focused (expensive, good UI)  
-**Grafana Stack:** Loki + Prometheus + Tempo (open source, cost-effective)  
+4. **Filter and Drop**
+   - Drop noisy or low-value logs
+   - Drop unused metrics
+   - Use recording rules for expensive queries
 
----
+**Target**: Observability cost <5% of infrastructure cost
 
-## Common Mistakes
+## Common Mistakes to Avoid
 
-❌ **Logging everything** → Use appropriate log levels, sample if needed  
-❌ **High cardinality metrics** → Limit unique label values (< 100)  
-❌ **No sampling strategy** → Sample intelligently (always trace errors)  
-❌ **Alert fatigue** → Alert only on actionable issues  
-❌ **No correlation IDs** → Can't trace requests across services  
-❌ **Ignoring cost** → Monitor and optimize observability costs  
-❌ **No standardization** → Create instrumentation standards  
-❌ **Observability as afterthought** → Design from the start  
-❌ **No training** → Team won't use observability effectively  
-❌ **No SLOs** → Don't know what to monitor or alert on  
+❌ **Logging everything without strategy** → High costs, noise  
+✅ **Log with purpose, use levels and sampling**
 
----
+❌ **High-cardinality metrics** (user_id in labels) → Metric explosion  
+✅ **Limit labels, use tags in traces for high-cardinality data**
 
-## Cost Optimization
+❌ **Alert on everything** → Alert fatigue  
+✅ **Alert on symptoms (user impact), ensure alerts are actionable**
 
-### Logging
-- Sample info logs (10-50%)
-- Short retention (7-30 days)
-- Use cost-effective tools (Loki vs. Splunk)
-- **Savings:** 50-70%
+❌ **No correlation between logs/metrics/traces** → Slow debugging  
+✅ **Implement correlation IDs, link pillars together**
 
-### Metrics
-- Control cardinality (low unique label values)
-- Use recording rules (pre-aggregate)
-- Downsample old data (1m → 5m → 1h)
-- Use object storage (Thanos, Mimir)
-- **Savings:** 40-60%
-
-### Tracing
-- Aggressive sampling (1-10% normal requests)
-- Short retention (7-30 days)
-- Use object storage (Tempo)
-- **Savings:** 80-90%
-
-**Example:**
-- Full observability: $30,000/month
-- Optimized: $3,000/month (10x reduction)
-
----
+❌ **Ignoring cost from the start** → Runaway costs  
+✅ **Design with cost in mind, implement sampling, monitor and optimize**
 
 ## Success Metrics
 
-### Coverage
-✅ 100% of critical services instrumented  
-✅ 80%+ of all services instrumented  
-✅ All services have health dashboards  
-✅ All services have alerts  
-
-### Quality
-✅ MTTD (Mean Time to Detection) < 5 min  
-✅ MTTR (Mean Time to Resolution) < 30 min  
-✅ Alert-to-incident ratio > 50%  
-✅ Zero incidents due to lack of observability  
-
-### Adoption
-✅ 90%+ of engineers trained  
-✅ Instrumentation libraries used by all services  
-✅ Standards followed consistently  
-
-### Cost
-✅ Observability costs < 5% of infrastructure costs  
-✅ No unexpected cost spikes  
-
----
-
-## Example: E-commerce Platform
-
-**System:** 15 microservices, 10K req/s, 99.9% SLO
-
-**Logging:**
-- ELK stack
-- Structured JSON with correlation IDs
-- 30-day retention
-- PII redaction
-
-**Metrics:**
-- Prometheus + Thanos
-- RED metrics for all services
-- Business metrics (orders/min, revenue/hr)
-- 90-day retention
-
-**Tracing:**
-- OpenTelemetry + Jaeger
-- 10% sampling (100% for errors)
-- 30-day retention
-
-**Alerting:**
-- Critical: Error rate > 1%, Latency > 1s (PagerDuty)
-- Warning: Error rate > 0.5%, Latency > 500ms (Slack)
-
-**Results:**
-- MTTD: 15-30 min → < 3 min
-- MTTR: 2-4 hours → < 20 min
-- Incidents: 8-10/month → 2-3/month
-
----
+- **MTTD** (Mean Time to Detect): <5 minutes for critical issues
+- **MTTR** (Mean Time to Resolve): <30 minutes for P0 incidents
+- **SLO Compliance**: >99.9% (or your target)
+- **Alert Quality**: >70% of alerts result in action
+- **Observability Cost**: <5% of infrastructure cost
 
 ## Related Skills
 
-**Prerequisites:**
-- `architecture-discovery` — Understand system structure
-- `system-design` — Design observability into system
+**Prerequisites**:
+- system-architecture-design
+- requirements-analysis
+- technology-selection
 
-**Commonly Followed By:**
-- `incident-analysis` — Use observability for incident response
-- `production-readiness` — Validate observability before production
-- `capacity-planning` — Use metrics for capacity planning
+**Commonly Followed By**:
+- incident-response
+- sre-practices
+- performance-optimization
+- chaos-engineering
 
-**Works With:**
-- `agent-observability` — Observability for AI agents
-- `reliability-analysis` — Use observability data for reliability
-- `performance-optimization` — Find bottlenecks with observability
-
----
+**Works Well With**:
+- security-design
+- cost-optimization
+- capacity-planning
 
 ## Resources
 
-**Documentation:**
-- [SKILL.md](./SKILL.md) — Comprehensive guide
-- [instructions.md](./instructions.md) — Step-by-step workflow
-- [examples.md](./examples.md) — Real-world examples
+### Documentation
+- [SKILL.md](./SKILL.md) - Comprehensive skill documentation
+- [instructions.md](./instructions.md) - Step-by-step implementation guide
+- [examples.md](./examples.md) - Real-world examples and case studies
 
-**External Resources:**
-- [OpenTelemetry](https://opentelemetry.io/) — Observability standard
-- [Prometheus](https://prometheus.io/) — Metrics and alerting
-- [Grafana](https://grafana.com/) — Dashboards and visualization
-- [Google SRE Book](https://sre.google/books/) — SLO-based monitoring
+### Standards
+- [W3C Trace Context](https://www.w3.org/TR/trace-context/)
+- [OpenTelemetry](https://opentelemetry.io/)
+- [Prometheus Naming Conventions](https://prometheus.io/docs/practices/naming/)
 
----
+### Books
+- "Observability Engineering" by Charity Majors, Liz Fong-Jones, George Miranda
+- "Site Reliability Engineering" by Google
+- "The Art of Monitoring" by James Turnbull
 
-## Quick Commands
+## Getting Help
 
-### Prometheus Queries
-
-```promql
-# Request rate (requests per second)
-rate(http_requests_total[5m])
-
-# Error rate (percentage)
-sum(rate(http_requests_total{status_code=~"5.."}[5m]))
-/
-sum(rate(http_requests_total[5m]))
-
-# p95 latency
-histogram_quantile(0.95,
-  rate(http_request_duration_seconds_bucket[5m])
-)
-
-# Availability (percentage)
-1 - (
-  sum(rate(http_requests_total{status_code=~"5.."}[30d]))
-  /
-  sum(rate(http_requests_total[30d]))
-)
-```
-
-### Log Queries (Elasticsearch)
-
-```
-# Find errors in last hour
-service:checkout AND level:ERROR AND @timestamp:[now-1h TO now]
-
-# Find slow requests
-service:checkout AND duration_ms:>1000
-
-# Trace specific request
-correlation_id:"abc123-def456-ghi789"
-
-# Find payment failures
-service:payment AND message:"Payment failed"
-```
-
----
+For questions or issues with this skill:
+1. Review the [SKILL.md](./SKILL.md) for comprehensive guidance
+2. Check [examples.md](./examples.md) for similar use cases
+3. Consult [instructions.md](./instructions.md) for step-by-step procedures
 
 ## Version
 
-**1.0.0** — Initial release
-
----
-
-**Next Steps:**
-1. Read [SKILL.md](./SKILL.md) for comprehensive guide
-2. Follow [instructions.md](./instructions.md) for step-by-step workflow
-3. Review [examples.md](./examples.md) for real-world scenarios
-4. Implement observability for your system
-5. Use observability for incident response (see `incident-analysis` skill)
+**Version**: 1.0.0  
+**Last Updated**: 2026-09-09  
+**Skill Type**: Design  
+**Complexity**: Advanced

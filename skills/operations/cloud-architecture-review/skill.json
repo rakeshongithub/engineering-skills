@@ -1,0 +1,76 @@
+{
+  "name": "cloud-architecture-review",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Review cloud architecture for best practices, cost optimization, security posture, and reliability to ensure scalable, secure, and cost-effective cloud infrastructure.",
+  "inputs": [
+    "Cloud infrastructure inventory (compute, storage, network, security)",
+    "Architecture documentation and diagrams",
+    "Business context and objectives",
+    "Current challenges (performance, cost, security, scalability)",
+    "Metrics and monitoring data (cost, performance, availability)",
+    "Historical data and incident history",
+    "Team information and capabilities",
+    "Future plans and growth projections",
+    "Vendor relationships and contracts",
+    "Compliance requirements (HIPAA, PCI-DSS, SOC2, GDPR)"
+  ],
+  "outputs": [
+    "Executive summary with health score and top recommendations",
+    "Detailed architecture assessment (Well-Architected Framework)",
+    "Cost optimization report with savings estimates",
+    "Security and compliance assessment",
+    "Reliability and disaster recovery analysis",
+    "Prioritized remediation roadmap",
+    "Best practices guide and recommendations",
+    "Infrastructure-as-code recommendations",
+    "Monitoring and observability plan",
+    "Risk register with mitigation strategies"
+  ],
+  "requires": [
+    "cloud-fundamentals",
+    "networking-basics",
+    "security-fundamentals"
+  ],
+  "commonly_followed_by": [
+    "cost-optimization-implementation",
+    "security-hardening",
+    "disaster-recovery-planning",
+    "performance-optimization",
+    "migration-planning"
+  ],
+  "alternative_to": [
+    "well-architected-review",
+    "security-audit",
+    "cost-audit"
+  ],
+  "works_with": [
+    "infrastructure-as-code",
+    "ci-cd-design",
+    "observability-design",
+    "capacity-planning",
+    "compliance-assessment"
+  ],
+  "tags": [
+    "cloud",
+    "architecture",
+    "aws",
+    "azure",
+    "gcp",
+    "cost-optimization",
+    "security",
+    "reliability",
+    "performance",
+    "compliance",
+    "well-architected",
+    "disaster-recovery",
+    "multi-cloud",
+    "infrastructure",
+    "operations",
+    "review",
+    "assessment"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "1-3 weeks for comprehensive cloud architecture review",
+  "skill_type": "assessment-and-design"
+}

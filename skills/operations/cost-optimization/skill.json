@@ -1,0 +1,53 @@
+{
+  "name": "cost-optimization",
+  "category": "operations",
+  "version": "1.0.0",
+  "description": "Analyze and optimize cloud infrastructure and operational costs through systematic assessment, right-sizing, resource consolidation, and implementation of cost-saving strategies while maintaining performance and reliability requirements.",
+  "inputs": [
+    "Cloud provider accounts and billing data",
+    "Resource inventory across all environments",
+    "Performance requirements and SLAs",
+    "Usage patterns and metrics",
+    "Business context and constraints"
+  ],
+  "outputs": [
+    "Cost analysis report with trends and drivers",
+    "Prioritized optimization recommendations",
+    "Right-sizing analysis and proposals",
+    "Reserved capacity recommendations",
+    "Implementation roadmap with ROI projections"
+  ],
+  "requires": [
+    "monitoring-and-observability",
+    "cloud-architecture-design"
+  ],
+  "commonly_followed_by": [
+    "infrastructure-as-code",
+    "capacity-planning",
+    "performance-optimization"
+  ],
+  "alternative_to": [],
+  "works_with": [
+    "disaster-recovery-planning",
+    "database-optimization",
+    "network-architecture",
+    "container-orchestration"
+  ],
+  "tags": [
+    "cost-optimization",
+    "finops",
+    "cloud-cost",
+    "right-sizing",
+    "reserved-instances",
+    "savings-plans",
+    "resource-optimization",
+    "aws",
+    "azure",
+    "gcp",
+    "multi-cloud",
+    "cost-analysis",
+    "budget-management"
+  ],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 weeks for comprehensive optimization"
+}

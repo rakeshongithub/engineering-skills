@@ -1,57 +1,548 @@
 {
-  "name": "backup-recovery",
-  "category": "operations",
-  "version": "1.0.0",
-  "description": "Design and implement backup and recovery systems to protect data from loss, corruption, or deletion by defining backup strategies, retention policies, recovery procedures, and automation for reliable data protection.",
-  "inputs": [
-    "data inventory (databases, file systems, object storage, configurations)",
-    "recovery requirements (RTO, RPO)",
-    "data criticality (mission-critical vs. nice-to-have)",
-    "compliance requirements (GDPR, HIPAA, SOC 2, PCI DSS)",
-    "storage infrastructure (S3, EBS, Glacier, tape)",
-    "current backup capabilities (optional)",
-    "budget constraints (optional)",
-    "data growth rate (optional)",
-    "retention policies (optional)"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "skillMetadata": {
+    "skillId": "backup-recovery-strategy-design",
+    "skillName": "Backup and Recovery Strategy Design",
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-15",
+    "author": "AI Skills Framework",
+    "status": "active"
+  },
+  "classification": {
+    "category": "Operations & Infrastructure",
+    "subcategory": "Backup & Disaster Recovery",
+    "domain": "Site Reliability Engineering",
+    "complexity": "intermediate-to-advanced",
+    "estimatedTime": {
+      "value": 5.5,
+      "unit": "hours",
+      "range": {
+        "min": 3,
+        "max": 8
+      }
+    },
+    "priority": "medium",
+    "tags": [
+      "backup",
+      "disaster-recovery",
+      "business-continuity",
+      "data-protection",
+      "rto",
+      "rpo",
+      "resilience",
+      "compliance",
+      "cloud-backup",
+      "recovery-testing"
+    ]
+  },
+  "description": {
+    "brief": "Design, validate, and optimize comprehensive backup and disaster recovery strategies for modern software systems.",
+    "detailed": "This skill enables AI agents to analyze existing backup approaches, identify gaps, design multi-tier recovery solutions, calculate RTO/RPO targets, implement best practices across diverse technology stacks, and ensure business continuity through comprehensive backup and disaster recovery strategies.",
+    "businessValue": [
+      "Minimize data loss and downtime during failures",
+      "Ensure regulatory compliance (GDPR, HIPAA, SOX, PCI DSS)",
+      "Reduce financial impact of data loss events",
+      "Maintain customer trust through reliable data protection",
+      "Optimize backup costs while meeting recovery objectives"
+    ]
+  },
+  "prerequisites": {
+    "technicalKnowledge": [
+      "Storage systems (block, file, object storage)",
+      "Database technologies (relational and NoSQL)",
+      "Cloud infrastructure (AWS, Azure, GCP)",
+      "Networking fundamentals",
+      "Basic disaster recovery concepts"
+    ],
+    "skills": [
+      "infrastructure-monitoring",
+      "cloud-infrastructure-management",
+      "database-administration"
+    ],
+    "tools": [
+      "Backup software (Veeam, Commvault, Rubrik)",
+      "Cloud backup services (AWS Backup, Azure Backup)",
+      "Monitoring tools (CloudWatch, Prometheus, Grafana)",
+      "Infrastructure as Code (Terraform, CloudFormation)"
+    ],
+    "access": [
+      "Infrastructure and architecture documentation",
+      "Backup system administrative access",
+      "Cloud console permissions",
+      "Database backup procedure access"
+    ]
+  },
+  "targetAudience": [
+    "DevOps Engineers",
+    "Site Reliability Engineers (SREs)",
+    "Cloud Architects",
+    "Database Administrators",
+    "Security Engineers",
+    "Infrastructure Engineers",
+    "Platform Engineers",
+    "Compliance Officers"
   ],
-  "outputs": [
-    "backup strategy document (methods, schedules, retention, 3-2-1 rule)",
-    "backup architecture (infrastructure, workflows, encryption)",
-    "recovery runbooks (step-by-step procedures, validation, troubleshooting)",
-    "backup automation (scripts, monitoring, alerting, validation)",
-    "backup testing plan (test scenarios, frequency, success criteria)",
-    "cost estimates (storage and operational costs)"
+  "learningObjectives": [
+    "Assess current backup infrastructure and identify gaps",
+    "Define appropriate RTO and RPO targets aligned with business needs",
+    "Design multi-tier backup architectures following 3-2-1-1-0 rule",
+    "Implement disaster recovery strategies for various failure scenarios",
+    "Configure backup automation and verification workflows",
+    "Establish compliance controls for regulatory requirements",
+    "Optimize backup costs through intelligent tiering and lifecycle management",
+    "Conduct recovery testing and disaster recovery drills",
+    "Monitor backup operations and implement alerting",
+    "Create comprehensive recovery runbooks and documentation"
   ],
-  "requires": [
-    "architecture-discovery",
-    "infrastructure-as-code"
+  "coreComponents": {
+    "concepts": [
+      {
+        "name": "Recovery Time Objective (RTO)",
+        "description": "Maximum acceptable downtime for service restoration",
+        "importance": "critical"
+      },
+      {
+        "name": "Recovery Point Objective (RPO)",
+        "description": "Maximum acceptable data loss measured in time",
+        "importance": "critical"
+      },
+      {
+        "name": "3-2-1-1-0 Backup Rule",
+        "description": "3 copies, 2 media types, 1 offsite, 1 offline/immutable, 0 errors",
+        "importance": "high"
+      },
+      {
+        "name": "Backup Types",
+        "description": "Full, incremental, differential, and continuous data protection",
+        "importance": "high"
+      },
+      {
+        "name": "Disaster Recovery Tiers",
+        "description": "Seven tiers from basic backup to zero data loss",
+        "importance": "medium"
+      }
+    ],
+    "techniques": [
+      {
+        "name": "Business Impact Analysis",
+        "description": "Quantify impact of downtime and data loss",
+        "applicability": "All backup strategy projects"
+      },
+      {
+        "name": "Multi-Tier Storage Architecture",
+        "description": "Hot, warm, cold, and archive storage tiers",
+        "applicability": "Cost optimization scenarios"
+      },
+      {
+        "name": "Automated Backup Verification",
+        "description": "Validate backup integrity through automated testing",
+        "applicability": "All backup implementations"
+      },
+      {
+        "name": "Disaster Recovery Orchestration",
+        "description": "Automated failover and recovery workflows",
+        "applicability": "Mission-critical systems"
+      },
+      {
+        "name": "Immutable Backup Protection",
+        "description": "Write-once-read-many storage for ransomware protection",
+        "applicability": "Security-sensitive environments"
+      }
+    ],
+    "workflows": [
+      {
+        "name": "Backup Strategy Assessment",
+        "phases": [
+          "Inventory data assets",
+          "Define business requirements",
+          "Assess current state",
+          "Identify gaps and risks"
+        ]
+      },
+      {
+        "name": "Backup Architecture Design",
+        "phases": [
+          "Select backup strategies per tier",
+          "Design storage architecture",
+          "Implement 3-2-1-1-0 rule",
+          "Design network architecture"
+        ]
+      },
+      {
+        "name": "Disaster Recovery Planning",
+        "phases": [
+          "Define DR scenarios",
+          "Design failover architecture",
+          "Create recovery runbooks",
+          "Implement DR automation"
+        ]
+      },
+      {
+        "name": "Recovery Testing",
+        "phases": [
+          "Define test scenarios",
+          "Create test procedures",
+          "Execute automated tests",
+          "Document results and improvements"
+        ]
+      }
+    ]
+  },
+  "implementationPhases": [
+    {
+      "phase": 1,
+      "name": "Assessment and Analysis",
+      "duration": "1-2 weeks",
+      "steps": [
+        "Inventory data assets and classify by criticality",
+        "Define RTO/RPO targets through business impact analysis",
+        "Assess current backup state and performance",
+        "Identify gaps, risks, and compliance requirements"
+      ],
+      "deliverables": [
+        "Data asset inventory",
+        "RTO/RPO requirements matrix",
+        "Current state assessment report",
+        "Gap analysis and risk register"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Strategy Design",
+      "duration": "2-3 weeks",
+      "steps": [
+        "Design backup architecture with multi-tier storage",
+        "Create disaster recovery strategy for failure scenarios",
+        "Design security and compliance controls",
+        "Document backup and recovery procedures"
+      ],
+      "deliverables": [
+        "Target backup architecture diagram",
+        "DR strategy and failover architecture",
+        "Security controls documentation",
+        "Recovery runbooks"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Implementation Planning",
+      "duration": "1-2 weeks",
+      "steps": [
+        "Create phased implementation roadmap",
+        "Design backup automation workflows",
+        "Develop backup verification procedures",
+        "Implement lifecycle management policies"
+      ],
+      "deliverables": [
+        "Implementation roadmap",
+        "Backup automation scripts",
+        "Verification automation",
+        "Lifecycle policies"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Testing and Validation",
+      "duration": "2-3 weeks",
+      "steps": [
+        "Develop comprehensive testing strategy",
+        "Execute recovery tests for all tiers",
+        "Conduct disaster recovery drills",
+        "Document test results and lessons learned"
+      ],
+      "deliverables": [
+        "Recovery test plan",
+        "Automated test scripts",
+        "DR drill reports",
+        "Lessons learned repository"
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "Monitoring and Optimization",
+      "duration": "Ongoing",
+      "steps": [
+        "Implement monitoring and alerting",
+        "Analyze cost drivers and optimize",
+        "Tune performance and efficiency",
+        "Continuous improvement based on metrics"
+      ],
+      "deliverables": [
+        "Monitoring dashboards",
+        "Cost optimization report",
+        "Performance benchmarks",
+        "Optimization recommendations"
+      ]
+    }
   ],
-  "commonly_followed_by": [
-    "disaster-recovery",
-    "production-readiness",
-    "compliance-audit"
+  "keyMetrics": [
+    {
+      "name": "Backup Success Rate",
+      "description": "Percentage of backup jobs completing successfully",
+      "target": ">99%",
+      "measurement": "(Successful backups / Total backup jobs) × 100",
+      "frequency": "daily"
+    },
+    {
+      "name": "Recovery Success Rate",
+      "description": "Percentage of recovery tests completing successfully",
+      "target": "100%",
+      "measurement": "(Successful recoveries / Total recovery attempts) × 100",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Actual RTO vs Target",
+      "description": "Measured recovery time compared to target",
+      "target": "<Target RTO",
+      "measurement": "Time from incident to full service restoration",
+      "frequency": "per-incident"
+    },
+    {
+      "name": "Actual RPO vs Target",
+      "description": "Measured data loss compared to target",
+      "target": "<Target RPO",
+      "measurement": "Time between last backup and failure event",
+      "frequency": "per-incident"
+    },
+    {
+      "name": "Deduplication Ratio",
+      "description": "Data reduction through deduplication",
+      "target": ">10:1",
+      "measurement": "Logical data size / Physical storage used",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Cost per GB Protected",
+      "description": "Total backup cost per GB of protected data",
+      "target": "Decreasing trend",
+      "measurement": "Total monthly cost / Total GB protected",
+      "frequency": "monthly"
+    },
+    {
+      "name": "Retention Compliance",
+      "description": "Percentage of backups meeting retention requirements",
+      "target": "100%",
+      "measurement": "(Compliant backups / Total backups) × 100",
+      "frequency": "weekly"
+    },
+    {
+      "name": "Encryption Compliance",
+      "description": "Percentage of backups encrypted",
+      "target": "100%",
+      "measurement": "(Encrypted backups / Total backups) × 100",
+      "frequency": "daily"
+    }
   ],
-  "alternative_to": [],
-  "works_with": [
-    "disaster-recovery",
-    "observability-design",
-    "security-architecture-review"
+  "commonChallenges": [
+    {
+      "challenge": "Meeting Aggressive RTO/RPO Targets",
+      "difficulty": "high",
+      "solutions": [
+        "Implement continuous data protection (CDP)",
+        "Deploy active-active architecture",
+        "Use instant recovery technologies"
+      ]
+    },
+    {
+      "challenge": "Backup Storage Costs Spiraling",
+      "difficulty": "medium",
+      "solutions": [
+        "Implement granular retention policies",
+        "Aggressive deduplication and compression",
+        "Intelligent storage tiering"
+      ]
+    },
+    {
+      "challenge": "Application Inconsistent Backups",
+      "difficulty": "medium",
+      "solutions": [
+        "Application-consistent snapshots",
+        "Quiescing and VSS integration",
+        "Automated backup validation"
+      ]
+    },
+    {
+      "challenge": "Ransomware Encrypting Backups",
+      "difficulty": "high",
+      "solutions": [
+        "Immutable backups with object lock",
+        "Air-gapped backup copies",
+        "Network segmentation and zero-trust access"
+      ]
+    },
+    {
+      "challenge": "Recovery Testing Disrupting Production",
+      "difficulty": "medium",
+      "solutions": [
+        "Isolated recovery environments",
+        "Production cloning for testing",
+        "Chaos engineering integration"
+      ]
+    }
   ],
-  "tags": [
-    "operations",
-    "backup",
-    "recovery",
-    "data-protection",
-    "rto",
-    "rpo",
-    "3-2-1-backup",
-    "disaster-recovery",
-    "compliance",
-    "automation",
-    "retention",
-    "encryption"
+  "bestPractices": [
+    "Follow the 3-2-1-1-0 backup rule for comprehensive protection",
+    "Automate backup execution, verification, and retention management",
+    "Test recovery procedures regularly (weekly, monthly, quarterly)",
+    "Encrypt all backups at rest and in transit",
+    "Implement immutable backups for ransomware protection",
+    "Monitor backup operations with real-time alerting",
+    "Document recovery runbooks for all disaster scenarios",
+    "Maintain geographic separation for DR sites (500+ miles)",
+    "Apply principle of least privilege for backup access",
+    "Optimize costs through intelligent storage tiering"
   ],
-  "complexity": "advanced",
-  "estimated_time": "4-8 hours",
-  "skill_type": "design"
+  "toolsAndTechnologies": {
+    "enterpriseBackup": [
+      "Veeam Backup & Replication",
+      "Commvault Complete Backup & Recovery",
+      "Rubrik Cloud Data Management",
+      "Veritas NetBackup"
+    ],
+    "cloudNativeBackup": [
+      "AWS Backup",
+      "Azure Backup",
+      "Google Cloud Backup and DR"
+    ],
+    "openSource": [
+      "Restic",
+      "Bacula",
+      "Duplicati"
+    ],
+    "databaseBackup": [
+      "pg_dump/pg_restore (PostgreSQL)",
+      "mysqldump/MySQL Enterprise Backup",
+      "Oracle RMAN",
+      "SQL Server Backup"
+    ],
+    "disasterRecovery": [
+      "VMware Site Recovery Manager",
+      "AWS Elastic Disaster Recovery",
+      "Azure Site Recovery",
+      "Zerto"
+    ],
+    "monitoring": [
+      "Prometheus + Grafana",
+      "Datadog",
+      "Splunk",
+      "AWS CloudWatch"
+    ]
+  },
+  "relatedSkills": [
+    {
+      "skillId": "infrastructure-monitoring",
+      "relationship": "complementary",
+      "description": "Monitor backup infrastructure health and performance"
+    },
+    {
+      "skillId": "cloud-infrastructure-management",
+      "relationship": "prerequisite",
+      "description": "Manage cloud backup services and multi-region DR"
+    },
+    {
+      "skillId": "database-administration",
+      "relationship": "complementary",
+      "description": "Database-specific backup and recovery procedures"
+    },
+    {
+      "skillId": "security-compliance",
+      "relationship": "complementary",
+      "description": "Implement encryption and meet regulatory requirements"
+    },
+    {
+      "skillId": "incident-response",
+      "relationship": "complementary",
+      "description": "Coordinate disaster recovery activations"
+    }
+  ],
+  "resources": {
+    "documentation": [
+      {
+        "title": "SKILL.md",
+        "path": "./SKILL.md",
+        "description": "Comprehensive skill documentation"
+      },
+      {
+        "title": "instructions.md",
+        "path": "./instructions.md",
+        "description": "Step-by-step implementation workflow"
+      },
+      {
+        "title": "examples.md",
+        "path": "./examples.md",
+        "description": "Real-world implementation examples"
+      },
+      {
+        "title": "README.md",
+        "path": "./README.md",
+        "description": "Quick reference guide"
+      }
+    ],
+    "externalResources": [
+      {
+        "type": "book",
+        "title": "Backup & Recovery by W. Curtis Preston",
+        "url": "https://www.oreilly.com/library/view/backup-recovery/0596102461/"
+      },
+      {
+        "type": "standard",
+        "title": "ISO 22301 - Business Continuity Management",
+        "url": "https://www.iso.org/standard/75106.html"
+      },
+      {
+        "type": "guide",
+        "title": "NIST SP 800-34 - Contingency Planning Guide",
+        "url": "https://csrc.nist.gov/publications/detail/sp/800-34/rev-1/final"
+      },
+      {
+        "type": "certification",
+        "title": "AWS Certified Solutions Architect",
+        "url": "https://aws.amazon.com/certification/certified-solutions-architect-associate/"
+      }
+    ]
+  },
+  "compliance": {
+    "frameworks": [
+      {
+        "name": "GDPR",
+        "requirements": [
+          "Right to erasure in backups",
+          "Data minimization",
+          "Geographic data residency"
+        ]
+      },
+      {
+        "name": "HIPAA",
+        "requirements": [
+          "Encryption of PHI in backups",
+          "Access controls and audit logging",
+          "Business associate agreements"
+        ]
+      },
+      {
+        "name": "SOX",
+        "requirements": [
+          "7-year retention for financial data",
+          "Immutable audit trails",
+          "Change management controls"
+        ]
+      },
+      {
+        "name": "PCI DSS",
+        "requirements": [
+          "Encryption of cardholder data",
+          "Quarterly backup testing",
+          "Secure deletion after retention"
+        ]
+      }
+    ]
+  },
+  "versionHistory": [
+    {
+      "version": "1.0.0",
+      "date": "2024-01-15",
+      "changes": "Initial release with comprehensive backup and DR strategy design",
+      "author": "AI Skills Framework"
+    }
+  ]
 }
