@@ -20,9 +20,11 @@ This repository is building an **open-source, composable engineering skill libra
 - **Phase 2 Skills:** ✅ Complete (10/10 completed)
 - **Phase 3 Skills:** ✅ Complete (2/2 completed)
 - **Frontend Foundation:** ✅ Complete (8/8 completed)
+- **E2E Testing Foundation:** ✅ Complete (8/8 completed)
+- **Advanced E2E Skills:** ✅ Complete (6/6 completed)
 - **Additional Skills:** ⏸️ Pending
 
-**Total Skills Implemented:** 40 (20 Phase 1 + 10 Phase 2 + 2 Phase 3 + 8 frontend foundation)
+**Total Skills Implemented:** 54 (20 Phase 1 + 10 Phase 2 + 2 Phase 3 + 8 frontend foundation + 8 E2E testing + 6 advanced E2E)
 **Total Documentation:** ~600,000 words across all skills
 
 ---
@@ -47,6 +49,7 @@ engineering-skills/
 │   ├── security/
 │   ├── agentic/
 │   ├── frontend/
+│   ├── testing/
 │   └── operations/
 ├── workflows/
 ├── catalog/
@@ -406,6 +409,44 @@ The frontend foundation adds architecture, component composition, responsive beh
 
 All eight skills include `SKILL.md`, `skill.json`, `instructions.md`, and `examples.md`. Four frontend workflows and four domain examples were also added.
 
+## E2E Testing Foundation (8 Skills)
+
+**Status:** ✅ Complete (100%)
+**Completed:** 2026-09-10
+
+The E2E foundation adds journey design, browser automation, test data, test environments, reliability, cross-browser coverage, failure debugging, and release gating.
+
+### Completed E2E Skills
+
+1. `e2e-test-design`
+2. `e2e-test-automation`
+3. `e2e-test-data-management`
+4. `e2e-test-environment`
+5. `e2e-test-reliability`
+6. `e2e-cross-browser-testing`
+7. `e2e-test-debugging`
+8. `e2e-release-gating`
+
+All eight skills include `SKILL.md`, `skill.json`, `instructions.md`, and `examples.md`. Four E2E workflows and six E2E domain examples were also added.
+
+## Advanced E2E Skills (6 Skills)
+
+**Status:** ✅ Complete (100%)
+**Completed:** 2026-09-10
+
+The advanced E2E backlog adds mobile-native testing, visual regression, performance journey testing, frontend/backend contracts, failure analytics, and controlled automated test generation and maintenance.
+
+### Completed Advanced E2E Skills
+
+1. `mobile-native-e2e-testing`
+2. `visual-regression-testing`
+3. `performance-journey-testing`
+4. `frontend-backend-contract-testing`
+5. `test-intelligence-and-failure-analytics`
+6. `automated-e2e-test-generation`
+
+All six skills include `SKILL.md`, `skill.json`, `instructions.md`, and `examples.md`. The advanced E2E quality workflow was added and existing E2E workflows were extended.
+
 ## Additional Skills
 
 **Status:** ⏸️ Pending
@@ -473,7 +514,9 @@ Every skill must include:
 4. ✅ Create workflow recipes combining Phase 1, Phase 2, and Phase 3 skills
 5. 🔍 Add evaluation examples for agentic skills
 6. ✅ Create Frontend Foundation skills and workflows
-7. 🎯 Plan additional specialized skills
+7. ✅ Create E2E Testing Foundation skills and workflows
+8. ✅ Complete advanced E2E backlog
+9. 🎯 Plan additional specialized skills
 
 ### Short-term (Next 2-4 Weeks)
 
@@ -512,7 +555,7 @@ Every skill must include:
 
 ### Completion Tracking
 
-- **Total Skills Planned:** 40+ (across all phases)
+- **Total Skills Planned:** 54+ (across all completed phases and the remaining backlog)
 - **Phase 1 Target:** 20 skills
 - **Phase 1 Completed:** 20 skills (100%) ✅
 - **Phase 2 Target:** 10 skills
@@ -521,16 +564,20 @@ Every skill must include:
 - **Phase 3 Completed:** 2 skills (100%) ✅
 - **Frontend Foundation Target:** 8 skills
 - **Frontend Foundation Completed:** 8 skills (100%) ✅
-- **Total Completed:** 40 documented skills
+- **E2E Testing Foundation Target:** 8 skills
+- **E2E Testing Foundation Completed:** 8 skills (100%) ✅
+- **Advanced E2E Target:** 6 skills
+- **Advanced E2E Completed:** 6 skills (100%) ✅
+- **Total Completed:** 54 documented skills
 - **Additional Skills Remaining:** TBD
 
 ### Quality Metrics
 
-- **Skills with Complete Documentation:** 40/40 (100%)
-- **Skills with Examples:** 40/40 (100%)
-- **Skills with Metadata:** 40/40 (100%)
-- **Skills with Instructions:** 40/40 (100%)
-- **Skills with README:** 32/40 (80%, README is optional for the skill contract)
+- **Skills with Complete Documentation:** 54/54 (100%)
+- **Skills with Examples:** 54/54 (100%)
+- **Skills with Metadata:** 54/54 (100%)
+- **Skills with Instructions:** 54/54 (100%)
+- **Skills with README:** 32/54 (59%, README is optional for the skill contract)
 - **Average Documentation per Skill:** ~18,750 words
 - **Total Documentation Volume:** ~600,000 words
 
@@ -587,6 +634,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 - Added frontend feature, architecture review, design system, and migration workflows
 - Added frontend examples for accessible checkout, design-system rollout, dashboard performance, and framework migration
 - Updated catalog, repository guides, workflow index, examples index, and tracking
+
+### 2026-09-10 (E2E testing foundation)
+
+- Added eight E2E testing skills with complete documentation and metadata
+- Added E2E strategy, implementation, failure triage, and release gate workflows
+- Added six E2E examples for checkout, banking transfer, tenant isolation, MFA, file upload, and mobile dashboard
+- Integrated E2E testing into the frontend feature workflow and repository documentation
+
+### 2026-09-10 (advanced E2E)
+
+- Added six advanced E2E skills for mobile, visual, performance, contracts, analytics, and controlled generation
+- Added the advanced E2E quality workflow and extended existing E2E workflows
+- Updated catalog, repository guides, best practices, examples guidance, and tracking
 
 ### 2026-09-08
 

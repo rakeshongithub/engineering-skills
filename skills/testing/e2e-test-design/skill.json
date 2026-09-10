@@ -1,0 +1,27 @@
+{
+  "name": "e2e-test-design",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Select and specify end-to-end tests that validate the highest-value user journeys and system risks",
+  "inputs": [
+    "user-journeys",
+    "acceptance-criteria",
+    "business-risk",
+    "system-boundaries",
+    "supported-platforms"
+  ],
+  "outputs": [
+    "journey-inventory",
+    "scenario-specifications",
+    "risk-mapping",
+    "coverage-backlog"
+  ],
+  "requires": ["testing-strategy", "frontend-testing-strategy"],
+  "commonly_followed_by": ["e2e-test-automation", "e2e-test-data-management"],
+  "alternative_to": [],
+  "works_with": ["e2e-test-environment", "e2e-release-gating"],
+  "tags": ["testing", "e2e", "user-journeys", "risk-based-testing"],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours",
+  "skill_type": "strategy"
+}

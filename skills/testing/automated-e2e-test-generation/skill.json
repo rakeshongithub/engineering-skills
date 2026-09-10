@@ -1,0 +1,36 @@
+{
+  "name": "automated-e2e-test-generation",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Use controlled automation or agents to propose, update, and validate E2E tests without weakening user intent or coverage",
+  "inputs": [
+    "journey-specifications",
+    "acceptance-criteria",
+    "application-semantics",
+    "existing-tests",
+    "generation-policy"
+  ],
+  "outputs": [
+    "proposed-test-patch",
+    "coverage-explanation",
+    "maintenance-update",
+    "validation-results",
+    "review-record"
+  ],
+  "requires": [
+    "e2e-test-design",
+    "e2e-test-automation",
+    "e2e-test-reliability"
+  ],
+  "commonly_followed_by": ["e2e-test-debugging", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": [
+    "agent-context-engineering",
+    "agent-guardrails",
+    "agent-evaluation"
+  ],
+  "tags": ["testing", "e2e", "automation", "agents", "maintenance"],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "automation"
+}

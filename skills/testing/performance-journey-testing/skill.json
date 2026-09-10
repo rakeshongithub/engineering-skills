@@ -1,0 +1,32 @@
+{
+  "name": "performance-journey-testing",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Measure end-to-end user journey performance under representative devices, networks, data volumes, and system load",
+  "inputs": [
+    "critical-journeys",
+    "performance-goals",
+    "device-profiles",
+    "network-profiles",
+    "observability-capabilities"
+  ],
+  "outputs": [
+    "journey-performance-model",
+    "workload-profiles",
+    "baseline-measurements",
+    "bottleneck-analysis",
+    "regression-thresholds"
+  ],
+  "requires": ["e2e-test-design", "frontend-performance-analysis"],
+  "commonly_followed_by": ["e2e-release-gating", "production-readiness"],
+  "alternative_to": [],
+  "works_with": [
+    "scalability-analysis",
+    "observability-design",
+    "e2e-test-environment"
+  ],
+  "tags": ["testing", "e2e", "performance", "journeys", "budgets"],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "analysis"
+}

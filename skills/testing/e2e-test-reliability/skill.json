@@ -1,0 +1,32 @@
+{
+  "name": "e2e-test-reliability",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Improve E2E signal by eliminating nondeterminism and governing retries, quarantine, and maintenance",
+  "inputs": [
+    "test-history",
+    "failure-artifacts",
+    "test-code",
+    "environment-data",
+    "ci-metrics"
+  ],
+  "outputs": [
+    "flake-taxonomy",
+    "reliability-plan",
+    "retry-policy",
+    "quarantine-policy",
+    "stability-metrics"
+  ],
+  "requires": [
+    "e2e-test-automation",
+    "e2e-test-data-management",
+    "e2e-test-environment"
+  ],
+  "commonly_followed_by": ["e2e-test-debugging", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": ["root-cause-analysis", "e2e-cross-browser-testing"],
+  "tags": ["testing", "e2e", "reliability", "flaky-tests", "ci"],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "analysis"
+}

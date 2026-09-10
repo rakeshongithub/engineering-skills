@@ -10,6 +10,10 @@ For standalone domain examples with explicit constraints, decisions, outputs, an
 
 Frontend-specific scenarios are collected in the [frontend examples index](../examples/frontend/README.md), including accessible checkout, design-system rollout, dashboard performance, and framework migration.
 
+The [E2E examples index](../examples/e2e/README.md) covers checkout, banking transfer, tenant isolation, MFA, file upload, and mobile dashboard journeys.
+
+Each advanced E2E skill also includes focused examples for mobile-native behavior, visual regression, performance journeys, frontend/backend contracts, failure analytics, and test maintenance automation.
+
 ## Scenario 1: New Microservice Development
 
 **Problem:** Design and implement a new user authentication microservice

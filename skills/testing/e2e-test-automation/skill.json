@@ -1,0 +1,32 @@
+{
+  "name": "e2e-test-automation",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Implement maintainable browser-based E2E tests with reliable selectors, synchronization, fixtures, assertions, and artifacts",
+  "inputs": [
+    "e2e-scenarios",
+    "application-routes",
+    "test-data-contract",
+    "environment-contract",
+    "browser-matrix"
+  ],
+  "outputs": [
+    "automated-tests",
+    "fixtures",
+    "selector-conventions",
+    "failure-artifacts",
+    "maintenance-guidance"
+  ],
+  "requires": [
+    "e2e-test-design",
+    "e2e-test-data-management",
+    "e2e-test-environment"
+  ],
+  "commonly_followed_by": ["e2e-test-reliability", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": ["e2e-cross-browser-testing", "e2e-test-debugging"],
+  "tags": ["testing", "e2e", "automation", "browser-testing", "fixtures"],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "implementation"
+}

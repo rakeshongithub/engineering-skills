@@ -1,0 +1,32 @@
+{
+  "name": "frontend-backend-contract-testing",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Verify that frontend and backend interfaces remain compatible across schemas, semantics, errors, authorization, and evolution",
+  "inputs": [
+    "api-schemas",
+    "frontend-consumers",
+    "consumer-expectations",
+    "auth-rules",
+    "compatibility-policy"
+  ],
+  "outputs": [
+    "contract-inventory",
+    "consumer-contracts",
+    "provider-verification",
+    "compatibility-policy",
+    "migration-guidance"
+  ],
+  "requires": ["api-design-review", "frontend-testing-strategy"],
+  "commonly_followed_by": ["e2e-test-design", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": [
+    "testing-strategy",
+    "migration-planning",
+    "e2e-test-automation"
+  ],
+  "tags": ["testing", "contracts", "frontend", "api", "compatibility"],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "strategy"
+}

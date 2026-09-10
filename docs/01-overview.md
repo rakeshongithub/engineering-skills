@@ -23,7 +23,7 @@ Composable Engineering Skill System
 
 ## Available Skills
 
-The library includes **40 production-ready skills** across multiple categories:
+The library includes **54 production-ready skills** across multiple categories:
 
 **Phase 1: Foundation (20 Skills)**
 
@@ -52,11 +52,21 @@ The library includes **40 production-ready skills** across multiple categories:
 - **Frontend Architecture** (3): Architecture, component design, responsive design
 - **Frontend Quality** (5): State management, accessibility, performance, testing, security
 
+**E2E Testing Foundation (8 Skills)**
+
+- **E2E Planning and Execution** (4): Journey design, automation, test data, test environments
+- **E2E Reliability and Release** (4): Reliability, cross-browser testing, debugging, release gating
+
+**Advanced E2E (6 Skills)**
+
+- Mobile-native E2E testing, visual regression, performance journey testing
+- Frontend/backend contracts, failure analytics, automated test generation and maintenance
+
 ## Workflow Recipes
 
-The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, incident response, frontend feature delivery, frontend architecture review, design systems, and frontend migration. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
+The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, incident response, frontend delivery, E2E testing, and advanced E2E quality. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
 
-The [`examples/`](../examples/README.md) directory demonstrates those compositions in e-commerce, banking, SaaS, AI-agent support operations, and frontend product scenarios.
+The [`examples/`](../examples/README.md) directory demonstrates those compositions in e-commerce, banking, SaaS, AI-agent support operations, frontend product scenarios, and E2E testing journeys.
 
 For a complete list with metadata, see [`catalog/skills.yaml`](../catalog/skills.yaml).
 

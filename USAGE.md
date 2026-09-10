@@ -16,7 +16,7 @@ Composable Engineering Skill System
 
 ### Available Skills
 
-The library includes **40 production-ready skills** across multiple categories:
+The library includes **54 production-ready skills** across multiple categories:
 
 **Phase 1: Foundation (20 Skills)** - Architecture, Engineering, Security, Operations, Documentation
 
@@ -26,11 +26,15 @@ The library includes **40 production-ready skills** across multiple categories:
 
 **Frontend Foundation (8 Skills)** - Architecture, components, responsive design, state, accessibility, performance, testing, and security
 
+**E2E Testing Foundation (8 Skills)** - Journey design, automation, data, environments, reliability, browsers, debugging, and release gates
+
+**Advanced E2E (6 Skills)** - Mobile, visual regression, performance journeys, contracts, failure analytics, and controlled test generation
+
 For a complete list with metadata, see [`catalog/skills.yaml`](catalog/skills.yaml).
 
 ## Workflow Recipes
 
-Use the reusable recipes in [`workflows/`](workflows/README.md) when a problem matches a common engineering scenario. Available recipes also cover frontend feature delivery, frontend architecture review, design-system creation, and frontend migration.
+Use the reusable recipes in [`workflows/`](workflows/README.md) when a problem matches a common engineering scenario. Available recipes also cover frontend delivery, E2E strategy, implementation, failure triage, release gating, and advanced E2E quality.
 
 Each recipe defines its inputs, skill sequence, handoff artifacts, quality gates, and expected outputs. Use `skill-orchestrator` when the problem needs a different composition.
 
@@ -39,6 +43,10 @@ Each recipe defines its inputs, skill sequence, handoff artifacts, quality gates
 Use [`examples/`](examples/README.md) to see the workflows applied to realistic domains. The examples include an e-commerce feature, banking modernization, a SaaS architecture review, and an AI support-triage agent.
 
 Frontend examples cover an accessible checkout, design-system rollout, dashboard performance, and framework migration.
+
+E2E examples cover checkout, banking transfer, tenant isolation, authentication and MFA, file upload, and mobile dashboard journeys.
+
+The advanced E2E skills include focused examples for mobile-native flows, visual baselines, performance journeys, interface contracts, failure analytics, and generated test maintenance.
 
 ---
 

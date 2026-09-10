@@ -15,7 +15,7 @@ Each skill represents a practical, repeatable engineering capability with:
 - Examples
 - Relationships to other skills
 
-**Current Status:** 40 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic + Phase 3: 2 operations + Frontend Foundation: 8)
+**Current Status:** 54 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic + Phase 3: 2 operations + Frontend Foundation: 8 + E2E Foundation: 8 + Advanced E2E: 6)
 
 ## What Makes This Different
 
@@ -49,6 +49,7 @@ engineering-skills/
 │   ├── security/
 │   ├── agentic/
 │   ├── frontend/
+│   ├── testing/        # E2E testing skills
 │   └── operations/
 ├── workflows/        # Reusable workflow recipes
 ├── catalog/         # Machine-readable skill catalog
@@ -113,6 +114,11 @@ Reusable workflow recipes compose the individual skills into common engineering 
 - [Frontend architecture review](workflows/frontend-architecture-review.md)
 - [Design system](workflows/design-system.md)
 - [Frontend migration](workflows/frontend-migration.md)
+- [E2E strategy](workflows/e2e-strategy.md)
+- [E2E implementation](workflows/e2e-implementation.md)
+- [E2E failure triage](workflows/e2e-failure-triage.md)
+- [E2E release gate](workflows/e2e-release-gate.md)
+- [E2E advanced quality](workflows/e2e-advanced-quality.md)
 
 Use the skill orchestrator when the problem does not fit one of these recipes or needs a different sequence.
 
@@ -128,6 +134,7 @@ The [examples index](examples/README.md) contains practical scenarios showing ho
 - [Design system rollout](examples/frontend/design-system.md)
 - [Dashboard performance](examples/frontend/dashboard-performance.md)
 - [Frontend migration](examples/frontend/frontend-migration.md)
+- [E2E examples](examples/e2e/README.md)
 
 ---
 
@@ -268,6 +275,20 @@ agent-guardrails (adjustment) → agentic-workflow-review
 
 - **Architecture and composition** (3) - Frontend architecture, component design, responsive design
 - **State and quality** (5) - State management, accessibility review, performance analysis, testing strategy, security review
+
+### E2E Testing Foundation (8 Skills) ✅
+
+- **Planning and execution** (4) - Journey design, automation, test data, test environment
+- **Reliability and release** (4) - Reliability, cross-browser testing, debugging, release gating
+
+### Advanced E2E Skills (6 Skills) ✅
+
+- Mobile-native E2E testing
+- Visual regression testing
+- Performance journey testing
+- Frontend/backend contract testing
+- Test intelligence and failure analytics
+- Automated E2E test generation and maintenance
 
 ### Coming Soon: Phase 4
 

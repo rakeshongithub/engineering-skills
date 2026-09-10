@@ -1,0 +1,28 @@
+{
+  "name": "e2e-test-environment",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Define reproducible environments and service controls that let E2E tests run safely and meaningfully",
+  "inputs": [
+    "system-architecture",
+    "e2e-scenarios",
+    "service-dependencies",
+    "provisioning-model",
+    "external-services"
+  ],
+  "outputs": [
+    "environment-topology",
+    "provisioning-plan",
+    "dependency-contract",
+    "readiness-checks",
+    "virtualization-strategy"
+  ],
+  "requires": ["e2e-test-design", "e2e-test-data-management"],
+  "commonly_followed_by": ["e2e-test-automation", "e2e-test-reliability"],
+  "alternative_to": [],
+  "works_with": ["deployment-strategy", "production-readiness"],
+  "tags": ["testing", "e2e", "environments", "ci", "dependencies"],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "operations"
+}

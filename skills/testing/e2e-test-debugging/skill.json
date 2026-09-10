@@ -1,0 +1,28 @@
+{
+  "name": "e2e-test-debugging",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Diagnose E2E failures using reproducible evidence and distinguish product, test, data, environment, dependency, and infrastructure causes",
+  "inputs": [
+    "test-failure",
+    "run-metadata",
+    "failure-artifacts",
+    "test-data",
+    "environment-state"
+  ],
+  "outputs": [
+    "failure-classification",
+    "reproduction-result",
+    "root-cause",
+    "remediation",
+    "regression-test"
+  ],
+  "requires": ["e2e-test-reliability"],
+  "commonly_followed_by": ["e2e-test-reliability", "root-cause-analysis"],
+  "alternative_to": [],
+  "works_with": ["e2e-test-environment", "incident-analysis"],
+  "tags": ["testing", "e2e", "debugging", "traces", "root-cause"],
+  "complexity": "advanced",
+  "estimated_time": "1-4 hours",
+  "skill_type": "debugging"
+}

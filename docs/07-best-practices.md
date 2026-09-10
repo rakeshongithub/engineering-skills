@@ -47,6 +47,10 @@ We need to migrate a legacy monolith.
 
 Available recipes are indexed in [`workflows/README.md`](../workflows/README.md). Choose a recipe by outcome, then let the skill orchestrator adapt the sequence to the system's constraints and risk.
 
+For browser-based user journeys, use the E2E recipes rather than making every UI test end to end. Start with [`e2e-strategy.md`](../workflows/e2e-strategy.md), then add automation, reliability, and release gating according to risk.
+
+Use the [advanced E2E quality workflow](../workflows/e2e-advanced-quality.md) when mobile capabilities, visual contracts, journey performance, interface compatibility, failure analytics, or controlled test generation are part of the risk.
+
 ## Combining Multiple Skills Effectively
 
 ### Sequential Composition

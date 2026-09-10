@@ -1,0 +1,36 @@
+{
+  "name": "e2e-release-gating",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Define how E2E evidence controls pull requests, deployments, and production releases",
+  "inputs": [
+    "critical-journeys",
+    "e2e-suite",
+    "reliability-metrics",
+    "deployment-strategy",
+    "release-risk"
+  ],
+  "outputs": [
+    "suite-tiers",
+    "blocking-policy",
+    "ci-cd-plan",
+    "exception-policy",
+    "release-evidence"
+  ],
+  "requires": [
+    "e2e-test-design",
+    "e2e-test-reliability",
+    "production-readiness"
+  ],
+  "commonly_followed_by": ["production-readiness"],
+  "alternative_to": [],
+  "works_with": [
+    "deployment-strategy",
+    "e2e-cross-browser-testing",
+    "e2e-test-debugging"
+  ],
+  "tags": ["testing", "e2e", "release", "ci-cd", "quality-gates"],
+  "complexity": "advanced",
+  "estimated_time": "2-4 hours",
+  "skill_type": "governance"
+}

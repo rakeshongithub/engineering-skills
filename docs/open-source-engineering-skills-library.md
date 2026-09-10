@@ -93,6 +93,32 @@ Frontend skills cover the client-side concerns that are easy to miss in backend-
 | `frontend-testing-strategy`     | Define component, integration, visual, accessibility, and end-to-end coverage |
 | `frontend-security-review`      | Review browser-facing security and sensitive data handling                    |
 
+# 3B. End-to-End Testing Skills
+
+E2E skills specialize in validating complete user journeys across the browser, application services, data, environments, and release controls. They complement, rather than replace, unit, component, integration, and frontend testing strategies.
+
+| Skill                       | Purpose                                                        |
+| --------------------------- | -------------------------------------------------------------- |
+| `e2e-test-design`           | Select and specify high-value user journeys and risk cases     |
+| `e2e-test-automation`       | Implement maintainable browser-based tests and fixtures        |
+| `e2e-test-data-management`  | Create isolated, deterministic, privacy-safe test data         |
+| `e2e-test-environment`      | Define reproducible environments and dependency controls       |
+| `e2e-test-reliability`      | Reduce flakiness and govern retries and quarantine             |
+| `e2e-cross-browser-testing` | Define browser, device, viewport, locale, and network coverage |
+| `e2e-test-debugging`        | Diagnose failures using reproducible evidence                  |
+| `e2e-release-gating`        | Connect E2E evidence to CI/CD and release decisions            |
+
+## Advanced E2E Skills
+
+| Skill                                     | Purpose                                                                            |
+| ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| `mobile-native-e2e-testing`               | Validate mobile-native journeys, capabilities, permissions, and lifecycle behavior |
+| `visual-regression-testing`               | Detect unintended visual changes while preserving intentional design               |
+| `performance-journey-testing`             | Measure complete user journeys under realistic devices, networks, and load         |
+| `frontend-backend-contract-testing`       | Verify interface compatibility between frontend consumers and backend providers    |
+| `test-intelligence-and-failure-analytics` | Turn test execution data into risk-weighted reliability and release insight        |
+| `automated-e2e-test-generation`           | Propose and maintain E2E tests with controlled automation and human review         |
+
 ---
 
 # 4. Agentic Engineering Skills
@@ -567,6 +593,26 @@ frontend-performance-analysis
 production-readiness
 ```
 
+## E2E Testing
+
+```text
+testing-strategy
+        ↓
+frontend-testing-strategy
+        ↓
+e2e-test-design
+        ↓
+e2e-test-data-management
+        ↓
+e2e-test-environment
+        ↓
+e2e-test-automation
+        ↓
+e2e-test-reliability
+        ↓
+e2e-release-gating
+```
+
 ## Legacy Modernization
 
 ```text
@@ -665,6 +711,22 @@ engineering-skills/
 │   │   ├── frontend-testing-strategy/
 │   │   └── frontend-security-review/
 │   │
+│   ├── testing/
+│   │   ├── e2e-test-design/
+│   │   ├── e2e-test-automation/
+│   │   ├── e2e-test-data-management/
+│   │   ├── e2e-test-environment/
+│   │   ├── e2e-test-reliability/
+│   │   ├── e2e-cross-browser-testing/
+│   │   ├── e2e-test-debugging/
+│   │   ├── e2e-release-gating/
+│   │   ├── mobile-native-e2e-testing/
+│   │   ├── visual-regression-testing/
+│   │   ├── performance-journey-testing/
+│   │   ├── frontend-backend-contract-testing/
+│   │   ├── test-intelligence-and-failure-analytics/
+│   │   └── automated-e2e-test-generation/
+│   │
 │   └── operations/
 │       ├── production-readiness/
 │       ├── incident-analysis/
@@ -686,7 +748,8 @@ engineering-skills/
     ├── banking/
     ├── saas/
         ├── ai-agent/
-        └── frontend/
+        ├── frontend/
+        └── e2e/
 ```
 
 ---

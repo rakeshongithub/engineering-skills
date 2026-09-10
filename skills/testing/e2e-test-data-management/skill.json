@@ -1,0 +1,28 @@
+{
+  "name": "e2e-test-data-management",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Create isolated, deterministic, privacy-safe test data and lifecycle rules for end-to-end tests",
+  "inputs": [
+    "e2e-scenarios",
+    "data-dependencies",
+    "environment-reset",
+    "roles-and-permissions",
+    "privacy-requirements"
+  ],
+  "outputs": [
+    "data-factories",
+    "fixture-strategy",
+    "isolation-rules",
+    "cleanup-rules",
+    "retention-controls"
+  ],
+  "requires": ["e2e-test-design", "e2e-test-environment"],
+  "commonly_followed_by": ["e2e-test-automation", "e2e-test-reliability"],
+  "alternative_to": [],
+  "works_with": ["data-architecture-review", "e2e-release-gating"],
+  "tags": ["testing", "e2e", "test-data", "isolation", "fixtures", "privacy"],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "operations"
+}

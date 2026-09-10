@@ -1,0 +1,31 @@
+{
+  "name": "mobile-native-e2e-testing",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Validate mobile-native user journeys across device capabilities, lifecycle events, permissions, navigation, and platform behavior",
+  "inputs": [
+    "mobile-journeys",
+    "os-and-device-policy",
+    "native-capabilities",
+    "backend-dependencies",
+    "device-lab"
+  ],
+  "outputs": [
+    "mobile-risk-matrix",
+    "capability-scenarios",
+    "automation-plan",
+    "release-evidence"
+  ],
+  "requires": [
+    "e2e-test-design",
+    "e2e-test-environment",
+    "e2e-cross-browser-testing"
+  ],
+  "commonly_followed_by": ["e2e-test-automation", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": ["e2e-test-data-management", "e2e-test-reliability"],
+  "tags": ["testing", "e2e", "mobile", "ios", "android", "native"],
+  "complexity": "advanced",
+  "estimated_time": "4-8 hours",
+  "skill_type": "strategy"
+}

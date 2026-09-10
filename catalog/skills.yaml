@@ -785,7 +785,337 @@ skills:
       - csrf
       - csp
 
-# This catalog now includes 40 documented skills:
+  # E2E Testing Skills
+  - name: e2e-test-design
+    category: testing
+    path: skills/testing/e2e-test-design
+    description: Select and specify end-to-end tests that validate the highest-value user journeys and system risks
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    requires:
+      - testing-strategy
+      - frontend-testing-strategy
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-test-data-management
+    works_with:
+      - e2e-test-environment
+      - e2e-release-gating
+    tags:
+      - testing
+      - e2e
+      - user-journeys
+      - risk-based-testing
+
+  - name: e2e-test-automation
+    category: testing
+    path: skills/testing/e2e-test-automation
+    description: Implement maintainable browser-based E2E tests with reliable selectors, synchronization, fixtures, assertions, and artifacts
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-data-management
+      - e2e-test-environment
+    commonly_followed_by:
+      - e2e-test-reliability
+      - e2e-release-gating
+    works_with:
+      - e2e-cross-browser-testing
+      - e2e-test-debugging
+    tags:
+      - testing
+      - e2e
+      - automation
+      - browser-testing
+
+  - name: e2e-test-data-management
+    category: testing
+    path: skills/testing/e2e-test-data-management
+    description: Create isolated, deterministic, privacy-safe test data and lifecycle rules for end-to-end tests
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-environment
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-test-reliability
+    works_with:
+      - data-architecture-review
+      - e2e-release-gating
+    tags:
+      - testing
+      - e2e
+      - test-data
+      - isolation
+      - privacy
+
+  - name: e2e-test-environment
+    category: testing
+    path: skills/testing/e2e-test-environment
+    description: Define reproducible environments and service controls that let E2E tests run safely and meaningfully
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-data-management
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-test-reliability
+    works_with:
+      - deployment-strategy
+      - production-readiness
+    tags:
+      - testing
+      - e2e
+      - environments
+      - ci
+
+  - name: e2e-test-reliability
+    category: testing
+    path: skills/testing/e2e-test-reliability
+    description: Improve E2E signal by eliminating nondeterminism and governing retries, quarantine, and maintenance
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - e2e-test-automation
+      - e2e-test-data-management
+      - e2e-test-environment
+    commonly_followed_by:
+      - e2e-test-debugging
+      - e2e-release-gating
+    works_with:
+      - root-cause-analysis
+      - e2e-cross-browser-testing
+    tags:
+      - testing
+      - e2e
+      - reliability
+      - flaky-tests
+
+  - name: e2e-cross-browser-testing
+    category: testing
+    path: skills/testing/e2e-cross-browser-testing
+    description: Define and execute a risk-based browser, device, viewport, locale, timezone, and network matrix
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    requires:
+      - e2e-test-design
+      - frontend-testing-strategy
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-release-gating
+    works_with:
+      - responsive-design
+      - frontend-accessibility-review
+      - e2e-test-reliability
+    tags:
+      - testing
+      - e2e
+      - browsers
+      - devices
+
+  - name: e2e-test-debugging
+    category: testing
+    path: skills/testing/e2e-test-debugging
+    description: Diagnose E2E failures using reproducible evidence and distinguish product, test, data, environment, dependency, and infrastructure causes
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 1-4 hours
+    requires:
+      - e2e-test-reliability
+    commonly_followed_by:
+      - e2e-test-reliability
+      - root-cause-analysis
+    works_with:
+      - e2e-test-environment
+      - incident-analysis
+    tags:
+      - testing
+      - e2e
+      - debugging
+      - traces
+
+  - name: e2e-release-gating
+    category: testing
+    path: skills/testing/e2e-release-gating
+    description: Define how E2E evidence controls pull requests, deployments, and production releases
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-4 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-reliability
+      - production-readiness
+    commonly_followed_by:
+      - production-readiness
+    works_with:
+      - deployment-strategy
+      - e2e-cross-browser-testing
+      - e2e-test-debugging
+    tags:
+      - testing
+      - e2e
+      - release
+      - ci-cd
+      - quality-gates
+
+  # Advanced E2E Skills
+  - name: mobile-native-e2e-testing
+    category: testing
+    path: skills/testing/mobile-native-e2e-testing
+    description: Validate mobile-native user journeys across device capabilities, lifecycle events, permissions, navigation, and platform behavior
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-environment
+      - e2e-cross-browser-testing
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-release-gating
+    works_with:
+      - e2e-test-data-management
+      - e2e-test-reliability
+    tags:
+      - testing
+      - e2e
+      - mobile
+      - ios
+      - android
+
+  - name: visual-regression-testing
+    category: testing
+    path: skills/testing/visual-regression-testing
+    description: Detect unintended visual changes while preserving intentional design, responsive, accessibility, and content behavior
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - e2e-test-design
+      - frontend-testing-strategy
+    commonly_followed_by:
+      - e2e-test-automation
+      - e2e-release-gating
+    works_with:
+      - component-design
+      - responsive-design
+      - frontend-accessibility-review
+    tags:
+      - testing
+      - e2e
+      - visual
+      - regression
+      - design-system
+
+  - name: performance-journey-testing
+    category: testing
+    path: skills/testing/performance-journey-testing
+    description: Measure end-to-end user journey performance under representative devices, networks, data volumes, and system load
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    requires:
+      - e2e-test-design
+      - frontend-performance-analysis
+    commonly_followed_by:
+      - e2e-release-gating
+      - production-readiness
+    works_with:
+      - scalability-analysis
+      - observability-design
+      - e2e-test-environment
+    tags:
+      - testing
+      - e2e
+      - performance
+      - journeys
+      - budgets
+
+  - name: frontend-backend-contract-testing
+    category: testing
+    path: skills/testing/frontend-backend-contract-testing
+    description: Verify frontend and backend interfaces remain compatible across schemas, semantics, errors, authorization, and evolution
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - api-design-review
+      - frontend-testing-strategy
+    commonly_followed_by:
+      - e2e-test-design
+      - e2e-release-gating
+    works_with:
+      - testing-strategy
+      - migration-planning
+      - e2e-test-automation
+    tags:
+      - testing
+      - contracts
+      - frontend
+      - api
+      - compatibility
+
+  - name: test-intelligence-and-failure-analytics
+    category: testing
+    path: skills/testing/test-intelligence-and-failure-analytics
+    description: Turn E2E execution data into actionable insight about failures, flakiness, duration, coverage, ownership, and release risk
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - e2e-test-reliability
+      - e2e-test-debugging
+    commonly_followed_by:
+      - e2e-test-reliability
+      - e2e-release-gating
+    works_with:
+      - agent-observability
+      - incident-analysis
+      - e2e-release-gating
+    tags:
+      - testing
+      - e2e
+      - analytics
+      - flakiness
+      - quality
+
+  - name: automated-e2e-test-generation
+    category: testing
+    path: skills/testing/automated-e2e-test-generation
+    description: Use controlled automation or agents to propose, update, and validate E2E tests without weakening user intent or coverage
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 3-6 hours
+    requires:
+      - e2e-test-design
+      - e2e-test-automation
+      - e2e-test-reliability
+    commonly_followed_by:
+      - e2e-test-debugging
+      - e2e-release-gating
+    works_with:
+      - agent-context-engineering
+      - agent-guardrails
+      - agent-evaluation
+    tags:
+      - testing
+      - e2e
+      - automation
+      - agents
+      - maintenance
+
+# This catalog now includes 54 documented skills:
 # - Existing foundation, agentic, and operations skills: 32
 # - Frontend foundation skills: 8
+# - E2E testing foundation skills: 8
+# - Advanced E2E skills: 6
 

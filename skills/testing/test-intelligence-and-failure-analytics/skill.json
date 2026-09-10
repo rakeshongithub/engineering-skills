@@ -1,0 +1,32 @@
+{
+  "name": "test-intelligence-and-failure-analytics",
+  "category": "testing",
+  "version": "1.0.0",
+  "description": "Turn E2E execution data into actionable insight about failures, flakiness, duration, coverage, ownership, and release risk",
+  "inputs": [
+    "test-runs",
+    "failure-artifacts",
+    "environment-metadata",
+    "ownership-data",
+    "escaped-defects"
+  ],
+  "outputs": [
+    "failure-taxonomy",
+    "trend-dashboards",
+    "risk-weighted-priorities",
+    "ownership-queues",
+    "release-recommendations"
+  ],
+  "requires": ["e2e-test-reliability", "e2e-test-debugging"],
+  "commonly_followed_by": ["e2e-test-reliability", "e2e-release-gating"],
+  "alternative_to": [],
+  "works_with": [
+    "agent-observability",
+    "incident-analysis",
+    "e2e-release-gating"
+  ],
+  "tags": ["testing", "e2e", "analytics", "flakiness", "quality"],
+  "complexity": "advanced",
+  "estimated_time": "3-6 hours",
+  "skill_type": "analysis"
+}
