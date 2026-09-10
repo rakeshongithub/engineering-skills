@@ -601,12 +601,191 @@ skills:
       - sre
       - post-mortem
 
-# This catalog now includes 32 skills:
-# - Meta: 2 skills
-# - Requirements: 1 skill
-# - Architecture: 9 skills
-# - Security: 1 skill
-# - Engineering: 5 skills
-# - Operations: 3 skills (Phase 1: 1 + Phase 3: 2)
-# - Documentation: 1 skill
-# - Agentic: 10 skills (Phase 2 complete)
+  # Frontend Skills
+  - name: frontend-architecture
+    category: frontend
+    path: skills/frontend/frontend-architecture
+    description: Define maintainable frontend architecture across rendering, routing, modules, data ownership, and delivery constraints
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 4-8 hours
+    requires:
+      - requirements-analysis
+      - system-design
+    commonly_followed_by:
+      - component-design
+      - responsive-design
+      - frontend-state-management
+      - architecture-decision
+    works_with:
+      - frontend-testing-strategy
+      - frontend-performance-analysis
+      - frontend-security-review
+    tags:
+      - frontend
+      - architecture
+      - rendering
+      - routing
+      - modules
+
+  - name: component-design
+    category: frontend
+    path: skills/frontend/component-design
+    description: Design reusable frontend components with clear APIs, states, composition, and accessibility behavior
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    requires:
+      - frontend-architecture
+    commonly_followed_by:
+      - frontend-accessibility-review
+      - frontend-testing-strategy
+    works_with:
+      - responsive-design
+      - frontend-state-management
+    tags:
+      - frontend
+      - components
+      - composition
+      - ui
+
+  - name: responsive-design
+    category: frontend
+    path: skills/frontend/responsive-design
+    description: Design usable frontend layouts and interactions across viewport sizes, input methods, content lengths, and device capabilities
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    requires:
+      - requirements-analysis
+      - component-design
+    commonly_followed_by:
+      - frontend-accessibility-review
+      - frontend-testing-strategy
+      - frontend-performance-analysis
+    works_with:
+      - frontend-architecture
+      - component-design
+    tags:
+      - frontend
+      - responsive
+      - mobile
+      - layout
+
+  - name: frontend-state-management
+    category: frontend
+    path: skills/frontend/frontend-state-management
+    description: Choose and structure frontend state by ownership, lifetime, synchronization, and update behavior
+    version: 1.0.0
+    complexity: intermediate
+    estimated_time: 2-4 hours
+    requires:
+      - frontend-architecture
+    commonly_followed_by:
+      - component-design
+      - frontend-testing-strategy
+      - frontend-performance-analysis
+    works_with:
+      - frontend-architecture
+      - frontend-testing-strategy
+    tags:
+      - frontend
+      - state
+      - data
+      - caching
+
+  - name: frontend-accessibility-review
+    category: frontend
+    path: skills/frontend/frontend-accessibility-review
+    description: Review frontend experiences for keyboard, screen-reader, semantic, visual, and WCAG 2.1 AA quality
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-6 hours
+    requires:
+      - component-design
+      - responsive-design
+    commonly_followed_by:
+      - frontend-testing-strategy
+      - production-readiness
+    works_with:
+      - frontend-security-review
+      - frontend-performance-analysis
+    tags:
+      - frontend
+      - accessibility
+      - wcag
+      - keyboard
+      - screen-reader
+
+  - name: frontend-performance-analysis
+    category: frontend
+    path: skills/frontend/frontend-performance-analysis
+    description: Analyze frontend loading, rendering, interaction, runtime, and network performance against user-centered budgets
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-6 hours
+    requires:
+      - frontend-architecture
+      - responsive-design
+    commonly_followed_by:
+      - frontend-testing-strategy
+      - production-readiness
+    works_with:
+      - scalability-analysis
+      - observability-design
+      - frontend-state-management
+    tags:
+      - frontend
+      - performance
+      - core-web-vitals
+      - rendering
+
+  - name: frontend-testing-strategy
+    category: frontend
+    path: skills/frontend/frontend-testing-strategy
+    description: Design risk-based frontend testing across behavior, accessibility, visual output, integration, and user journeys
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-6 hours
+    requires:
+      - testing-strategy
+      - component-design
+    commonly_followed_by:
+      - frontend-accessibility-review
+      - production-readiness
+    works_with:
+      - frontend-performance-analysis
+      - frontend-security-review
+    tags:
+      - frontend
+      - testing
+      - e2e
+      - visual-testing
+
+  - name: frontend-security-review
+    category: frontend
+    path: skills/frontend/frontend-security-review
+    description: Review browser-facing code and delivery controls for client-side vulnerabilities and unsafe data handling
+    version: 1.0.0
+    complexity: advanced
+    estimated_time: 2-6 hours
+    requires:
+      - security-architecture-review
+      - frontend-architecture
+    commonly_followed_by:
+      - frontend-testing-strategy
+      - production-readiness
+    works_with:
+      - frontend-accessibility-review
+      - production-readiness
+    tags:
+      - frontend
+      - security
+      - xss
+      - csrf
+      - csp
+
+# This catalog now includes 40 documented skills:
+# - Existing foundation, agentic, and operations skills: 32
+# - Frontend foundation skills: 8
+

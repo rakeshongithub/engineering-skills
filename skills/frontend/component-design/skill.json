@@ -1,0 +1,32 @@
+{
+  "name": "component-design",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Design reusable frontend components with clear APIs, states, composition, and accessibility behavior",
+  "inputs": [
+    "user-journeys",
+    "interaction-requirements",
+    "design-reference",
+    "component-library",
+    "accessibility-requirements"
+  ],
+  "outputs": [
+    "component-boundaries",
+    "component-api",
+    "state-model",
+    "interaction-contract",
+    "test-requirements"
+  ],
+  "requires": ["frontend-architecture"],
+  "commonly_followed_by": [
+    "frontend-accessibility-review",
+    "frontend-testing-strategy",
+    "design-system-engineering"
+  ],
+  "alternative_to": [],
+  "works_with": ["responsive-design", "frontend-state-management"],
+  "tags": ["frontend", "components", "composition", "api-design", "ui"],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours",
+  "skill_type": "design"
+}

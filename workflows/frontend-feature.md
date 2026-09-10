@@ -1,0 +1,38 @@
+# Frontend Feature Workflow
+
+## Purpose
+
+Deliver a frontend feature with clear architecture, resilient interaction states, accessibility, security, test coverage, and measurable performance.
+
+## Inputs
+
+- User journeys and acceptance criteria
+- Designs, content rules, and supported browsers/devices
+- Existing frontend architecture and API contracts
+- Accessibility, security, performance, and release constraints
+
+## Workflow
+
+1. `requirements-analysis` defines user outcomes, edge cases, and acceptance criteria.
+2. `frontend-architecture` defines route, rendering, module, data, and ownership boundaries.
+3. `component-design` defines reusable components, states, and interaction contracts.
+4. `responsive-design` defines layout and interaction behavior across viewports and input methods.
+5. `frontend-state-management` defines server, URL, form, local, and shared state ownership.
+6. Run `frontend-accessibility-review` and `frontend-security-review` in parallel after the design stabilizes.
+7. `frontend-testing-strategy` maps risks to component, integration, visual, accessibility, and end-to-end tests.
+8. `frontend-performance-analysis` validates budgets and critical user journeys.
+9. `production-readiness` confirms rollout, monitoring, rollback, and support readiness.
+
+## Quality Gates
+
+- Critical journeys and all meaningful states have acceptance criteria.
+- Keyboard, responsive, security, and failure behavior are specified before implementation.
+- Tests cover user-visible behavior and high-risk integrations.
+- Performance budgets and release evidence are explicit.
+
+## Outputs
+
+- Frontend design and component contracts
+- State and responsive behavior model
+- Accessibility and security findings
+- Test plan, performance baseline, and production launch plan

@@ -1,0 +1,27 @@
+{
+  "name": "frontend-accessibility-review",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Review frontend experiences for keyboard, screen-reader, semantic, visual, and WCAG 2.1 AA quality",
+  "inputs": [
+    "user-journeys",
+    "frontend-implementation",
+    "design-reference",
+    "supported-assistive-tech",
+    "automated-results"
+  ],
+  "outputs": [
+    "accessibility-findings",
+    "remediation-plan",
+    "regression-tests",
+    "release-risk"
+  ],
+  "requires": ["component-design", "responsive-design"],
+  "commonly_followed_by": ["frontend-testing-strategy", "production-readiness"],
+  "alternative_to": [],
+  "works_with": ["frontend-security-review", "frontend-performance-analysis"],
+  "tags": ["frontend", "accessibility", "wcag", "keyboard", "screen-reader"],
+  "complexity": "advanced",
+  "estimated_time": "2-6 hours",
+  "skill_type": "review"
+}

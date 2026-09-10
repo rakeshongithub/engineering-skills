@@ -1,0 +1,32 @@
+{
+  "name": "frontend-state-management",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Choose and structure frontend state by ownership, lifetime, synchronization, and update behavior",
+  "inputs": [
+    "user-journeys",
+    "state-inventory",
+    "data-sources",
+    "cache-requirements",
+    "persistence-requirements"
+  ],
+  "outputs": [
+    "state-inventory",
+    "ownership-model",
+    "source-of-truth-rules",
+    "transition-model",
+    "adoption-plan"
+  ],
+  "requires": ["frontend-architecture"],
+  "commonly_followed_by": [
+    "component-design",
+    "frontend-testing-strategy",
+    "frontend-performance-analysis"
+  ],
+  "alternative_to": [],
+  "works_with": ["frontend-data-fetching", "frontend-architecture"],
+  "tags": ["frontend", "state", "data", "caching", "architecture"],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours",
+  "skill_type": "design"
+}

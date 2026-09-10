@@ -1,0 +1,36 @@
+{
+  "name": "frontend-testing-strategy",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Design risk-based frontend testing across behavior, accessibility, visual output, integration, and user journeys",
+  "inputs": [
+    "acceptance-criteria",
+    "critical-journeys",
+    "risk-areas",
+    "browser-matrix",
+    "ci-constraints"
+  ],
+  "outputs": [
+    "test-strategy",
+    "coverage-map",
+    "test-data-plan",
+    "ci-execution-plan"
+  ],
+  "requires": ["testing-strategy", "component-design"],
+  "commonly_followed_by": [
+    "frontend-accessibility-review",
+    "production-readiness"
+  ],
+  "alternative_to": [],
+  "works_with": ["frontend-performance-analysis", "frontend-security-review"],
+  "tags": [
+    "frontend",
+    "testing",
+    "e2e",
+    "visual-testing",
+    "accessibility-testing"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-6 hours",
+  "skill_type": "strategy"
+}

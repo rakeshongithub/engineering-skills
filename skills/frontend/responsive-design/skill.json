@@ -1,0 +1,31 @@
+{
+  "name": "responsive-design",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Design usable frontend layouts and interactions across viewport sizes, input methods, content lengths, and device capabilities",
+  "inputs": [
+    "user-journeys",
+    "content-priority",
+    "viewport-matrix",
+    "input-methods",
+    "layout-constraints"
+  ],
+  "outputs": [
+    "responsive-rules",
+    "breakpoint-rationale",
+    "reflow-behavior",
+    "responsive-test-plan"
+  ],
+  "requires": ["requirements-analysis", "component-design"],
+  "commonly_followed_by": [
+    "frontend-accessibility-review",
+    "frontend-testing-strategy",
+    "frontend-performance-analysis"
+  ],
+  "alternative_to": [],
+  "works_with": ["frontend-architecture", "component-design"],
+  "tags": ["frontend", "responsive", "mobile", "layout", "touch"],
+  "complexity": "intermediate",
+  "estimated_time": "2-4 hours",
+  "skill_type": "design"
+}

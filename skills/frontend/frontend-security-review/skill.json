@@ -1,0 +1,28 @@
+{
+  "name": "frontend-security-review",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Review browser-facing code and delivery controls for client-side vulnerabilities and unsafe data handling",
+  "inputs": [
+    "frontend-code",
+    "routes-and-forms",
+    "auth-model",
+    "data-flows",
+    "security-headers",
+    "dependencies"
+  ],
+  "outputs": [
+    "security-findings",
+    "required-controls",
+    "security-tests",
+    "residual-risk"
+  ],
+  "requires": ["security-architecture-review", "frontend-architecture"],
+  "commonly_followed_by": ["frontend-testing-strategy", "production-readiness"],
+  "alternative_to": [],
+  "works_with": ["frontend-accessibility-review", "production-readiness"],
+  "tags": ["frontend", "security", "xss", "csrf", "csp", "privacy"],
+  "complexity": "advanced",
+  "estimated_time": "2-6 hours",
+  "skill_type": "review"
+}

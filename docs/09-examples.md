@@ -8,6 +8,8 @@ For complete, reusable sequences, see the [workflow recipes](../workflows/README
 
 For standalone domain examples with explicit constraints, decisions, outputs, and quality gates, see the [examples directory](../examples/README.md).
 
+Frontend-specific scenarios are collected in the [frontend examples index](../examples/frontend/README.md), including accessible checkout, design-system rollout, dashboard performance, and framework migration.
+
 ## Scenario 1: New Microservice Development
 
 **Problem:** Design and implement a new user authentication microservice

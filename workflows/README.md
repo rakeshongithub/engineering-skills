@@ -4,15 +4,19 @@ Workflow recipes compose the library's individual skills into repeatable enginee
 
 ## Available Recipes
 
-| Recipe                                          | Use for                                        | Primary outcome                               |
-| ----------------------------------------------- | ---------------------------------------------- | --------------------------------------------- |
-| [New Feature](new-feature.md)                   | Delivering a user-facing feature safely        | Implementable design and release plan         |
-| [System Design](system-design.md)               | Designing a new system or major capability     | Reviewed system design                        |
-| [Architecture Review](architecture-review.md)   | Assessing an existing architecture             | Prioritized findings and decisions            |
-| [Legacy Modernization](legacy-modernization.md) | Modernizing an existing platform incrementally | Sequenced modernization roadmap               |
-| [Production Readiness](production-readiness.md) | Preparing a change or system for production    | Go/no-go decision and launch plan             |
-| [Agent Development](agent-development.md)       | Building an agentic engineering system         | Evaluated, guarded, observable agent workflow |
-| [Incident Response](incident-response.md)       | Learning from a production incident            | Incident report and prevention backlog        |
+| Recipe                                                          | Use for                                         | Primary outcome                               |
+| --------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| [New Feature](new-feature.md)                                   | Delivering a user-facing feature safely         | Implementable design and release plan         |
+| [System Design](system-design.md)                               | Designing a new system or major capability      | Reviewed system design                        |
+| [Architecture Review](architecture-review.md)                   | Assessing an existing architecture              | Prioritized findings and decisions            |
+| [Legacy Modernization](legacy-modernization.md)                 | Modernizing an existing platform incrementally  | Sequenced modernization roadmap               |
+| [Production Readiness](production-readiness.md)                 | Preparing a change or system for production     | Go/no-go decision and launch plan             |
+| [Agent Development](agent-development.md)                       | Building an agentic engineering system          | Evaluated, guarded, observable agent workflow |
+| [Incident Response](incident-response.md)                       | Learning from a production incident             | Incident report and prevention backlog        |
+| [Frontend Feature](frontend-feature.md)                         | Delivering a frontend feature safely            | Accessible, tested, performant feature        |
+| [Frontend Architecture Review](frontend-architecture-review.md) | Assessing frontend structure and quality        | Prioritized frontend remediation roadmap      |
+| [Design System](design-system.md)                               | Creating reusable frontend foundations          | Governed component and token system           |
+| [Frontend Migration](frontend-migration.md)                     | Modernizing frontend architecture incrementally | Sequenced migration and rollback plan         |
 
 ## How to Run a Recipe
 

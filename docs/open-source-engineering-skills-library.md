@@ -41,42 +41,57 @@ Skills should be:
 
 These form the core of the library.
 
-| Skill | Purpose | Practical Output |
-|---|---|---|
-| `architecture-review` | Review an existing architecture | Findings, risks, recommendations |
-| `architecture-design` | Design architecture for a new requirement | Architecture, diagrams, decisions |
-| `system-design` | Convert requirements into system design | Components, APIs, data flow |
-| `architecture-decision` | Make an architectural/technology decision | ADR |
-| `tradeoff-analysis` | Compare architectural alternatives | Decision matrix |
-| `scalability-analysis` | Identify scalability bottlenecks | Capacity risks and solutions |
-| `reliability-analysis` | Review availability and resilience | Failure modes and mitigations |
-| `security-architecture-review` | Review security architecture | Threats and controls |
-| `api-design-review` | Review REST/event/API design | API issues and recommendations |
-| `data-architecture-review` | Review data/storage architecture | Data risks and recommendations |
-| `integration-design` | Design system integrations | Integration architecture |
-| `event-driven-design` | Design event-driven systems | Events, producers, consumers, failure handling |
+| Skill                          | Purpose                                   | Practical Output                               |
+| ------------------------------ | ----------------------------------------- | ---------------------------------------------- |
+| `architecture-review`          | Review an existing architecture           | Findings, risks, recommendations               |
+| `architecture-design`          | Design architecture for a new requirement | Architecture, diagrams, decisions              |
+| `system-design`                | Convert requirements into system design   | Components, APIs, data flow                    |
+| `architecture-decision`        | Make an architectural/technology decision | ADR                                            |
+| `tradeoff-analysis`            | Compare architectural alternatives        | Decision matrix                                |
+| `scalability-analysis`         | Identify scalability bottlenecks          | Capacity risks and solutions                   |
+| `reliability-analysis`         | Review availability and resilience        | Failure modes and mitigations                  |
+| `security-architecture-review` | Review security architecture              | Threats and controls                           |
+| `api-design-review`            | Review REST/event/API design              | API issues and recommendations                 |
+| `data-architecture-review`     | Review data/storage architecture          | Data risks and recommendations                 |
+| `integration-design`           | Design system integrations                | Integration architecture                       |
+| `event-driven-design`          | Design event-driven systems               | Events, producers, consumers, failure handling |
 
 ---
 
 # 3. Software Engineering Skills
 
-| Skill | Purpose |
-|---|---|
-| `requirements-analysis` | Turn vague requirements into engineering requirements |
-| `requirement-clarification` | Identify ambiguities and missing requirements |
-| `technical-specification` | Convert requirements into implementation-ready specifications |
-| `code-review` | Perform structured code review |
-| `refactoring` | Identify and plan safe refactoring |
-| `technical-debt-analysis` | Identify and prioritize technical debt |
-| `bug-analysis` | Analyze bugs systematically |
-| `root-cause-analysis` | Perform root-cause analysis rather than symptom fixing |
-| `performance-analysis` | Analyze application performance |
-| `dependency-analysis` | Analyze library/package dependencies |
-| `migration-planning` | Plan technology/platform migrations |
-| `legacy-modernization` | Modernize legacy applications incrementally |
-| `testing-strategy` | Define testing strategy |
-| `test-case-design` | Generate meaningful test scenarios |
-| `release-readiness` | Determine whether a feature/release is ready |
+| Skill                       | Purpose                                                       |
+| --------------------------- | ------------------------------------------------------------- |
+| `requirements-analysis`     | Turn vague requirements into engineering requirements         |
+| `requirement-clarification` | Identify ambiguities and missing requirements                 |
+| `technical-specification`   | Convert requirements into implementation-ready specifications |
+| `code-review`               | Perform structured code review                                |
+| `refactoring`               | Identify and plan safe refactoring                            |
+| `technical-debt-analysis`   | Identify and prioritize technical debt                        |
+| `bug-analysis`              | Analyze bugs systematically                                   |
+| `root-cause-analysis`       | Perform root-cause analysis rather than symptom fixing        |
+| `performance-analysis`      | Analyze application performance                               |
+| `dependency-analysis`       | Analyze library/package dependencies                          |
+| `migration-planning`        | Plan technology/platform migrations                           |
+| `legacy-modernization`      | Modernize legacy applications incrementally                   |
+| `testing-strategy`          | Define testing strategy                                       |
+| `test-case-design`          | Generate meaningful test scenarios                            |
+| `release-readiness`         | Determine whether a feature/release is ready                  |
+
+# 3A. Frontend Engineering Skills
+
+Frontend skills cover the client-side concerns that are easy to miss in backend-oriented engineering workflows: rendering, component boundaries, responsive behavior, browser state, accessibility, performance, testing, and security.
+
+| Skill                           | Purpose                                                                       |
+| ------------------------------- | ----------------------------------------------------------------------------- |
+| `frontend-architecture`         | Define frontend rendering, routing, module, data, and ownership boundaries    |
+| `component-design`              | Design reusable components with clear APIs, states, and interaction contracts |
+| `responsive-design`             | Design usable layouts across viewport sizes and input methods                 |
+| `frontend-state-management`     | Structure state by ownership, lifetime, and synchronization behavior          |
+| `frontend-accessibility-review` | Review keyboard, semantic, screen-reader, visual, and WCAG quality            |
+| `frontend-performance-analysis` | Analyze loading, rendering, interaction, and runtime performance              |
+| `frontend-testing-strategy`     | Define component, integration, visual, accessibility, and end-to-end coverage |
+| `frontend-security-review`      | Review browser-facing security and sensitive data handling                    |
 
 ---
 
@@ -86,41 +101,41 @@ This category can become one of the distinctive parts of the repository.
 
 The focus should be on **engineering with agents**, rather than generic "AI code generation."
 
-| Skill | Purpose |
-|---|---|
-| `agent-task-decomposition` | Break large engineering problems into agent-sized tasks |
-| `agent-workflow-design` | Design workflows involving multiple agents |
-| `agent-selection` | Decide which agent should perform which task |
-| `agent-context-engineering` | Determine what context an agent needs |
-| `agent-instruction-design` | Create effective agent instructions |
-| `agent-output-validation` | Validate agent-generated output |
-| `agent-handoff-design` | Design handoffs between agents |
-| `agent-human-handoff` | Determine when humans must intervene |
-| `agent-tool-selection` | Decide which tools an agent needs |
-| `agent-memory-design` | Design short/long-term agent memory |
-| `agent-evaluation` | Evaluate agent quality |
-| `agent-observability` | Design tracing/monitoring for agents |
-| `agent-guardrails` | Define boundaries and controls |
-| `agentic-workflow-review` | Review an existing agentic workflow |
+| Skill                       | Purpose                                                 |
+| --------------------------- | ------------------------------------------------------- |
+| `agent-task-decomposition`  | Break large engineering problems into agent-sized tasks |
+| `agent-workflow-design`     | Design workflows involving multiple agents              |
+| `agent-selection`           | Decide which agent should perform which task            |
+| `agent-context-engineering` | Determine what context an agent needs                   |
+| `agent-instruction-design`  | Create effective agent instructions                     |
+| `agent-output-validation`   | Validate agent-generated output                         |
+| `agent-handoff-design`      | Design handoffs between agents                          |
+| `agent-human-handoff`       | Determine when humans must intervene                    |
+| `agent-tool-selection`      | Decide which tools an agent needs                       |
+| `agent-memory-design`       | Design short/long-term agent memory                     |
+| `agent-evaluation`          | Evaluate agent quality                                  |
+| `agent-observability`       | Design tracing/monitoring for agents                    |
+| `agent-guardrails`          | Define boundaries and controls                          |
+| `agentic-workflow-review`   | Review an existing agentic workflow                     |
 
 ---
 
 # 5. DevOps / Platform Skills
 
-| Skill | Purpose |
-|---|---|
-| `ci-cd-design` | Design CI/CD pipelines |
-| `deployment-strategy` | Choose blue/green, canary, rolling, etc. |
-| `containerization` | Containerize applications |
-| `kubernetes-review` | Review Kubernetes architecture |
-| `cloud-architecture-review` | Review cloud architecture |
-| `observability-design` | Design logs, metrics and traces |
-| `incident-analysis` | Analyze production incidents |
-| `disaster-recovery` | Design disaster recovery strategy |
-| `backup-recovery` | Review backup/recovery strategy |
-| `capacity-planning` | Estimate infrastructure capacity |
-| `cost-optimization` | Analyze cloud/infrastructure costs |
-| `production-readiness` | Review production readiness |
+| Skill                       | Purpose                                  |
+| --------------------------- | ---------------------------------------- |
+| `ci-cd-design`              | Design CI/CD pipelines                   |
+| `deployment-strategy`       | Choose blue/green, canary, rolling, etc. |
+| `containerization`          | Containerize applications                |
+| `kubernetes-review`         | Review Kubernetes architecture           |
+| `cloud-architecture-review` | Review cloud architecture                |
+| `observability-design`      | Design logs, metrics and traces          |
+| `incident-analysis`         | Analyze production incidents             |
+| `disaster-recovery`         | Design disaster recovery strategy        |
+| `backup-recovery`           | Review backup/recovery strategy          |
+| `capacity-planning`         | Estimate infrastructure capacity         |
+| `cost-optimization`         | Analyze cloud/infrastructure costs       |
+| `production-readiness`      | Review production readiness              |
 
 ---
 
@@ -128,18 +143,18 @@ The focus should be on **engineering with agents**, rather than generic "AI code
 
 Keep these practical rather than turning them into security textbooks.
 
-| Skill | Purpose |
-|---|---|
-| `threat-modeling` | Threat model a system |
-| `security-review` | Perform security review of architecture/code |
-| `authentication-design` | Design authentication |
-| `authorization-design` | Design authorization |
-| `api-security-review` | Review API security |
-| `data-protection-review` | Review sensitive data handling |
-| `secrets-management` | Review secrets handling |
-| `dependency-security-review` | Identify dependency risks |
-| `secure-coding-review` | Identify common security problems |
-| `zero-trust-review` | Evaluate zero-trust principles |
+| Skill                        | Purpose                                      |
+| ---------------------------- | -------------------------------------------- |
+| `threat-modeling`            | Threat model a system                        |
+| `security-review`            | Perform security review of architecture/code |
+| `authentication-design`      | Design authentication                        |
+| `authorization-design`       | Design authorization                         |
+| `api-security-review`        | Review API security                          |
+| `data-protection-review`     | Review sensitive data handling               |
+| `secrets-management`         | Review secrets handling                      |
+| `dependency-security-review` | Identify dependency risks                    |
+| `secure-coding-review`       | Identify common security problems            |
+| `zero-trust-review`          | Evaluate zero-trust principles               |
 
 ---
 
@@ -147,17 +162,17 @@ Keep these practical rather than turning them into security textbooks.
 
 Architects spend significant time making decisions under uncertainty.
 
-| Skill | Purpose |
-|---|---|
-| `technology-selection` | Select technology/framework |
-| `build-vs-buy` | Analyze build vs. buy |
-| `vendor-evaluation` | Evaluate vendors |
-| `architecture-tradeoff` | Analyze competing architectural choices |
-| `poc-evaluation` | Evaluate POCs |
-| `technology-risk-analysis` | Identify technology risks |
-| `technical-feasibility` | Determine technical feasibility |
-| `decision-matrix` | Create weighted decision matrix |
-| `adr-generator` | Generate Architecture Decision Records |
+| Skill                      | Purpose                                 |
+| -------------------------- | --------------------------------------- |
+| `technology-selection`     | Select technology/framework             |
+| `build-vs-buy`             | Analyze build vs. buy                   |
+| `vendor-evaluation`        | Evaluate vendors                        |
+| `architecture-tradeoff`    | Analyze competing architectural choices |
+| `poc-evaluation`           | Evaluate POCs                           |
+| `technology-risk-analysis` | Identify technology risks               |
+| `technical-feasibility`    | Determine technical feasibility         |
+| `decision-matrix`          | Create weighted decision matrix         |
+| `adr-generator`            | Generate Architecture Decision Records  |
 
 Example composition:
 
@@ -179,19 +194,19 @@ ADR
 
 # 8. Documentation & Knowledge Skills
 
-| Skill | Purpose |
-|---|---|
-| `architecture-documentation` | Document architecture |
-| `api-documentation` | Create API documentation |
-| `adr-documentation` | Create ADRs |
-| `runbook-generation` | Create operational runbooks |
-| `technical-design-doc` | Create design documents |
-| `engineering-guidelines` | Create engineering standards |
-| `migration-documentation` | Document migration strategy |
-| `onboarding-guide` | Create technical onboarding |
-| `architecture-diagram` | Generate architecture diagrams |
-| `sequence-diagram` | Generate sequence diagrams |
-| `dependency-diagram` | Generate dependency diagrams |
+| Skill                        | Purpose                        |
+| ---------------------------- | ------------------------------ |
+| `architecture-documentation` | Document architecture          |
+| `api-documentation`          | Create API documentation       |
+| `adr-documentation`          | Create ADRs                    |
+| `runbook-generation`         | Create operational runbooks    |
+| `technical-design-doc`       | Create design documents        |
+| `engineering-guidelines`     | Create engineering standards   |
+| `migration-documentation`    | Document migration strategy    |
+| `onboarding-guide`           | Create technical onboarding    |
+| `architecture-diagram`       | Generate architecture diagrams |
+| `sequence-diagram`           | Generate sequence diagrams     |
+| `dependency-diagram`         | Generate dependency diagrams   |
 
 ---
 
@@ -199,18 +214,18 @@ ADR
 
 These are particularly useful for senior engineers and architects working with existing systems.
 
-| Skill | Purpose |
-|---|---|
-| `codebase-analysis` | Understand an unfamiliar codebase |
-| `architecture-discovery` | Reverse-engineer architecture |
-| `dependency-mapping` | Map dependencies |
-| `service-boundary-analysis` | Evaluate microservice boundaries |
-| `coupling-analysis` | Identify coupling |
-| `cohesion-analysis` | Analyze component cohesion |
-| `complexity-analysis` | Analyze system/code complexity |
-| `bottleneck-analysis` | Find bottlenecks |
-| `failure-mode-analysis` | Identify failure scenarios |
-| `risk-analysis` | Identify technical risks |
+| Skill                       | Purpose                           |
+| --------------------------- | --------------------------------- |
+| `codebase-analysis`         | Understand an unfamiliar codebase |
+| `architecture-discovery`    | Reverse-engineer architecture     |
+| `dependency-mapping`        | Map dependencies                  |
+| `service-boundary-analysis` | Evaluate microservice boundaries  |
+| `coupling-analysis`         | Identify coupling                 |
+| `cohesion-analysis`         | Analyze component cohesion        |
+| `complexity-analysis`       | Analyze system/code complexity    |
+| `bottleneck-analysis`       | Find bottlenecks                  |
+| `failure-mode-analysis`     | Identify failure scenarios        |
+| `risk-analysis`             | Identify technical risks          |
 
 ---
 
@@ -530,6 +545,28 @@ agent-observability
 production-readiness
 ```
 
+## Frontend Feature
+
+```text
+requirements-analysis
+        ↓
+frontend-architecture
+        ↓
+component-design
+        ↓
+responsive-design
+        ↓
+frontend-state-management
+        ↓
+frontend-accessibility-review
+        ↓
+frontend-testing-strategy
+        ↓
+frontend-performance-analysis
+        ↓
+production-readiness
+```
+
 ## Legacy Modernization
 
 ```text
@@ -618,6 +655,16 @@ engineering-skills/
 │   │   ├── agent-evaluation/
 │   │   └── agent-guardrails/
 │   │
+│   ├── frontend/
+│   │   ├── frontend-architecture/
+│   │   ├── component-design/
+│   │   ├── responsive-design/
+│   │   ├── frontend-state-management/
+│   │   ├── frontend-accessibility-review/
+│   │   ├── frontend-performance-analysis/
+│   │   ├── frontend-testing-strategy/
+│   │   └── frontend-security-review/
+│   │
 │   └── operations/
 │       ├── production-readiness/
 │       ├── incident-analysis/
@@ -638,7 +685,8 @@ engineering-skills/
     ├── ecommerce/
     ├── banking/
     ├── saas/
-    └── ai-agent/
+        ├── ai-agent/
+        └── frontend/
 ```
 
 ---

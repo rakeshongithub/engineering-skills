@@ -23,7 +23,7 @@ Composable Engineering Skill System
 
 ## Available Skills
 
-The library includes **32 production-ready skills** across multiple categories:
+The library includes **40 production-ready skills** across multiple categories:
 
 **Phase 1: Foundation (20 Skills)**
 
@@ -47,11 +47,16 @@ The library includes **32 production-ready skills** across multiple categories:
 
 - **Incident Response** (2): Incident analysis, root-cause analysis
 
+**Frontend Foundation (8 Skills)**
+
+- **Frontend Architecture** (3): Architecture, component design, responsive design
+- **Frontend Quality** (5): State management, accessibility, performance, testing, security
+
 ## Workflow Recipes
 
-The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, and incident response. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
+The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, incident response, frontend feature delivery, frontend architecture review, design systems, and frontend migration. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
 
-The [`examples/`](../examples/README.md) directory demonstrates those compositions in four domains: e-commerce, banking, SaaS, and AI-agent support operations.
+The [`examples/`](../examples/README.md) directory demonstrates those compositions in e-commerce, banking, SaaS, AI-agent support operations, and frontend product scenarios.
 
 For a complete list with metadata, see [`catalog/skills.yaml`](../catalog/skills.yaml).
 

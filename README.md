@@ -15,7 +15,7 @@ Each skill represents a practical, repeatable engineering capability with:
 - Examples
 - Relationships to other skills
 
-**Current Status:** 32 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic + Phase 3: 2 operations)
+**Current Status:** 40 production-ready skills (Phase 1: 20 foundational + Phase 2: 10 agentic + Phase 3: 2 operations + Frontend Foundation: 8)
 
 ## What Makes This Different
 
@@ -48,6 +48,7 @@ engineering-skills/
 │   ├── engineering/
 │   ├── security/
 │   ├── agentic/
+│   ├── frontend/
 │   └── operations/
 ├── workflows/        # Reusable workflow recipes
 ├── catalog/         # Machine-readable skill catalog
@@ -108,6 +109,10 @@ Reusable workflow recipes compose the individual skills into common engineering 
 - [Production readiness](workflows/production-readiness.md)
 - [Agent development](workflows/agent-development.md)
 - [Incident response](workflows/incident-response.md)
+- [Frontend feature](workflows/frontend-feature.md)
+- [Frontend architecture review](workflows/frontend-architecture-review.md)
+- [Design system](workflows/design-system.md)
+- [Frontend migration](workflows/frontend-migration.md)
 
 Use the skill orchestrator when the problem does not fit one of these recipes or needs a different sequence.
 
@@ -119,6 +124,10 @@ The [examples index](examples/README.md) contains practical scenarios showing ho
 - [Banking modernization](examples/banking/legacy-modernization.md)
 - [SaaS architecture review](examples/saas/architecture-review.md)
 - [Support-triage agent](examples/ai-agent/support-triage.md)
+- [Accessible checkout](examples/frontend/accessible-checkout.md)
+- [Design system rollout](examples/frontend/design-system.md)
+- [Dashboard performance](examples/frontend/dashboard-performance.md)
+- [Frontend migration](examples/frontend/frontend-migration.md)
 
 ---
 
@@ -254,6 +263,11 @@ agent-guardrails (adjustment) → agentic-workflow-review
 ### Phase 3: Engineering Operations (2 Skills) ✅
 
 - **Incident Response** (2 skills) - Incident analysis, root cause analysis
+
+### Frontend Foundation (8 Skills) ✅
+
+- **Architecture and composition** (3) - Frontend architecture, component design, responsive design
+- **State and quality** (5) - State management, accessibility review, performance analysis, testing strategy, security review
 
 ### Coming Soon: Phase 4
 

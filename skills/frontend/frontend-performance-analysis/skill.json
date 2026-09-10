@@ -1,0 +1,37 @@
+{
+  "name": "frontend-performance-analysis",
+  "category": "frontend",
+  "version": "1.0.0",
+  "description": "Analyze frontend loading, rendering, interaction, runtime, and network performance against user-centered budgets",
+  "inputs": [
+    "critical-journeys",
+    "performance-budgets",
+    "real-user-data",
+    "lab-measurements",
+    "build-output"
+  ],
+  "outputs": [
+    "performance-baseline",
+    "bottleneck-analysis",
+    "optimization-plan",
+    "regression-budgets"
+  ],
+  "requires": ["frontend-architecture", "responsive-design"],
+  "commonly_followed_by": ["frontend-testing-strategy", "production-readiness"],
+  "alternative_to": [],
+  "works_with": [
+    "scalability-analysis",
+    "observability-design",
+    "frontend-state-management"
+  ],
+  "tags": [
+    "frontend",
+    "performance",
+    "core-web-vitals",
+    "bundles",
+    "rendering"
+  ],
+  "complexity": "advanced",
+  "estimated_time": "2-6 hours",
+  "skill_type": "analysis"
+}
