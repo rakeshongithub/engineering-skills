@@ -21,11 +21,13 @@ Thank you for your interest in contributing! This guide will help you create hig
 ### 2. Define Inputs and Outputs
 
 **Inputs** should be:
+
 - Specific and well-defined
 - Practical and obtainable
 - Necessary (not nice-to-have)
 
 **Outputs** should be:
+
 - Actionable
 - Measurable
 - Valuable
@@ -49,6 +51,17 @@ Thank you for your interest in contributing! This guide will help you create hig
 - What skills commonly follow this one?
 - How does it compose with other skills?
 
+## Adding Domain Examples
+
+Domain examples should show a realistic engineering problem without depending on proprietary code or credentials. Prefer one Markdown file per scenario under `examples/<domain>/` and include:
+
+- Context, constraints, and available evidence
+- The workflow recipe and skills being composed
+- Important decisions or handoff artifacts
+- Expected outputs and quality gates
+
+Add the scenario to `examples/README.md` so it can be discovered from the repository entry points.
+
 ## Standard Skill Structure
 
 Every skill must include:
@@ -68,50 +81,63 @@ skills/<category>/<skill-name>/
 # Skill Name
 
 ## Purpose
+
 [One-sentence description]
 
 ## When to Use
+
 [Specific scenarios]
 
 ## When NOT to Use
+
 [Anti-patterns and limitations]
 
 ## Inputs
+
 - Input 1: Description
 - Input 2: Description
 
 ## Expected Outputs
+
 - Output 1: Description
 - Output 2: Description
 
 ## Workflow
+
 1. Step 1
 2. Step 2
 3. Step 3
 
 ## Decision Framework
+
 [How to make key decisions]
 
 ## Quality Checklist
+
 - [ ] Criterion 1
 - [ ] Criterion 2
 
 ## Common Mistakes
+
 - Mistake 1: Why it's wrong
 - Mistake 2: Why it's wrong
 
 ## Examples
+
 [See examples.md]
 
 ## Related Skills
+
 - **Requires**: skill-name
 - **Commonly followed by**: skill-name
 - **Alternative to**: skill-name
 
 ## Skill Composition
+
 [How this skill combines with others]
 
 ## Evaluation Criteria
+
 [How to measure success]
 ```
 
@@ -123,25 +149,11 @@ skills/<category>/<skill-name>/
   "category": "architecture|engineering|agentic|security|operations|meta",
   "version": "1.0.0",
   "description": "Brief description",
-  "inputs": [
-    "input-1",
-    "input-2"
-  ],
-  "outputs": [
-    "output-1",
-    "output-2"
-  ],
-  "requires": [
-    "dependency-skill-1"
-  ],
-  "commonly_followed_by": [
-    "next-skill-1",
-    "next-skill-2"
-  ],
-  "tags": [
-    "tag1",
-    "tag2"
-  ],
+  "inputs": ["input-1", "input-2"],
+  "outputs": ["output-1", "output-2"],
+  "requires": ["dependency-skill-1"],
+  "commonly_followed_by": ["next-skill-1", "next-skill-2"],
+  "tags": ["tag1", "tag2"],
   "complexity": "basic|intermediate|advanced",
   "estimated_time": "15min|1hour|4hours|1day"
 }

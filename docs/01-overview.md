@@ -51,6 +51,8 @@ The library includes **32 production-ready skills** across multiple categories:
 
 The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, and incident response. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
 
+The [`examples/`](../examples/README.md) directory demonstrates those compositions in four domains: e-commerce, banking, SaaS, and AI-agent support operations.
+
 For a complete list with metadata, see [`catalog/skills.yaml`](../catalog/skills.yaml).
 
 ## Getting Started

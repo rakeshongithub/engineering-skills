@@ -32,6 +32,10 @@ Use the reusable recipes in [`workflows/`](workflows/README.md) when a problem m
 
 Each recipe defines its inputs, skill sequence, handoff artifacts, quality gates, and expected outputs. Use `skill-orchestrator` when the problem needs a different composition.
 
+## Domain Examples
+
+Use [`examples/`](examples/README.md) to see the workflows applied to realistic domains. The examples include an e-commerce feature, banking modernization, a SaaS architecture review, and an AI support-triage agent.
+
 ---
 
 ## Quick Start
@@ -53,6 +57,8 @@ Each recipe defines its inputs, skill sequence, handoff artifacts, quality gates
    - Read `SKILL.md` for overview
    - Follow `instructions.md` for detailed workflow
    - Reference `examples.md` for real-world usage
+
+For a complete scenario, start with an example in [`examples/`](examples/README.md), then open the linked workflow and individual skills.
 
 4. **Integrate with your tools** - See integration guides below
 

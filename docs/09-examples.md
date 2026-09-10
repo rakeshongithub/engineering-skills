@@ -6,6 +6,8 @@ This guide provides practical examples of using engineering skills in real-world
 
 For complete, reusable sequences, see the [workflow recipes](../workflows/README.md). The scenarios below show how those compositions can be executed through an agent or manually.
 
+For standalone domain examples with explicit constraints, decisions, outputs, and quality gates, see the [examples directory](../examples/README.md).
+
 ## Scenario 1: New Microservice Development
 
 **Problem:** Design and implement a new user authentication microservice

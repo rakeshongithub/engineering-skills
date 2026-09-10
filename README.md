@@ -111,6 +111,15 @@ Reusable workflow recipes compose the individual skills into common engineering 
 
 Use the skill orchestrator when the problem does not fit one of these recipes or needs a different sequence.
 
+## Domain Examples
+
+The [examples index](examples/README.md) contains practical scenarios showing how recipes are applied in context:
+
+- [E-commerce checkout](examples/ecommerce/checkout-feature.md)
+- [Banking modernization](examples/banking/legacy-modernization.md)
+- [SaaS architecture review](examples/saas/architecture-review.md)
+- [Support-triage agent](examples/ai-agent/support-triage.md)
+
 ---
 
 ## Phase 2: Agentic Engineering Skills

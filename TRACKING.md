@@ -470,7 +470,7 @@ Every skill must include:
 
 1. Complete Phase 4 (Additional specialized skills)
 2. Extend the workflow recipe set with domain-specific examples and evaluation cases
-3. Build example implementations for each workflow
+3. ✅ Build initial domain examples for the workflow recipes
 4. Add evaluation criteria and test cases
 
 ### Long-term (3-6 Months)
@@ -550,6 +550,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 - Completed the reusable workflow recipe layer in `workflows/`
 - Added recipes for new features, system design, architecture review, legacy modernization, production readiness, agent development, and incident response
 - Added workflow index and linked recipes from repository usage and integration documentation
+
+### 2026-09-10 (continued)
+
+- Added initial domain examples for e-commerce, banking, SaaS, and AI-agent workflows
+- Added examples index and contributor guidance for creating domain examples
 
 ### 2026-09-08
 
