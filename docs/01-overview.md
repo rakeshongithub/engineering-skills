@@ -23,7 +23,7 @@ Composable Engineering Skill System
 
 ## Available Skills
 
-The library includes **30 production-ready skills** across multiple categories:
+The library includes **32 production-ready skills** across multiple categories:
 
 **Phase 1: Foundation (20 Skills)**
 
@@ -42,6 +42,14 @@ The library includes **30 production-ready skills** across multiple categories:
 - **Agent Execution** (2): Tool selection, handoff design
 - **Agent Safety & Quality** (2): Guardrails, evaluation
 - **Agent Operations** (2): Observability, workflow review
+
+**Phase 3: Engineering Operations (2 Skills)**
+
+- **Incident Response** (2): Incident analysis, root-cause analysis
+
+## Workflow Recipes
+
+The [`workflows/`](../workflows/README.md) directory contains reusable compositions for new feature delivery, system design, architecture review, legacy modernization, production readiness, agent development, and incident response. Each recipe identifies the input evidence, ordered skill sequence, quality gates, and final artifacts.
 
 For a complete list with metadata, see [`catalog/skills.yaml`](../catalog/skills.yaml).
 

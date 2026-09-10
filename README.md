@@ -97,6 +97,20 @@ Teaches: **How to create high-quality skills**
 
 Location: `skills/meta/skill-authoring/`
 
+## Workflow Recipes
+
+Reusable workflow recipes compose the individual skills into common engineering paths. Start with the [workflow index](workflows/README.md) when the problem matches a known scenario:
+
+- [New feature](workflows/new-feature.md)
+- [System design](workflows/system-design.md)
+- [Architecture review](workflows/architecture-review.md)
+- [Legacy modernization](workflows/legacy-modernization.md)
+- [Production readiness](workflows/production-readiness.md)
+- [Agent development](workflows/agent-development.md)
+- [Incident response](workflows/incident-response.md)
+
+Use the skill orchestrator when the problem does not fit one of these recipes or needs a different sequence.
+
 ---
 
 ## Phase 2: Agentic Engineering Skills

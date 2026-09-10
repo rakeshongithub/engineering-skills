@@ -76,7 +76,7 @@ Use the skill-orchestrator to determine which skills I need for:
 ### New Feature Development
 
 ```
-@workspace I need to design a new authentication system.
+@workspace Follow the new feature workflow from workflows/new-feature.md to design a new authentication system.
 
 1. Use requirements-analysis skill to clarify requirements
 2. Use system-design skill to create the architecture
@@ -89,6 +89,8 @@ Requirements:
 - Multi-factor authentication
 - Session management
 ```
+
+For other common paths, use the recipes in [`workflows/`](../workflows/README.md), including system design, legacy modernization, production readiness, agent development, and incident response.
 
 ### Code Review
 

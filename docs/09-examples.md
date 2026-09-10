@@ -4,6 +4,8 @@
 
 This guide provides practical examples of using engineering skills in real-world situations.
 
+For complete, reusable sequences, see the [workflow recipes](../workflows/README.md). The scenarios below show how those compositions can be executed through an agent or manually.
+
 ## Scenario 1: New Microservice Development
 
 **Problem:** Design and implement a new user authentication microservice
@@ -166,7 +168,7 @@ Follow the skill's quality checklist and provide findings.
 
 ### Copilot Response
 
-```markdown
+````markdown
 # API Design Review: Orders API
 
 ## Findings
@@ -219,7 +221,9 @@ Response 400:
   }
 }
 ```
-```
+````
+
+````
 
 ## Scenario 5: Technical Debt Prioritization
 
@@ -256,7 +260,7 @@ print(debt_analysis['output'])
 # - Estimated effort
 # - Risk assessment
 # - Remediation roadmap
-```
+````
 
 ## Scenario 6: Multi-Agent Code Review System
 
@@ -328,17 +332,17 @@ review = client.messages.create(
     model="claude-3-5-sonnet-20241022",
     max_tokens=4096,
     system=f"""You are an expert architect.
-    
+
     {skill['skill']}
-    
+
     Follow the workflow exactly.""",
     messages=[{
         "role": "user",
         "content": """
         Review this architecture:
-        
+
         System: E-commerce Platform
-        
+
         Components:
         - Frontend: React SPA
         - API Gateway: Kong
@@ -347,9 +351,9 @@ review = client.messages.create(
         - Cache: Redis
         - Message Queue: RabbitMQ
         - Search: Elasticsearch
-        
+
         Scale: 100K daily users, 10K concurrent
-        
+
         Requirements:
         - High availability (99.9%)
         - Low latency (<200ms p95)

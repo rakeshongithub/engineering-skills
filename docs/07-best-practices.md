@@ -41,9 +41,11 @@ We're building a new payment processing system.
 **Example:**
 
 ```
-We need to migrate our database.
-→ Use: migration workflow recipe
+We need to migrate a legacy monolith.
+→ Use: [legacy modernization workflow](../workflows/legacy-modernization.md)
 ```
+
+Available recipes are indexed in [`workflows/README.md`](../workflows/README.md). Choose a recipe by outcome, then let the skill orchestrator adapt the sequence to the system's constraints and risk.
 
 ## Combining Multiple Skills Effectively
 

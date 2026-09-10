@@ -4,6 +4,8 @@
 
 Phase 2 introduces 10 specialized skills for designing, implementing, and managing AI agent-based engineering workflows. These skills enable you to build production-ready multi-agent systems with proper planning, safety, and observability.
 
+For an end-to-end sequence, follow the [agent development workflow](../workflows/agent-development.md). It composes requirements, task decomposition, workflow design, context and instruction design, tool selection, guardrails, evaluation, observability, and production readiness.
+
 ## When to Use Agentic Skills
 
 **Use agentic skills when:**
@@ -57,11 +59,13 @@ Agent A → Agent B → Agent C → Agent D
 ```
 
 **Use when:**
+
 - Each agent depends on previous agent's output
 - Linear workflow with clear dependencies
 - Order matters
 
 **Example:** Code review pipeline
+
 ```
 Static Analysis → Architecture Review → Test Coverage → Documentation Review
 ```
@@ -75,11 +79,13 @@ Input ─┤          ├─ Aggregator → Output
 ```
 
 **Use when:**
+
 - Agents work independently
 - No dependencies between agents
 - Speed is important
 
 **Example:** Multi-aspect analysis
+
 ```
               ┌─ Security Review ─┐
 Architecture ─┤ Scalability     ├─ Combined Report
@@ -95,11 +101,13 @@ Decision ─┤          ├─ Merge
 ```
 
 **Use when:**
+
 - Different paths based on conditions
 - Dynamic workflow selection
 - Context-dependent execution
 
 **Example:** Migration strategy
+
 ```
                 ┌─ Microservices Path ─┐
 Architecture ──┤ Modular Monolith   ├─ Implementation
@@ -115,11 +123,13 @@ Agent → Validator ────────────────┐
 ```
 
 **Use when:**
+
 - Quality refinement needed
 - Iterative improvement
 - Validation loops
 
 **Example:** Documentation generation
+
 ```
 Generate Docs → Quality Check ────────────────┐
      ↑                                      │
@@ -164,7 +174,7 @@ Tasks:
 ```yaml
 Workflow:
   Pattern: Parallel with aggregation
-  
+
   Execution:
     - Trigger: Pull request created
     - Parallel execution:
@@ -174,12 +184,12 @@ Workflow:
         - Documentation Agent
     - Aggregate results
     - Generate consolidated report
-  
+
   Error Handling:
     - Continue on agent failure
     - Mark failed agents in report
     - Retry transient failures (max 3)
-  
+
   Timeout: 5 minutes total
 ```
 
@@ -242,15 +252,15 @@ Selected Tools:
     - ESLint: JavaScript/TypeScript linting
     - Prettier: Code formatting
     - SonarQube: Code quality and security
-  
+
   Analysis:
     - Semgrep: Custom pattern matching
     - Dependency-cruiser: Dependency validation
-  
+
   Testing:
     - Jest: Test coverage analysis
     - Test parser: Test structure analysis
-  
+
   Configuration:
     - Read-only repository access
     - API rate limits: 100 calls/hour
@@ -262,13 +272,13 @@ Selected Tools:
 ```yaml
 Handoff: Agents to Aggregator
   Type: Asynchronous (wait for all)
-  
+
   Context Transfer:
     - Agent name and status
     - Findings list
     - Execution time
     - Error messages (if any)
-  
+
   Schema:
     {
       "agent": "static-analysis",
@@ -319,7 +329,7 @@ Metrics:
     - Completeness: % of actual issues found
     - Latency: Time to complete review
     - Cost: API calls and compute
-  
+
   Qualitative:
     - Usefulness: Developer feedback (1-5)
     - Clarity: How clear are suggestions
@@ -363,20 +373,20 @@ Tracing:
 
 Dashboards:
   1. Workflow Overview:
-     - Current status
-     - Queue depth
-     - Completion rate
-     - Error count
-  
+    - Current status
+    - Queue depth
+    - Completion rate
+    - Error count
+
   2. Performance:
-     - Latency (p50, p95, p99)
-     - Throughput (reviews/hour)
-     - Agent utilization
-  
+    - Latency (p50, p95, p99)
+    - Throughput (reviews/hour)
+    - Agent utilization
+
   3. Quality:
-     - Accuracy trends
-     - False positive rate
-     - Developer feedback
+    - Accuracy trends
+    - False positive rate
+    - Developer feedback
 
 Alerts:
   - Error rate >5%: Page on-call
@@ -397,17 +407,17 @@ Review Checklist:
     - Meeting latency targets?
     - Parallelization opportunities?
     - Bottlenecks identified?
-  
+
   Reliability:
     - Error rate acceptable?
     - Retries working?
     - Fallbacks sufficient?
-  
+
   Quality:
     - Developer satisfaction?
     - Accuracy improving?
     - False positives decreasing?
-  
+
   Cost:
     - Within budget?
     - API usage optimized?

@@ -1,6 +1,6 @@
 # Engineering Skills Library - Project Tracking
 
-**Last Updated:** 2026-09-08
+**Last Updated:** 2026-09-10
 
 ---
 
@@ -448,7 +448,7 @@ Every skill must include:
 1. ✅ Phase 1 Complete (20 skills)
 2. ✅ Phase 2 Complete (10 skills)
 3. ✅ Phase 3 Complete (2 skills)
-4. 📝 Create workflow recipes combining Phase 1, Phase 2, and Phase 3 skills
+4. ✅ Create workflow recipes combining Phase 1, Phase 2, and Phase 3 skills
 5. 🔍 Add evaluation examples for agentic skills
 6. 🎯 Plan Phase 4 (Additional specialized skills)
 
@@ -469,11 +469,7 @@ Every skill must include:
 ### Medium-term (1-2 Months)
 
 1. Complete Phase 4 (Additional specialized skills)
-2. Create comprehensive workflow recipes:
-   - New feature development (requirements → design → implementation → deployment)
-   - System migration (discovery → planning → execution → validation)
-   - Incident response (detection → analysis → resolution → prevention)
-   - Agentic system development (task decomposition → workflow design → implementation → evaluation)
+2. Extend the workflow recipe set with domain-specific examples and evaluation cases
 3. Build example implementations for each workflow
 4. Add evaluation criteria and test cases
 
@@ -548,6 +544,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 - Updated README.md with Phase 3 highlights
 - Updated TRACKING.md to reflect Phase 3 completion
 - **Total Skills:** 32 (Phase 1: 20 + Phase 2: 10 + Phase 3: 2)
+
+### 2026-09-10
+
+- Completed the reusable workflow recipe layer in `workflows/`
+- Added recipes for new features, system design, architecture review, legacy modernization, production readiness, agent development, and incident response
+- Added workflow index and linked recipes from repository usage and integration documentation
 
 ### 2026-09-08
 
