@@ -120,6 +120,8 @@ Reusable workflow recipes compose the individual skills into common engineering 
 - [E2E release gate](workflows/e2e-release-gate.md)
 - [E2E advanced quality](workflows/e2e-advanced-quality.md)
 
+For using these skills with an existing React agent team and Figma or Peacock MCP servers, see the [React Agent Development Guide](docs/react-agent-development.md).
+
 Use the skill orchestrator when the problem does not fit one of these recipes or needs a different sequence.
 
 ## Domain Examples
