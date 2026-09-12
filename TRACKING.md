@@ -35,26 +35,16 @@ This repository is building an **open-source, composable engineering skill libra
 
 **Completed:** 2026-09-07
 
-```
-engineering-skills/
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── TRACKING.md (this file)
-├── skills/
-│   ├── meta/
-│   ├── requirements/
-│   ├── architecture/
-│   ├── engineering/
-│   ├── security/
-│   ├── agentic/
-│   ├── frontend/
-│   ├── testing/
-│   └── operations/
-├── workflows/
-├── catalog/
-├── examples/
-└── docs/
+```mermaid
+flowchart TB
+   Root[engineering-skills]
+   Root --> Core[README, CONTRIBUTING, LICENSE, TRACKING]
+   Root --> Skills[skills/]
+   Skills --> SkillAreas[meta, requirements, architecture, engineering, security, agentic, frontend, testing, operations]
+   Root --> Workflows[workflows/]
+   Root --> Catalog[catalog/]
+   Root --> Examples[examples/]
+   Root --> Docs[docs/]
 ```
 
 ### Meta-Skills ✅
@@ -691,9 +681,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 1. **Comprehensive Documentation:** Each agentic skill required ~30,000 words of documentation across 5 files to ensure completeness and practical applicability
 
 2. **Skill Composition Patterns:** Three primary patterns emerged:
-   - **Production-Ready Agent System:** Task decomposition → Workflow design → Context engineering → Instruction design → Tool selection → Handoff design → Guardrails → Evaluation → Observability → Workflow review
-   - **Continuous Improvement Cycle:** Evaluation → Observability → Workflow review → Optimization
-   - **Incident Response:** Observability → Evaluation → Guardrails adjustment → Workflow review
+
+```mermaid
+flowchart TB
+   Production[Production-Ready Agent System]
+   Production --> Decompose[Task Decomposition] --> Workflow[Workflow Design] --> Context[Context Engineering]
+   Context --> Instructions[Instruction Design] --> Tools[Tool Selection] --> Handoff[Handoff Design]
+   Handoff --> Guardrails[Guardrails] --> Evaluation[Evaluation] --> Observability[Observability] --> Review[Workflow Review]
+
+   Improvement[Continuous Improvement Cycle] --> EvalCycle[Evaluation] --> ObsCycle[Observability] --> ReviewCycle[Workflow Review] --> Optimization[Optimization]
+   Incident[Incident Response] --> ObsIncident[Observability] --> EvalIncident[Evaluation] --> Adjust[Guardrails Adjustment] --> IncidentReview[Workflow Review]
+```
 
 3. **Workflow Patterns:** Identified 5 core workflow patterns (sequential, parallel, pipeline, fan-out/fan-in, conditional) applicable across all agentic engineering scenarios
 

@@ -435,62 +435,44 @@ Produce:
 
 ### Pattern 1: New Feature Development
 
-```
-requirements-analysis
-    ↓
-system-design
-    ↓
-api-design-review
-    ↓
-security-architecture-review
-    ↓
-testing-strategy
-    ↓
-production-readiness
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] --> Design[System Design]
+    Design --> API[API Design Review]
+    API --> Security[Security Architecture Review]
+    Security --> Testing[Testing Strategy]
+    Testing --> Readiness[Production Readiness]
 ```
 
 ### Pattern 2: System Migration
 
-```
-architecture-discovery
-    ↓
-technical-debt-analysis
-    ↓
-migration-planning
-    ↓
-architecture-decision
-    ↓
-testing-strategy
-    ↓
-production-readiness
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Debt[Technical Debt Analysis]
+    Debt --> Migration[Migration Planning]
+    Migration --> Decision[Architecture Decision]
+    Decision --> Testing[Testing Strategy]
+    Testing --> Readiness[Production Readiness]
 ```
 
 ### Pattern 3: Performance Optimization
 
-```
-architecture-discovery
-    ↓
-scalability-analysis
-    ↓
-performance-optimization
-    ↓
-testing-strategy
-    ↓
-production-readiness
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Scalability[Scalability Analysis]
+    Scalability --> Performance[Performance Optimization]
+    Performance --> Testing[Testing Strategy]
+    Testing --> Readiness[Production Readiness]
 ```
 
 ### Pattern 4: Security Hardening
 
-```
-architecture-discovery
-    ↓
-security-architecture-review
-    ↓
-threat-modeling
-    ↓
-security-remediation
-    ↓
-production-readiness
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Security[Security Architecture Review]
+    Security --> Threats[Threat Modeling]
+    Threats --> Remediation[Security Remediation]
+    Remediation --> Readiness[Production Readiness]
 ```
 
 ## Tips for Success

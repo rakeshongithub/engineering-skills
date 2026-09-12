@@ -57,43 +57,39 @@ Use the [advanced E2E quality workflow](../workflows/e2e-advanced-quality.md) wh
 
 Each skill builds on the previous:
 
-```
-requirements-analysis
-    ↓ (outputs: clear requirements)
-system-design
-    ↓ (outputs: architecture)
-architecture-review
-    ↓ (outputs: findings, recommendations)
-architecture-decision
-    ↓ (outputs: ADR)
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] -->|Clear requirements| Design[System Design]
+    Design -->|Architecture| Review[Architecture Review]
+    Review -->|Findings and recommendations| Decision[Architecture Decision]
+    Decision -->|ADR| ADR[Recorded decision]
 ```
 
 ### Parallel Composition
 
 Independent skills executed simultaneously:
 
-```
-architecture-discovery
-    ↓
-┌───────────────┬─────────────────┬──────────────────┐
-│ scalability   │ security        │ reliability      │
-│ analysis      │ review          │ analysis         │
-└───────────────┴─────────────────┴──────────────────┘
-    ↓
-architecture-decision
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Scalability[Scalability Analysis]
+    Discovery --> Security[Security Review]
+    Discovery --> Reliability[Reliability Analysis]
+    Scalability --> Decision[Architecture Decision]
+    Security --> Decision
+    Reliability --> Decision
 ```
 
 ### Conditional Composition
 
 Skill selection based on context:
 
-```
-architecture-discovery
-    ↓
-IF (monolith) → service-boundary-analysis
-IF (microservices) → integration-design
-    ↓
-architecture-review
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Choice{System shape?}
+    Choice -->|Monolith| Boundaries[Service Boundary Analysis]
+    Choice -->|Microservices| Integration[Integration Design]
+    Boundaries --> Review[Architecture Review]
+    Integration --> Review
 ```
 
 ## Performance Optimization Tips

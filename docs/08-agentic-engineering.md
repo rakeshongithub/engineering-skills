@@ -54,8 +54,9 @@ For an end-to-end sequence, follow the [agent development workflow](../workflows
 
 ### Pattern 1: Sequential Pipeline
 
-```
-Agent A → Agent B → Agent C → Agent D
+```mermaid
+flowchart LR
+  AgentA[Agent A] --> AgentB[Agent B] --> AgentC[Agent C] --> AgentD[Agent D]
 ```
 
 **Use when:**
@@ -66,16 +67,22 @@ Agent A → Agent B → Agent C → Agent D
 
 **Example:** Code review pipeline
 
-```
-Static Analysis → Architecture Review → Test Coverage → Documentation Review
+```mermaid
+flowchart LR
+  Static[Static Analysis] --> Architecture[Architecture Review]
+  Architecture --> Tests[Test Coverage]
+  Tests --> Documentation[Documentation Review]
 ```
 
 ### Pattern 2: Parallel Execution
 
-```
-        ┌─ Agent A ─┐
-Input ─┤          ├─ Aggregator → Output
-        └─ Agent B ─┘
+```mermaid
+flowchart LR
+    Input --> AgentA[Agent A]
+    Input --> AgentB[Agent B]
+    AgentA --> Aggregator[Aggregator]
+    AgentB --> Aggregator
+    Aggregator --> Output
 ```
 
 **Use when:**
@@ -86,18 +93,24 @@ Input ─┤          ├─ Aggregator → Output
 
 **Example:** Multi-aspect analysis
 
-```
-              ┌─ Security Review ─┐
-Architecture ─┤ Scalability     ├─ Combined Report
-              └─ Reliability     ─┘
+```mermaid
+flowchart LR
+  Architecture[Architecture] --> Security[Security Review]
+  Architecture --> Scalability[Scalability Review]
+  Architecture --> Reliability[Reliability Review]
+  Security --> Report[Combined Report]
+  Scalability --> Report
+  Reliability --> Report
 ```
 
 ### Pattern 3: Conditional Branching
 
-```
-         ┌─ Path A ─┐
-Decision ─┤          ├─ Merge
-         └─ Path B ─┘
+```mermaid
+flowchart LR
+  Decision{Decision} --> PathA[Path A]
+  Decision --> PathB[Path B]
+  PathA --> Merge[Merge]
+  PathB --> Merge
 ```
 
 **Use when:**
@@ -108,18 +121,23 @@ Decision ─┤          ├─ Merge
 
 **Example:** Migration strategy
 
-```
-                ┌─ Microservices Path ─┐
-Architecture ──┤ Modular Monolith   ├─ Implementation
-                └─ Serverless Path    ─┘
+```mermaid
+flowchart LR
+  Architecture[Architecture] --> Microservices[Microservices Path]
+  Architecture --> Modular[Modular Monolith Path]
+  Architecture --> Serverless[Serverless Path]
+  Microservices --> Implementation[Implementation]
+  Modular --> Implementation
+  Serverless --> Implementation
 ```
 
 ### Pattern 4: Iterative Refinement
 
-```
-Agent → Validator ────────────────┐
-  ↑                              │
-  └────── If not valid ───────┘
+```mermaid
+flowchart LR
+    Agent --> Validator[Validator]
+    Validator -->|Valid| Complete[Complete]
+    Validator -->|Not valid| Agent
 ```
 
 **Use when:**
@@ -130,10 +148,11 @@ Agent → Validator ────────────────┐
 
 **Example:** Documentation generation
 
-```
-Generate Docs → Quality Check ────────────────┐
-     ↑                                      │
-     └────── If quality < 90% ───────┘
+```mermaid
+flowchart LR
+  Generate[Generate Docs] --> Quality[Quality Check]
+  Quality -->|Quality >= 90%| Complete[Complete]
+  Quality -->|Quality < 90%| Generate
 ```
 
 ## Example: Building a Code Review Agent System

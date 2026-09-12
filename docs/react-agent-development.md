@@ -38,24 +38,17 @@ The general rule is: agents can gather evidence and prepare changes autonomously
 
 ## Standard Feature Flow
 
-```text
-planner
-  |
-  +--> figma + Figma MCP
-  |
-  +--> peacock + Peacock MCP
-  |
-  +--> HITL: design approval
-  |
-  +--> implementer
-  |
-  +--> review
-  |
-  +--> HITL: implementation and risk approval
-  |
-  +--> deliver
-  |
-  +--> HITL: release approval
+```mermaid
+flowchart TB
+    Planner[planner] --> Figma[figma + Figma MCP]
+    Planner --> Peacock[peacock + Peacock MCP]
+    Figma --> DesignApproval[HITL: design approval]
+    Peacock --> DesignApproval
+    DesignApproval --> Implementer[implementer]
+    Implementer --> Review[review]
+    Review --> ImplementationApproval[HITL: implementation and risk approval]
+    ImplementationApproval --> Deliver[deliver]
+    Deliver --> ReleaseApproval[HITL: release approval]
 ```
 
 Use [Frontend Feature Workflow](../workflows/frontend-feature.md) as the default recipe for a new React feature.

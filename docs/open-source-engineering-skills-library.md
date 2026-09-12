@@ -202,18 +202,13 @@ Architects spend significant time making decisions under uncertainty.
 
 Example composition:
 
-```text
-Requirement
-    ↓
-technology-selection
-    ↓
-tradeoff-analysis
-    ↓
-risk-analysis
-    ↓
-architecture-decision
-    ↓
-ADR
+```mermaid
+flowchart TB
+        Requirement --> Selection[Technology Selection]
+        Selection --> Tradeoff[Tradeoff Analysis]
+        Tradeoff --> Risk[Risk Analysis]
+        Risk --> Decision[Architecture Decision]
+        Decision --> ADR[ADR]
 ```
 
 ---
@@ -275,26 +270,17 @@ For example, for:
 
 The orchestrator could determine:
 
-```text
-migration-planning
-        ↓
-architecture-discovery
-        ↓
-service-boundary-analysis
-        ↓
-data-architecture-review
-        ↓
-integration-design
-        ↓
-scalability-analysis
-        ↓
-reliability-analysis
-        ↓
-security-architecture-review
-        ↓
-architecture-decision
-        ↓
-migration-plan
+```mermaid
+flowchart TB
+    Planning[Migration Planning] --> Discovery[Architecture Discovery]
+    Discovery --> Boundaries[Service Boundary Analysis]
+    Boundaries --> Data[Data Architecture Review]
+    Data --> Integration[Integration Design]
+    Integration --> Scalability[Scalability Analysis]
+    Scalability --> Reliability[Reliability Analysis]
+    Reliability --> Security[Security Architecture Review]
+    Security --> Decision[Architecture Decision]
+    Decision --> Plan[Migration Plan]
 ```
 
 For:
@@ -303,26 +289,17 @@ For:
 
 It could compose:
 
-```text
-requirements-analysis
-        ↓
-agent-task-decomposition
-        ↓
-agent-workflow-design
-        ↓
-agent-tool-selection
-        ↓
-agent-context-engineering
-        ↓
-agent-guardrails
-        ↓
-security-review
-        ↓
-agent-evaluation
-        ↓
-agent-observability
-        ↓
-production-readiness
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] --> Decomposition[Agent Task Decomposition]
+    Decomposition --> Workflow[Agent Workflow Design]
+    Workflow --> Tools[Agent Tool Selection]
+    Tools --> Context[Agent Context Engineering]
+    Context --> Guardrails[Agent Guardrails]
+    Guardrails --> Security[Security Review]
+    Security --> Evaluation[Agent Evaluation]
+    Evaluation --> Observability[Agent Observability]
+    Observability --> Readiness[Production Readiness]
 ```
 
 ---
@@ -333,37 +310,27 @@ The orchestrator should understand relationships between skills.
 
 Example:
 
-```text
-                    ┌─────────────────────┐
-                    │ Skill Orchestrator  │
-                    └──────────┬──────────┘
-                               │
-        ┌──────────────────────┼──────────────────────┐
-        ↓                      ↓                      ↓
- Architecture             Engineering             Agentic
-        │                      │                      │
-        ↓                      ↓                      ↓
- system-design          requirements-analysis   agent-workflow
- architecture-review    code-review             agent-context
- tradeoff-analysis      testing-strategy        agent-evaluation
- scalability            refactoring              guardrails
- security               migration               observability
+```mermaid
+flowchart TB
+    Orchestrator[Skill Orchestrator]
+    Orchestrator --> Architecture[Architecture]
+    Orchestrator --> Engineering[Engineering]
+    Orchestrator --> Agentic[Agentic]
+    Architecture --> ArchitectureSkills[System Design<br/>Architecture Review<br/>Tradeoff Analysis<br/>Scalability<br/>Security]
+    Engineering --> EngineeringSkills[Requirements Analysis<br/>Code Review<br/>Testing Strategy<br/>Refactoring<br/>Migration]
+    Agentic --> AgenticSkills[Agent Workflow<br/>Agent Context<br/>Agent Evaluation<br/>Guardrails<br/>Observability]
 ```
 
 Skills should also define dependencies.
 
 Example:
 
-```text
-architecture-review
-       │
-       ├── requires → architecture-discovery
-       │
-       ├── uses → scalability-analysis
-       │
-       ├── uses → security-review
-       │
-       └── uses → reliability-analysis
+```mermaid
+flowchart TB
+        Review[Architecture Review] -->|requires| Discovery[Architecture Discovery]
+        Review -->|uses| Scalability[Scalability Analysis]
+        Review -->|uses| Security[Security Review]
+        Review -->|uses| Reliability[Reliability Analysis]
 ```
 
 This creates a **machine-readable skill graph**.
@@ -382,26 +349,17 @@ Its purpose is to teach contributors how to create high-quality skills.
 
 Recommended workflow:
 
-```text
-Problem
-   ↓
-Define skill purpose
-   ↓
-Define inputs
-   ↓
-Define outputs
-   ↓
-Define workflow
-   ↓
-Define constraints
-   ↓
-Define quality criteria
-   ↓
-Add examples
-   ↓
-Add evaluation cases
-   ↓
-Submit skill
+```mermaid
+flowchart TB
+         Problem --> Purpose[Define Skill Purpose]
+         Purpose --> Inputs[Define Inputs]
+         Inputs --> Outputs[Define Outputs]
+         Outputs --> Workflow[Define Workflow]
+         Workflow --> Constraints[Define Constraints]
+         Constraints --> Quality[Define Quality Criteria]
+         Quality --> Examples[Add Examples]
+         Examples --> Evaluations[Add Evaluation Cases]
+         Evaluations --> Submit[Submit Skill]
 ```
 
 This makes the repository capable of growing through community contributions.
@@ -495,34 +453,17 @@ Instead of thinking:
 
 think:
 
-```text
-                    ┌───────────────┐
-                    │ ORCHESTRATOR  │
-                    └───────┬───────┘
-                            │
-                    ┌───────▼───────┐
-                    │ REQUIREMENTS  │
-                    └───────┬───────┘
-                            │
-             ┌──────────────┼──────────────┐
-             ↓              ↓              ↓
-       ARCHITECTURE      SECURITY       DATA
-             │              │              │
-             └──────────────┼──────────────┘
-                            ↓
-                       TRADEOFFS
-                            ↓
-                         DESIGN
-                            ↓
-                      IMPLEMENTATION
-                            ↓
-                         TESTING
-                            ↓
-                       PRODUCTION
-                            ↓
-                       OBSERVABILITY
-                            ↓
-                       OPTIMIZATION
+```mermaid
+flowchart TB
+    Orchestrator[Orchestrator] --> Requirements[Requirements]
+    Requirements --> Architecture[Architecture]
+    Requirements --> Security[Security]
+    Requirements --> Data[Data]
+    Architecture --> Tradeoffs[Tradeoffs]
+    Security --> Tradeoffs
+    Data --> Tradeoffs
+    Tradeoffs --> Design[Design] --> Implementation[Implementation] --> Testing[Testing]
+    Testing --> Production[Production] --> Observability[Observability] --> Optimization[Optimization]
 ```
 
 ---
@@ -533,223 +474,104 @@ In addition to individual skills, create reusable workflow recipes.
 
 ## New Feature
 
-```text
-requirements-analysis
-        ↓
-system-design
-        ↓
-architecture-review
-        ↓
-security-review
-        ↓
-api-design-review
-        ↓
-testing-strategy
-        ↓
-production-readiness
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] --> Design[System Design]
+    Design --> Architecture[Architecture Review]
+    Architecture --> Security[Security Review]
+    Security --> API[API Design Review]
+    API --> Testing[Testing Strategy]
+    Testing --> Readiness[Production Readiness]
 ```
 
 ## New AI Agent
 
-```text
-requirements-analysis
-        ↓
-agent-task-decomposition
-        ↓
-agent-workflow-design
-        ↓
-agent-context-engineering
-        ↓
-agent-tool-selection
-        ↓
-agent-guardrails
-        ↓
-agent-evaluation
-        ↓
-agent-observability
-        ↓
-production-readiness
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] --> Decomposition[Agent Task Decomposition]
+    Decomposition --> Workflow[Agent Workflow Design]
+    Workflow --> Context[Agent Context Engineering]
+    Context --> Tools[Agent Tool Selection]
+    Tools --> Guardrails[Agent Guardrails]
+    Guardrails --> Evaluation[Agent Evaluation]
+    Evaluation --> Observability[Agent Observability]
+    Observability --> Readiness[Production Readiness]
 ```
 
 ## Frontend Feature
 
-```text
-requirements-analysis
-        ↓
-frontend-architecture
-        ↓
-component-design
-        ↓
-responsive-design
-        ↓
-frontend-state-management
-        ↓
-frontend-accessibility-review
-        ↓
-frontend-testing-strategy
-        ↓
-frontend-performance-analysis
-        ↓
-production-readiness
+```mermaid
+flowchart TB
+    Requirements[Requirements Analysis] --> Architecture[Frontend Architecture]
+    Architecture --> Components[Component Design]
+    Components --> Responsive[Responsive Design]
+    Responsive --> State[Frontend State Management]
+    State --> Accessibility[Frontend Accessibility Review]
+    Accessibility --> Testing[Frontend Testing Strategy]
+    Testing --> Performance[Frontend Performance Analysis]
+    Performance --> Readiness[Production Readiness]
 ```
 
 ## E2E Testing
 
-```text
-testing-strategy
-        ↓
-frontend-testing-strategy
-        ↓
-e2e-test-design
-        ↓
-e2e-test-data-management
-        ↓
-e2e-test-environment
-        ↓
-e2e-test-automation
-        ↓
-e2e-test-reliability
-        ↓
-e2e-release-gating
+```mermaid
+flowchart TB
+    Testing[Testing Strategy] --> FrontendTesting[Frontend Testing Strategy]
+    FrontendTesting --> Design[E2E Test Design]
+    Design --> Data[E2E Test Data Management]
+    Data --> Environment[E2E Test Environment]
+    Environment --> Automation[E2E Test Automation]
+    Automation --> Reliability[E2E Test Reliability]
+    Reliability --> Gating[E2E Release Gating]
 ```
 
 ## Legacy Modernization
 
-```text
-architecture-discovery
-        ↓
-technical-debt-analysis
-        ↓
-dependency-analysis
-        ↓
-service-boundary-analysis
-        ↓
-migration-planning
-        ↓
-architecture-decision
-        ↓
-testing-strategy
-        ↓
-production-readiness
+```mermaid
+flowchart TB
+    Discovery[Architecture Discovery] --> Debt[Technical Debt Analysis]
+    Debt --> Dependencies[Dependency Analysis]
+    Dependencies --> Boundaries[Service Boundary Analysis]
+    Boundaries --> Migration[Migration Planning]
+    Migration --> Decision[Architecture Decision]
+    Decision --> Testing[Testing Strategy]
+    Testing --> Readiness[Production Readiness]
 ```
 
 Workflow recipes give users two ways to work:
 
-```text
-"I know what skill I need"
-              ↓
-        Use individual skill
-
-
-"I have a problem"
-              ↓
-      Skill Orchestrator
-              ↓
-       Skill composition
-              ↓
-        Workflow
+```mermaid
+flowchart TB
+    Known["I know what skill I need"] --> Individual[Use individual skill]
+    Problem["I have a problem"] --> Orchestrator[Skill Orchestrator]
+    Orchestrator --> Composition[Skill Composition]
+    Composition --> Workflow[Workflow]
 ```
 
 ---
 
 # 17. Recommended Repository Structure
 
-```text
-engineering-skills/
-│
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
-│
-├── skills/
-│   │
-│   ├── meta/
-│   │   ├── skill-orchestrator/
-│   │   │   ├── SKILL.md
-│   │   │   ├── examples/
-│   │   │   └── evals/
-│   │   │
-│   │   └── skill-authoring/
-│   │
-│   ├── requirements/
-│   │   ├── requirements-analysis/
-│   │   └── requirement-clarification/
-│   │
-│   ├── architecture/
-│   │   ├── architecture-discovery/
-│   │   ├── architecture-design/
-│   │   ├── architecture-review/
-│   │   ├── architecture-decision/
-│   │   ├── tradeoff-analysis/
-│   │   ├── scalability-analysis/
-│   │   └── reliability-analysis/
-│   │
-│   ├── engineering/
-│   │   ├── code-review/
-│   │   ├── refactoring/
-│   │   ├── testing-strategy/
-│   │   └── technical-debt-analysis/
-│   │
-│   ├── security/
-│   │   ├── threat-modeling/
-│   │   └── security-review/
-│   │
-│   ├── agentic/
-│   │   ├── agent-task-decomposition/
-│   │   ├── agent-workflow-design/
-│   │   ├── agent-context-engineering/
-│   │   ├── agent-evaluation/
-│   │   └── agent-guardrails/
-│   │
-│   ├── frontend/
-│   │   ├── frontend-architecture/
-│   │   ├── component-design/
-│   │   ├── responsive-design/
-│   │   ├── frontend-state-management/
-│   │   ├── frontend-accessibility-review/
-│   │   ├── frontend-performance-analysis/
-│   │   ├── frontend-testing-strategy/
-│   │   └── frontend-security-review/
-│   │
-│   ├── testing/
-│   │   ├── e2e-test-design/
-│   │   ├── e2e-test-automation/
-│   │   ├── e2e-test-data-management/
-│   │   ├── e2e-test-environment/
-│   │   ├── e2e-test-reliability/
-│   │   ├── e2e-cross-browser-testing/
-│   │   ├── e2e-test-debugging/
-│   │   ├── e2e-release-gating/
-│   │   ├── mobile-native-e2e-testing/
-│   │   ├── visual-regression-testing/
-│   │   ├── performance-journey-testing/
-│   │   ├── frontend-backend-contract-testing/
-│   │   ├── test-intelligence-and-failure-analytics/
-│   │   └── automated-e2e-test-generation/
-│   │
-│   └── operations/
-│       ├── production-readiness/
-│       ├── incident-analysis/
-│       └── observability-design/
-│
-├── workflows/
-│   ├── new-feature.md
-│   ├── system-design.md
-│   ├── architecture-review.md
-│   ├── legacy-modernization.md
-│   ├── production-readiness.md
-│   └── agent-development.md
-│
-├── catalog/
-│   └── skills.yaml
-│
-└── examples/
-    ├── ecommerce/
-    ├── banking/
-    ├── saas/
-        ├── ai-agent/
-        ├── frontend/
-        └── e2e/
+```mermaid
+flowchart TB
+    Root[engineering-skills]
+    Root --> Skills[skills/]
+    Skills --> Meta[meta]
+    Skills --> Requirements[requirements]
+    Skills --> Architecture[architecture]
+    Skills --> Engineering[engineering]
+    Skills --> Security[security]
+    Skills --> Agentic[agentic]
+    Skills --> Frontend[frontend]
+    Skills --> Testing[testing]
+    Skills --> Operations[operations]
+    Root --> Workflows[workflows/]
+    Root --> Catalog[catalog/]
+    Root --> Examples[examples/]
+    Root --> Docs[docs/]
+    Workflows --> Recipes[Reusable workflow recipes]
+    Catalog --> Metadata[skills.yaml]
+    Examples --> Domains[ecommerce, banking, saas, frontend, e2e]
 ```
 
 ---
@@ -836,32 +658,12 @@ Add:
 
 The overall repository can eventually operate like this:
 
-```text
-                    Engineering Problem
-                           │
-                           ▼
-                  ┌─────────────────┐
-                  │ Skill           │
-                  │ Orchestrator    │
-                  └────────┬────────┘
-                           │
-                 Discover / Select
-                           │
-                           ▼
-                 ┌─────────────────┐
-                 │ Skill Graph     │
-                 └────────┬────────┘
-                           │
-                  Compose Skills
-                           │
-                           ▼
-                    ┌────────────┐
-                    │ Workflow   │
-                    └─────┬──────┘
-                          │
-                          ▼
-                    Engineering
-                      Outcome
+```mermaid
+flowchart TB
+        Problem[Engineering Problem] --> Orchestrator[Skill Orchestrator]
+        Orchestrator -->|Discover and select| Graph[Skill Graph]
+        Graph -->|Compose skills| Workflow[Workflow]
+        Workflow --> Outcome[Engineering Outcome]
 ```
 
 ---
@@ -878,20 +680,14 @@ A stronger positioning is:
 
 The key differentiator is that the repository is not just a set of independent prompts. It is designed as:
 
-```text
-Individual Skills
-       +
-Skill Metadata
-       +
-Skill Relationships
-       +
-Skill Orchestration
-       +
-Workflow Recipes
-       +
-Evaluation
-       =
-Composable Engineering Skill System
+```mermaid
+flowchart TB
+    Skills[Individual Skills] --> Metadata[Skill Metadata]
+    Metadata --> Relationships[Skill Relationships]
+    Relationships --> Orchestration[Skill Orchestration]
+    Orchestration --> Workflows[Workflow Recipes]
+    Workflows --> Evaluation[Evaluation]
+    Evaluation --> System[Composable Engineering Skill System]
 ```
 
 ---
@@ -910,30 +706,15 @@ The architecture should remain vendor-neutral so that the same skills can eventu
 
 The repository can evolve through the following stages:
 
-```text
-Stage 1
-Individual Engineering Skills
-        ↓
-Stage 2
-Standardized Skill Contract
-        ↓
-Stage 3
-Skill Metadata / Catalog
-        ↓
-Stage 4
-Skill Relationships / Graph
-        ↓
-Stage 5
-Skill Orchestrator
-        ↓
-Stage 6
-Workflow Recipes
-        ↓
-Stage 7
-Automated Skill Evaluation
-        ↓
-Stage 8
-Agentic Engineering Workflows
+```mermaid
+flowchart TB
+    Stage1[Stage 1: Individual Engineering Skills] --> Stage2[Stage 2: Standardized Skill Contract]
+    Stage2 --> Stage3[Stage 3: Skill Metadata and Catalog]
+    Stage3 --> Stage4[Stage 4: Skill Relationships and Graph]
+    Stage4 --> Stage5[Stage 5: Skill Orchestrator]
+    Stage5 --> Stage6[Stage 6: Workflow Recipes]
+    Stage6 --> Stage7[Stage 7: Automated Skill Evaluation]
+    Stage7 --> Stage8[Stage 8: Agentic Engineering Workflows]
 ```
 
 The ultimate goal is to make engineering expertise **discoverable, reusable, composable, and executable by both humans and AI agents**.

@@ -8,10 +8,14 @@ The **Engineering Skills Library** is an open-source, composable collection of e
 
 This is **not** a collection of generic AI prompts. It's a **composable engineering skill system** that combines:
 
-```
-Individual Skills + Skill Metadata + Skill Relationships +
-Skill Orchestration + Workflow Recipes + Evaluation =
-Composable Engineering Skill System
+```mermaid
+flowchart LR
+  Skills[Individual Skills] --> Metadata[Skill Metadata]
+  Metadata --> Relationships[Skill Relationships]
+  Relationships --> Orchestration[Skill Orchestration]
+  Orchestration --> Workflows[Workflow Recipes]
+  Workflows --> Evaluation[Evaluation]
+  Evaluation --> System[Composable Engineering Skill System]
 ```
 
 ### Available Skills

@@ -21,40 +21,37 @@ Each skill represents a practical, repeatable engineering capability with:
 
 This is not a collection of generic AI prompts. It's designed as:
 
+```mermaid
+flowchart TB
+    Skills[Individual Skills] --> Metadata[Skill Metadata]
+    Metadata --> Relationships[Skill Relationships]
+    Relationships --> Orchestration[Skill Orchestration]
+    Orchestration --> Workflows[Workflow Recipes]
+    Workflows --> Evaluation[Evaluation]
+    Evaluation --> System[Composable Engineering Skill System]
 ```
-Individual Skills
-       +
-Skill Metadata
-       +
-Skill Relationships
-       +
-Skill Orchestration
-       +
-Workflow Recipes
-       +
-Evaluation
-       =
-Composable Engineering Skill System
+
+## Repository HLD
+
+```mermaid
+flowchart TB
+    Users[Engineers and AI agents] --> Guides[Usage and integration guides]
+    Users --> Orchestrator[Skill orchestrator]
+    Orchestrator --> Skills[Composable engineering skills]
+    Skills --> Catalog[Machine-readable catalog]
+    Skills --> Relationships[Skill relationships]
+    Skills --> Workflows[Reusable workflow recipes]
+    Workflows --> Examples[Domain examples]
+    Workflows --> Gates[Quality gates and HITL checkpoints]
+    Integrations[Copilot, Claude, Cursor, custom agents, MCP tools] --> Guides
+    Integrations --> Orchestrator
 ```
+
+The repository turns engineering knowledge into reusable execution paths: skills provide expertise, the catalog and relationships make it discoverable, workflows compose it, examples make it concrete, and quality gates keep human decisions visible.
 
 ## Repository Structure
 
-```
-engineering-skills/
-├── skills/           # Individual engineering skills
-│   ├── meta/        # Meta-skills (orchestrator, authoring)
-│   ├── requirements/
-│   ├── architecture/
-│   ├── engineering/
-│   ├── security/
-│   ├── agentic/
-│   ├── frontend/
-│   ├── testing/        # E2E testing skills
-│   └── operations/
-├── workflows/        # Reusable workflow recipes
-├── catalog/         # Machine-readable skill catalog
-└── examples/        # Domain-specific examples
-```
+The main implementation areas are `skills/`, `workflows/`, `catalog/`, `examples/`, and `docs/`. The HLD above shows how they work together; the [workflow index](workflows/README.md) is the best entry point for applying them.
 
 ## Getting Started
 
@@ -229,26 +226,35 @@ Phase 2 introduces 10 comprehensive skills for designing, implementing, and mana
 
 **Production-Ready Agent System:**
 
-```
-agent-task-decomposition → agent-workflow-design →
-agent-context-engineering → agent-instruction-design →
-agent-tool-selection → agent-handoff-design →
-agent-guardrails → agent-evaluation →
-agent-observability → agentic-workflow-review
+```mermaid
+flowchart LR
+   Decompose[Task Decomposition] --> Workflow[Workflow Design]
+   Workflow --> Context[Context Engineering]
+   Context --> Instructions[Instruction Design]
+   Instructions --> Tools[Tool Selection]
+   Tools --> Handoff[Handoff Design]
+   Handoff --> Guardrails[Guardrails]
+   Guardrails --> Evaluation[Evaluation]
+   Evaluation --> Observability[Observability]
+   Observability --> Review[Workflow Review]
 ```
 
 **Continuous Improvement Cycle:**
 
-```
-agent-evaluation → agent-observability →
-agentic-workflow-review → optimization
+```mermaid
+flowchart LR
+   Evaluation[Agent Evaluation] --> Observability[Observability]
+   Observability --> Review[Workflow Review]
+   Review --> Optimization[Optimization]
 ```
 
 **Incident Response & Debugging:**
 
-```
-agent-observability → agent-evaluation →
-agent-guardrails (adjustment) → agentic-workflow-review
+```mermaid
+flowchart LR
+   Observability[Agent Observability] --> Evaluation[Agent Evaluation]
+   Evaluation --> Guardrails[Guardrails Adjustment]
+   Guardrails --> Review[Workflow Review]
 ```
 
 ## Skill Categories
