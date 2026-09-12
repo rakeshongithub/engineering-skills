@@ -136,7 +136,7 @@ The focus should be on **engineering with agents**, rather than generic "AI code
 | `agent-instruction-design`  | Create effective agent instructions                     |
 | `agent-output-validation`   | Validate agent-generated output                         |
 | `agent-handoff-design`      | Design handoffs between agents                          |
-| `agent-human-handoff`       | Determine when humans must intervene                    |
+| `agent-handoff-design`      | Design handoffs between agents and human checkpoints    |
 | `agent-tool-selection`      | Decide which tools an agent needs                       |
 | `agent-memory-design`       | Design short/long-term agent memory                     |
 | `agent-evaluation`          | Evaluate agent quality                                  |

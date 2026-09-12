@@ -32,3 +32,16 @@ Workflow recipes compose the library's individual skills into repeatable enginee
 5. Record decisions, assumptions, owners, and follow-up work in the final output.
 
 Recipes are starting points, not mandatory chains. The skill orchestrator may add, remove, or reorder steps when constraints or risk justify it.
+
+## Human-in-the-Loop Policy
+
+Workflows may run analysis and evidence gathering autonomously, but they must pause at a human checkpoint before high-impact decisions or irreversible actions. Use [HITL Checkpoint Contract](hitl-checkpoint-contract.md) to define the boundary.
+
+Require an explicit human decision for:
+
+- Production release, migration cutover, rollback exceptions, or other irreversible changes
+- Security, privacy, authorization, data ownership, or compliance decisions
+- Accepted high or critical risks, quarantined checks, and release exceptions
+- Agent-generated code, tests, designs, or baselines that will be adopted as authoritative
+
+Every checkpoint records the required evidence, approver role, decision, rationale, expiry, audit reference, and follow-up owner. A missing, expired, or rejected decision blocks the dependent step and routes to the documented escalation path.

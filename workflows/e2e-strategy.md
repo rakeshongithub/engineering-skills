@@ -30,6 +30,12 @@ Design a focused E2E program that validates critical user journeys with appropri
 - Browser coverage reflects supported users and meaningful risk.
 - Blocking policy matches suite reliability and release impact.
 
+## HITL Checkpoints
+
+- **Journey approval:** Product or service owners approve the critical journey inventory and its risk justification.
+- **Privacy and data approval:** Data or security owners approve roles, namespaces, test data, and retention controls when sensitive flows are in scope.
+- **Gate policy approval:** The release or quality owner approves which suites block pull requests, deployments, and releases.
+
 ## Outputs
 
 - E2E journey inventory and coverage map

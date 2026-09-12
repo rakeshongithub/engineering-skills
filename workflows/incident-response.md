@@ -36,6 +36,12 @@ Steps 3-6 may run in parallel after the incident facts and causal analysis are s
 - Prevention actions have owners, success measures, and verification dates.
 - Customer, security, compliance, and reliability follow-ups are explicitly tracked.
 
+## HITL Checkpoints
+
+- **Causal finding review:** The incident or service owner validates the evidence-backed causal analysis before it is published as the incident account.
+- **Remediation acceptance:** Accountable owners approve priority, scope, and due dates for prevention actions; unresolved high-risk actions require explicit risk acceptance.
+- **Closure:** The incident owner records closure only after follow-up owners, validation evidence, and review dates are assigned.
+
 ## Outputs
 
 - Incident report and impact summary

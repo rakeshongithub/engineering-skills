@@ -29,6 +29,12 @@ Establish E2E evidence and blocking rules for pull requests, deployments, and pr
 - Exceptions and quarantine have expiry, rationale, and compensating controls.
 - Rollback and risk-acceptance paths are explicit.
 
+## HITL Checkpoints
+
+- **Gate policy approval:** The release or quality owner approves blocking thresholds and the journeys they protect.
+- **Exception approval:** An accountable risk owner approves every quarantine, exception, or retry policy that weakens a release gate, with expiry and compensating controls.
+- **Release promotion:** The release owner reviews the current evidence and authorizes promotion when the gate is satisfied or a valid exception exists.
+
 ## Outputs
 
 - Suite tiers and pipeline execution plan

@@ -35,6 +35,12 @@ Use this recipe for platform renewal, monolith decomposition, infrastructure mig
 - Security, reliability, and operational controls remain effective during transition.
 - The roadmap prioritizes business value and risk reduction, not technology novelty.
 
+## HITL Checkpoints
+
+- **Target-state approval:** Business and technical owners approve the modernization option, constraints, and success measures before phase planning is finalized.
+- **Phase readiness:** The service owner approves each migration increment after rollback, reconciliation, compatibility, and exit evidence is complete.
+- **Cutover approval:** The accountable service or business owner authorizes traffic or data cutover; automation may prepare but not execute the cutover before approval.
+
 ## Outputs
 
 - Current-state and target-state architecture

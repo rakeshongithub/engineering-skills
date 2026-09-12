@@ -188,6 +188,7 @@ Phase 2 introduces 10 comprehensive skills for designing, implementing, and mana
 - Design seamless handoffs between agents
 - Implement synchronous, asynchronous, and event-driven handoffs
 - Ensure context continuity and error recovery
+- Apply the [HITL Checkpoint Contract](workflows/hitl-checkpoint-contract.md) when a handoff requires human review or approval
 - **Use when:** Building multi-agent workflows with agent-to-agent transitions
 
 ### Agent Safety & Quality

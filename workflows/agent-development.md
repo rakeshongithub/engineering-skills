@@ -39,6 +39,12 @@ Steps 7-9 can proceed in parallel once the workflow and interfaces are stable.
 - Evaluation covers normal, ambiguous, adversarial, and degraded inputs.
 - Observability supports tracing a user request through decisions, tools, handoffs, and outcomes.
 
+## HITL Checkpoints
+
+- **Boundary approval:** The accountable owner approves the agent's scope, permissions, prohibited actions, and identified human checkpoints before evaluation or launch.
+- **Critical finding review:** A qualified human reviews critical findings or ambiguous outcomes before they trigger changes or external actions.
+- **Action approval:** The agent must pause for approval before irreversible or high-impact actions; the decision follows the HITL Checkpoint Contract.
+
 ## Outputs
 
 - Agent workflow and state model

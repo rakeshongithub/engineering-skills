@@ -41,6 +41,12 @@ Steps 4-6 may run in parallel after the system design is stable.
 - Tests cover happy paths, boundaries, failures, authorization, and compatibility.
 - Production readiness has an explicit owner and go/no-go outcome.
 
+## HITL Checkpoints
+
+- **Design approval:** Before implementation begins, the technical or domain owner approves the design, unresolved risks, and acceptance criteria.
+- **Risk approval:** Security, data, or compliance owners approve applicable control decisions; accepted high or critical risks use the HITL Checkpoint Contract.
+- **Release decision:** `production-readiness` records the release owner's `go`, `go with conditions`, or `no-go` decision before production promotion.
+
 ## Outputs
 
 - Approved technical design

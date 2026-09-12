@@ -29,6 +29,12 @@ Create or evolve a frontend design system that is coherent, accessible, reusable
 - Breaking changes have versioning and migration guidance.
 - Documentation demonstrates correct composition and non-goals.
 
+## HITL Checkpoints
+
+- **Foundation approval:** Design-system and product owners approve tokens, component contracts, accessibility behavior, and compatibility scope.
+- **Breaking-change approval:** The accountable owner approves versioning, migration guidance, and adoption impact before publication.
+- **Adoption decision:** Consumer owners approve rollout of changes that can affect multiple products or user journeys.
+
 ## Outputs
 
 - Token and component architecture

@@ -30,6 +30,12 @@ Implement maintainable E2E automation from approved journey specifications throu
 - Failures include enough evidence to diagnose the cause.
 - Browser and CI execution is reproducible locally and remotely.
 
+## HITL Checkpoints
+
+- **Scenario approval:** The journey owner approves scenario boundaries and observable assertions before automation is treated as release evidence.
+- **Artifact review:** A qualified reviewer approves fixtures, generated tests, visual baselines, and sensitive test-data changes before they become authoritative.
+- **Gate enrollment:** The release or quality owner approves adding a suite to a blocking CI or release gate.
+
 ## Outputs
 
 - Automated E2E suite and fixtures

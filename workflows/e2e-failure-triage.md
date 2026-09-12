@@ -28,6 +28,12 @@ Classify and resolve E2E failures without masking product defects or normalizing
 - Retries and quarantine do not replace root-cause remediation.
 - Ownership, follow-up, and regression coverage are recorded.
 
+## HITL Checkpoints
+
+- **Classification review:** A test or service owner reviews ambiguous classifications before a product failure is downgraded or a test is changed.
+- **Quarantine approval:** An accountable risk owner approves quarantine, retries, or gate weakening with expiry and compensating controls.
+- **Policy change:** The release or quality owner approves any change to blocking behavior after reviewing evidence and release impact.
+
 ## Outputs
 
 - Failure classification and evidence summary

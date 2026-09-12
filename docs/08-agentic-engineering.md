@@ -320,6 +320,8 @@ Compliance Guardrails:
   - Data retention: 90 days
 ```
 
+For workflow-level human approvals, use the [HITL Checkpoint Contract](../workflows/hitl-checkpoint-contract.md). It defines the evidence, decision owner, prohibited actions, expiry, escalation, and audit record required before an agent can resume a high-impact action.
+
 ### Step 8: Evaluation
 
 ```yaml

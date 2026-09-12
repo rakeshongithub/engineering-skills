@@ -29,6 +29,12 @@ Migrate a frontend framework, rendering model, state approach, or component syst
 - Accessibility, security, performance, and browser support do not regress.
 - Old and new paths can be observed and compared during coexistence.
 
+## HITL Checkpoints
+
+- **Pilot approval:** The frontend and product owners approve the pilot scope, user cohort, success thresholds, and rollback trigger.
+- **Increment approval:** Each rollout increment requires evidence review for critical journeys, accessibility, security, performance, and browser support.
+- **Cutover approval:** The service or product owner authorizes final path removal or traffic expansion after coexistence evidence meets the exit criteria.
+
 ## Outputs
 
 - Current and target frontend architecture

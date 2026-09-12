@@ -37,6 +37,12 @@ Steps 2-7 may run in parallel when their evidence is available.
 - Capacity, security, data protection, and compliance evidence is current.
 - The final decision is `go`, `go with conditions`, or `no-go`, with expiry and follow-up dates.
 
+## HITL Checkpoints
+
+- **Risk acceptance:** The accountable risk owner approves any unresolved high or critical risk with conditions, expiry, and compensating controls.
+- **Release decision:** The release or service owner records `go`, `go with conditions`, or `no-go` after reviewing the evidence package.
+- **Promotion boundary:** Deployment automation must not promote to production until the release decision is valid for the current scope and evidence.
+
 ## Outputs
 
 - Readiness checklist and evidence links

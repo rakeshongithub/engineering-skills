@@ -36,6 +36,12 @@ The specialist reviews in step 3 may run in parallel after discovery.
 - The review distinguishes immediate controls from longer-term redesign.
 - Disputed assumptions and evidence gaps are explicitly recorded.
 
+## HITL Checkpoints
+
+- **Finding validation:** The accountable system owner reviews material findings, disputed assumptions, and evidence gaps before recommendations become commitments.
+- **Risk acceptance:** An accountable risk owner explicitly approves any accepted high or critical risk, including conditions and expiry.
+- **Remediation approval:** Owners approve the prioritized remediation backlog and its sequencing before execution.
+
 ## Outputs
 
 - Current-state architecture summary

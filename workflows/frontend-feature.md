@@ -33,6 +33,12 @@ Deliver a frontend feature with clear architecture, resilient interaction states
 - Tests cover user-visible behavior and high-risk integrations.
 - Performance budgets and release evidence are explicit.
 
+## HITL Checkpoints
+
+- **Design approval:** The product and frontend owners approve the interaction states, accessibility expectations, and acceptance criteria before implementation.
+- **Artifact review:** A qualified reviewer approves generated tests, visual baselines, or other authoritative artifacts before merge.
+- **Release decision:** The release owner approves production promotion through `production-readiness`.
+
 ## Outputs
 
 - Frontend design and component contracts

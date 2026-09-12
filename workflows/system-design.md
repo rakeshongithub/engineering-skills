@@ -37,6 +37,12 @@ Steps 5-7 can run in parallel after the baseline design exists.
 - Security controls are tied to identified threats and trust boundaries.
 - Decisions include consequences, alternatives, and an owner.
 
+## HITL Checkpoints
+
+- **Design approval:** A system or domain owner approves the baseline design before implementation or downstream design work treats it as authoritative.
+- **Control approval:** Security, data, and compliance owners approve applicable trust-boundary, data-lifecycle, and regulatory decisions.
+- **Decision record:** Rejected alternatives, accepted risks, and conditions are recorded with an accountable owner and expiry.
+
 ## Outputs
 
 - System context and component design

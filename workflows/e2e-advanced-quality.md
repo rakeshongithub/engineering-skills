@@ -28,6 +28,12 @@ Extend a mature E2E program with mobile, visual, performance, contract, intellig
 - Mobile, visual, contract, and generated suites do not weaken core journey coverage.
 - Exceptions have owners, expiry, rationale, and compensating controls.
 
+## HITL Checkpoints
+
+- **Generated artifact review:** A qualified human reviews generated tests and visual baselines before release use.
+- **Coverage decision:** Product, platform, or quality owners approve advanced coverage and its relationship to core journeys.
+- **Exception approval:** An accountable risk owner approves exceptions or quarantines with expiry and compensating controls.
+
 ## Outputs
 
 - Advanced E2E coverage map

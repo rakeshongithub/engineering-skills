@@ -28,6 +28,12 @@ Assess an existing frontend for maintainability, user experience quality, access
 - Immediate containment is distinguished from target-state improvement.
 - Every accepted recommendation has an owner, measure, and validation plan.
 
+## HITL Checkpoints
+
+- **Finding validation:** The frontend or product owner reviews material findings and user-impact assumptions before publication.
+- **Risk acceptance:** Security, accessibility, or product owners explicitly approve accepted high-risk findings with conditions and expiry.
+- **Remediation approval:** The accountable owner approves the sequenced roadmap before implementation begins.
+
 ## Outputs
 
 - Current-state frontend architecture
